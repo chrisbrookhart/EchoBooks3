@@ -1,0 +1,125 @@
+{
+    "bookID": "327006de-dd89-4c3d-bdb5-f30f1b3019de",
+    "bookTitle": "The Book of Mormon",
+    "author": "Translated by Joseph Smith",
+    "languages": [
+        "en-US",
+        "es-ES",
+        "fr-FR"
+    ],
+    "bookDescription": "A record of the Nephites and Lamanites.",
+    "coverImageName": "TheBookOfMormon.png",
+    "bookCode": "BOOKM",
+    "defaultPlaybackOrder": [
+        "en-US",
+        "es-ES",
+        "fr-FR"
+    ],
+    "subBooks": [
+        {
+            "subBookID": "05cfe850-171e-4209-bc31-c82a1dc012d5",
+            "subBookNumber": 1,
+            "subBookTitle": "Introduction and Witnesses",
+            "chapters": [
+                {
+                    "chapterID": "dbfd8a0a-d7b4-435e-aeb7-cf50b3956f1c",
+                    "chapterNumber": 1,
+                    "chapterTitle": "Title Page Of The Book Of Mormon",
+                    "totalParagraphs": 2,
+                    "totalSentences": 2,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S1_C1_en-US.json",
+                        "es-ES": "BOOKM_S1_C1_es-ES.json",
+                        "fr-FR": "BOOKM_S1_C1_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "d0fd11f6-e054-495e-9091-77a26a6dd22d",
+                    "chapterNumber": 2,
+                    "chapterTitle": "Testimony Of Three Witnesses",
+                    "totalParagraphs": 2,
+                    "totalSentences": 4,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S1_C2_en-US.json",
+                        "es-ES": "BOOKM_S1_C2_es-ES.json",
+                        "fr-FR": "BOOKM_S1_C2_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "db319c2d-ebdf-47aa-b4fd-a8f013faf239",
+                    "chapterNumber": 3,
+                    "chapterTitle": "Testimony Of Eight Witnesses",
+                    "totalParagraphs": 2,
+                    "totalSentences": 2,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S1_C3_en-US.json",
+                        "es-ES": "BOOKM_S1_C3_es-ES.json",
+                        "fr-FR": "BOOKM_S1_C3_fr-FR.json"
+                    }
+                }
+            ]
+        },
+        {
+            "subBookID": "cfd46574-d557-415b-9d8f-fdda2b617574",
+            "subBookNumber": 2,
+            "subBookTitle": "1 Nephi",
+            "chapters": [
+                {
+                    "chapterID": "15983dee-5253-4a95-ae14-dee03df5eabd",
+                    "chapterNumber": 1,
+                    "chapterTitle": "1",
+                    "totalParagraphs": 6,
+                    "totalSentences": 8,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S2_C1_en-US.json",
+                        "es-ES": "BOOKM_S2_C1_es-ES.json",
+                        "fr-FR": "BOOKM_S2_C1_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "191c12ad-804b-466a-bece-ea6785a240e4",
+                    "chapterNumber": 2,
+                    "chapterTitle": "2",
+                    "totalParagraphs": 4,
+                    "totalSentences": 4,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S2_C2_en-US.json",
+                        "es-ES": "BOOKM_S2_C2_es-ES.json",
+                        "fr-FR": "BOOKM_S2_C2_fr-FR.json"
+                    }
+                }
+            ]
+        },
+        {
+            "subBookID": "a5c9ab3a-4ce9-48c6-b97d-644ecca685d9",
+            "subBookNumber": 3,
+            "subBookTitle": "Moroni",
+            "chapters": [
+                {
+                    "chapterID": "c2ea8bbc-3cda-4b27-81c3-e74c4d237d0c",
+                    "chapterNumber": 1,
+                    "chapterTitle": "1",
+                    "totalParagraphs": 6,
+                    "totalSentences": 6,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S3_C1_en-US.json",
+                        "es-ES": "BOOKM_S3_C1_es-ES.json",
+                        "fr-FR": "BOOKM_S3_C1_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "6e7795d5-bce1-47a2-95f1-705b9124002a",
+                    "chapterNumber": 2,
+                    "chapterTitle": "2",
+                    "totalParagraphs": 4,
+                    "totalSentences": 4,
+                    "contentReferences": {
+                        "en-US": "BOOKM_S3_C2_en-US.json",
+                        "es-ES": "BOOKM_S3_C2_es-ES.json",
+                        "fr-FR": "BOOKM_S3_C2_fr-FR.json"
+                    }
+                }
+            ]
+        }
+    ]
+}

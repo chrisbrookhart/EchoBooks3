@@ -1,0 +1,36 @@
+{
+    "chapterID": "c0f14c8f-43e9-4e8f-9433-2b08f607f154",
+    "language": "en-US",
+    "chapterNumber": 3,
+    "chapterTitle": "Testimony of Eight Witnesses",
+    "paragraphs": [
+        {
+            "paragraphID": "0824a4dd-9207-4186-929f-5fac80567e88",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "13e31e4f-0227-4b3e-b9dc-999ee6959a94",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 7,
+                    "reference": "",
+                    "text": "THE TESTIMONY OF EIGHT WITNESSES",
+                    "audioFile": "0000007_BOOKM_S1_C3_P1_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "9f03753d-3fbf-4778-834e-5dd66358b431",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "4857beaf-b051-4da5-a521-043762f7c589",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 8,
+                    "reference": "",
+                    "text": "Be it known unto all nations, kindreds, tongues, and people, unto whom this work shall come: That Joseph Smith, Jun., the translator of this work, has shown unto us the plates of which hath been spoken, which have the appearance of gold; and as many of the leaves as the said Smith has translated we did handle with our hands; and we also saw the engravings thereon, all of which has the appearance of ancient work, and of curious workmanship.",
+                    "audioFile": "0000008_BOOKM_S1_C3_P2_S1_en-US.aac"
+                }
+            ]
+        }
+    ]
+}

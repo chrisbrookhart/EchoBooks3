@@ -1,0 +1,98 @@
+{
+    "chapterID": "e3d3382b-6a81-455f-8f28-a1b2c9d75334",
+    "language": "en-US",
+    "chapterNumber": 1,
+    "chapterTitle": "The Golden Bird",
+    "paragraphs": [
+        {
+            "paragraphID": "086ba87a-1e73-48b0-a16c-1bda8ad5e59a",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "7795469a-ab84-44f0-917f-2db13fda677d",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 1,
+                    "reference": "",
+                    "text": "The Golden Bird",
+                    "audioFile": "0000001_GRIMM_S1_C1_P1_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "fbc6f154-e5b8-4509-ba3d-7004f4e0bef2",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "10960e9d-2575-4833-bca8-775190202dd6",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 2,
+                    "reference": "",
+                    "text": "A certain king had a beautiful garden, and in the garden stood a tree which bore golden apples.",
+                    "audioFile": "0000002_GRIMM_S1_C1_P2_S1_en-US.aac"
+                },
+                {
+                    "sentenceID": "870fb193-10f7-41ca-85fc-d3339523c9d7",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 3,
+                    "reference": "",
+                    "text": "These apples were always counted, and about the time when they began to grow ripe it was found that every night one of them was gone.",
+                    "audioFile": "0000003_GRIMM_S1_C1_P2_S2_en-US.aac"
+                },
+                {
+                    "sentenceID": "fe2e9841-e0db-4196-945f-0e1493ce5399",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 4,
+                    "reference": "",
+                    "text": "The king became very angry at this, and ordered the gardener to keep watch all night under the tree.",
+                    "audioFile": "0000004_GRIMM_S1_C1_P2_S3_en-US.aac"
+                },
+                {
+                    "sentenceID": "a6cc34b9-2d3e-4ecd-bd1c-752e6bdc6b18",
+                    "sentenceIndex": 4,
+                    "globalSentenceIndex": 5,
+                    "reference": "",
+                    "text": "The gardener set his eldest son to watch; but about twelve o’clock he fell asleep, and in the morning another of the apples was missing.",
+                    "audioFile": "0000005_GRIMM_S1_C1_P2_S4_en-US.aac"
+                },
+                {
+                    "sentenceID": "69c6dd35-f4a3-4bb4-abec-885890de60ef",
+                    "sentenceIndex": 5,
+                    "globalSentenceIndex": 6,
+                    "reference": "",
+                    "text": "Then the second son was ordered to watch; and at midnight he too fell asleep, and in the morning another apple was gone.",
+                    "audioFile": "0000006_GRIMM_S1_C1_P2_S5_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "aa4bad31-1766-4634-9f3d-e782d92d4bd3",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "e9192272-0a85-4b42-847f-66e0bedf371b",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 7,
+                    "reference": "",
+                    "text": "Then the gardener’s eldest son set out and thought to find the golden bird very easily; and when he had gone but a little way, he came to a wood, and by the side of the wood he saw a fox sitting; so he took his bow and made ready to shoot at it.",
+                    "audioFile": "0000007_GRIMM_S1_C1_P3_S1_en-US.aac"
+                },
+                {
+                    "sentenceID": "7376a6ef-5de2-4b84-a472-5c3913bd5773",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 8,
+                    "reference": "",
+                    "text": "Then the fox said, ‘Do not shoot me, for I will give you good counsel; I know what your business is, and that you want to find the golden bird.",
+                    "audioFile": "0000008_GRIMM_S1_C1_P3_S2_en-US.aac"
+                },
+                {
+                    "sentenceID": "5e1e5da8-40be-402e-98df-91dea6026a57",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 9,
+                    "reference": "",
+                    "text": "You will reach a village in the evening; and when you get there, you will see two inns opposite to each other, one of which is very pleasant and beautiful to look at: go not in there, but rest for the night in the other, though it may appear to you to be very poor and mean.’",
+                    "audioFile": "0000009_GRIMM_S1_C1_P3_S3_en-US.aac"
+                }
+            ]
+        }
+    ]
+}

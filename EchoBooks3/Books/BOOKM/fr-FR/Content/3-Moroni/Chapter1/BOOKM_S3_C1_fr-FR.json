@@ -1,0 +1,92 @@
+{
+    "chapterID": "6f2916ed-9bb4-4911-913a-d349ae210649",
+    "language": "fr-FR",
+    "chapterNumber": 1,
+    "chapterTitle": "1",
+    "paragraphs": [
+        {
+            "paragraphID": "cd5e6ae2-8e36-4a83-bb42-024b695805d1",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "a89fb7cc-8aae-4da9-960d-2a2f206928cc",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 21,
+                    "reference": "",
+                    "text": "LE LIVRE DE MORONI",
+                    "audioFile": "0000021_BOOKM_S3_C1_P1_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "58c5ddac-2e62-4669-a6ab-969097852a18",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "42048b3f-1bfa-4c51-aaca-64ab3b464f8c",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 22,
+                    "reference": "",
+                    "text": "Moroni Chapitre 1",
+                    "audioFile": "0000022_BOOKM_S3_C1_P2_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "696de745-c320-4dc6-b266-2a4ea0a1059d",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "27ec3b39-7e67-4d26-8273-e6afc4748a4b",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 23,
+                    "reference": "1:1",
+                    "text": "Maintenant moi, Moroni, après avoir terminé l'abrégé du récit du peuple de Jared, je supposais ne plus avoir à écrire, mais je n'ai pas encore péri; et je ne me fais pas connaître aux Lamanites de peur qu'ils ne me détruisent.",
+                    "audioFile": "0000023_BOOKM_S3_C1_P3_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "9f8f1c0d-aca3-49ac-a611-076be390a184",
+            "paragraphIndex": 4,
+            "sentences": [
+                {
+                    "sentenceID": "c1235e2b-329c-447c-a6a5-6baac0f9d68c",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 24,
+                    "reference": "1:2",
+                    "text": "Car voici, leurs guerres sont extrêmement féroces entre eux; et à cause de leur haine, ils mettent à mort tout Néphite qui ne reniera pas le Christ.",
+                    "audioFile": "0000024_BOOKM_S3_C1_P4_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "296acec8-95f2-456c-8e13-3f26dfc53fcb",
+            "paragraphIndex": 5,
+            "sentences": [
+                {
+                    "sentenceID": "ab6c2692-2457-4918-9639-6b7d67ad920a",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 25,
+                    "reference": "1:3",
+                    "text": "Et moi, Moroni, je ne renierai pas le Christ; c'est pourquoi, je vagabonde partout où je peux pour la sécurité de ma propre vie.",
+                    "audioFile": "0000025_BOOKM_S3_C1_P5_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "c12cd1bf-4d29-4bba-a962-9ba539817e36",
+            "paragraphIndex": 6,
+            "sentences": [
+                {
+                    "sentenceID": "c26f822d-6710-4457-9bc0-87b2cd0c806f",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 26,
+                    "reference": "1:4",
+                    "text": "C'est pourquoi, j'écris encore quelques choses, contrairement à ce que j'avais supposé ; car j'avais supposé ne plus rien écrire ; mais j'écris encore quelques choses, qui peut-être auront de la valeur pour mes frères, les Lamanites, dans un jour futur, selon la volonté du Seigneur.",
+                    "audioFile": "0000026_BOOKM_S3_C1_P6_S1_fr-FR.aac"
+                }
+            ]
+        }
+    ]
+}

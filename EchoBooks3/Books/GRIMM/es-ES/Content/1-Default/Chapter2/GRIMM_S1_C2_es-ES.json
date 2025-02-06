@@ -1,0 +1,98 @@
+{
+    "chapterID": "be5d5c09-94de-4542-8702-e5585b8e8855",
+    "language": "es-ES",
+    "chapterNumber": 2,
+    "chapterTitle": "Hans in Luck",
+    "paragraphs": [
+        {
+            "paragraphID": "5e540d08-b93f-4ba7-afbb-ef56bb7cbde7",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "81f54473-c4fd-4d11-a2df-b992c9e54296",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 10,
+                    "reference": "",
+                    "text": "Hans con Suerte",
+                    "audioFile": "0000010_GRIMM_S1_C2_P1_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "45279ba3-47dd-42fa-8ef5-125e9da8b4ef",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "fe0480f6-eb93-44df-888f-dfadd8546582",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 11,
+                    "reference": "",
+                    "text": "Algunos hombres nacen con buena suerte: todo lo que hacen o intentan hacer les sale bien, todo lo que les llega es ganancia, todos sus gansos son cisnes, todas sus cartas son triunfos. Lánzalos como quieras, siempre caerán, como el pobre gato, sobre sus patas, y solo avanzarán mucho más rápido.",
+                    "audioFile": "0000011_GRIMM_S1_C2_P2_S1_es-ES.aac"
+                },
+                {
+                    "sentenceID": "1858cbae-9ad7-4b7f-ad90-9de46c305a74",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 12,
+                    "reference": "",
+                    "text": "Es muy probable que el mundo no siempre piense en ellos como ellos mismos se ven, ¿pero qué les importa el mundo a ellos?",
+                    "audioFile": "0000012_GRIMM_S1_C2_P2_S2_es-ES.aac"
+                },
+                {
+                    "sentenceID": "eea24ab9-bc0e-42b0-a650-8b375a02cffa",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 13,
+                    "reference": "",
+                    "text": "¿Qué puede saber sobre el asunto?",
+                    "audioFile": "0000013_GRIMM_S1_C2_P2_S3_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "09de3edb-b41d-4e30-8a28-5fdc9b06a05d",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "d74d7704-4912-46da-a543-22b89f773f4d",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 14,
+                    "reference": "",
+                    "text": "Uno de estos seres afortunados era el vecino Hans.",
+                    "audioFile": "0000014_GRIMM_S1_C2_P3_S1_es-ES.aac"
+                },
+                {
+                    "sentenceID": "9d267724-6901-4755-9f47-7ceb6c9c1e87",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 15,
+                    "reference": "",
+                    "text": "Durante siete largos años, había trabajado duro para su maestro.",
+                    "audioFile": "0000015_GRIMM_S1_C2_P3_S2_es-ES.aac"
+                },
+                {
+                    "sentenceID": "228c5525-649e-4edd-91da-38fca4e98fe3",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 16,
+                    "reference": "",
+                    "text": "Por fin dijo, ‘Maestro, mi tiempo se ha acabado; debo ir a casa y ver a mi pobre madre una vez más: así que por favor págeme mi salario y déjeme ir.’",
+                    "audioFile": "0000016_GRIMM_S1_C2_P3_S3_es-ES.aac"
+                },
+                {
+                    "sentenceID": "f70f4cd7-a653-4a2a-bded-a05b73b782a4",
+                    "sentenceIndex": 4,
+                    "globalSentenceIndex": 17,
+                    "reference": "",
+                    "text": "Y el maestro dijo, ‘Has sido un sirviente fiel y bueno, Hans, así que tu paga será generosa.’",
+                    "audioFile": "0000017_GRIMM_S1_C2_P3_S4_es-ES.aac"
+                },
+                {
+                    "sentenceID": "7f23c0be-8829-468b-8ea9-6fb353e8a5f1",
+                    "sentenceIndex": 5,
+                    "globalSentenceIndex": 18,
+                    "reference": "",
+                    "text": "Luego le dio un trozo de plata tan grande como su cabeza.",
+                    "audioFile": "0000018_GRIMM_S1_C2_P3_S5_es-ES.aac"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+{
+    "chapterID": "614e71ed-b1d1-4832-b8a0-6f45eda5ac05",
+    "language": "fr-FR",
+    "chapterNumber": 2,
+    "chapterTitle": "2",
+    "paragraphs": [
+        {
+            "paragraphID": "4af2a27d-f608-4677-a3e0-4490022d0952",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "39b368b8-c314-40ca-aacf-335f41113407",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 17,
+                    "reference": "",
+                    "text": "1 Néphi Chapitre 2",
+                    "audioFile": "0000017_BOOKM_S2_C2_P1_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "e701ada3-2b54-4371-9124-795b6328e7c1",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "886ace15-1715-4fa5-9de9-e651205b9f92",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 18,
+                    "reference": "2:1",
+                    "text": "Car voici, il arriva que le Seigneur parla à mon père, oui, même dans un rêve, et lui dit : Tu es béni, Lehi, à cause des choses que tu as faites ; et parce que tu as été fidèle et as déclaré à ce peuple les choses que je t'ai commandées, voici, ils cherchent à ôter ta vie.",
+                    "audioFile": "0000018_BOOKM_S2_C2_P2_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "51242ee4-08f3-4388-8e01-72725d59c5e0",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "1ece1ce5-29ea-4753-8cb4-22688b59cb5e",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 19,
+                    "reference": "2:2",
+                    "text": "Et il arriva que le Seigneur commanda à mon père, même dans un rêve, qu'il devrait prendre sa famille et partir dans le désert.",
+                    "audioFile": "0000019_BOOKM_S2_C2_P3_S1_fr-FR.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "2d234d8c-c730-477a-8f63-f799b2cb39c0",
+            "paragraphIndex": 4,
+            "sentences": [
+                {
+                    "sentenceID": "e169dae8-499e-4f2b-bcc4-4e2ce153a361",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 20,
+                    "reference": "2:3",
+                    "text": "Et il arriva qu'il obéit à la parole du Seigneur, c'est pourquoi il fit comme le Seigneur lui avait commandé.",
+                    "audioFile": "0000020_BOOKM_S2_C2_P4_S1_fr-FR.aac"
+                }
+            ]
+        }
+    ]
+}

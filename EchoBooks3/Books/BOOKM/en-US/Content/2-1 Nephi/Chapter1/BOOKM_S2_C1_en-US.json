@@ -1,0 +1,108 @@
+{
+    "chapterID": "01772663-e1ed-4201-ac5a-770603873500",
+    "language": "en-US",
+    "chapterNumber": 1,
+    "chapterTitle": "1",
+    "paragraphs": [
+        {
+            "paragraphID": "e9cd9bd7-d75d-4829-9ae9-a29e26413af8",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "9d76586c-163e-4c19-aff5-6abcd2b18d45",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 9,
+                    "reference": "",
+                    "text": "THE FIRST BOOK OF NEPHI HIS REIGN AND MINISTRY (1 Nephi)",
+                    "audioFile": "0000009_BOOKM_S2_C1_P1_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "93714671-85fb-40c3-83a9-eb9f2a8aab60",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "29e89c5c-2a6e-4191-b094-949b38023b63",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 10,
+                    "reference": "",
+                    "text": "An account of Lehi and his wife Sariah and his four sons, being called, (beginning at the eldest) Laman, Lemuel, Sam, and Nephi.",
+                    "audioFile": "0000010_BOOKM_S2_C1_P2_S1_en-US.aac"
+                },
+                {
+                    "sentenceID": "da937ed8-7ef9-4ee5-8d2f-4c4a873c077a",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 11,
+                    "reference": "",
+                    "text": "The Lord warns Lehi to depart out of the land of Jerusalem, because he prophesieth unto the people concerning their iniquity and they seek to destroy his life.",
+                    "audioFile": "0000011_BOOKM_S2_C1_P2_S2_en-US.aac"
+                },
+                {
+                    "sentenceID": "982abbcb-b7dc-4e21-b52f-e348ccb2ae86",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 12,
+                    "reference": "",
+                    "text": "He taketh three days’ journey into the wilderness with his family.",
+                    "audioFile": "0000012_BOOKM_S2_C1_P2_S3_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "c4a178ee-36e6-4c42-bee6-82788b8dc15d",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "a2bdd763-1f7b-4398-a318-5f7ef08730fb",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 13,
+                    "reference": "",
+                    "text": "1 Nephi Chapter 1",
+                    "audioFile": "0000013_BOOKM_S2_C1_P3_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "fab6a4ed-648d-481b-ad01-3a15ac230e41",
+            "paragraphIndex": 4,
+            "sentences": [
+                {
+                    "sentenceID": "0277d10d-e75e-4147-86ba-d4db2a5a7e76",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 14,
+                    "reference": "1:1",
+                    "text": "I, Nephi, having been born of goodly parents, therefore I was taught somewhat in all the learning of my father; and having seen many afflictions in the course of my days, nevertheless, having been highly favored of the Lord in all my days; yea, having had a great knowledge of the goodness and the mysteries of God, therefore I make a record of my proceedings in my days.",
+                    "audioFile": "0000014_BOOKM_S2_C1_P4_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "1a7593f2-0a9f-45ca-964f-361b100fbfc3",
+            "paragraphIndex": 5,
+            "sentences": [
+                {
+                    "sentenceID": "9fbfdfd8-33e2-4cc2-b897-6bb4b5d74554",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 15,
+                    "reference": "1:2",
+                    "text": "Yea, I make a record in the language of my father, which consists of the learning of the Jews and the language of the Egyptians.",
+                    "audioFile": "0000015_BOOKM_S2_C1_P5_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "67873bad-a131-402e-8d15-689d0b48adf2",
+            "paragraphIndex": 6,
+            "sentences": [
+                {
+                    "sentenceID": "251d62cc-d963-473c-aa48-80ce90791f2f",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 16,
+                    "reference": "1:3",
+                    "text": "And I know that the record which I make is true; and I make it with mine own hand; and I make it according to my knowledge.",
+                    "audioFile": "0000016_BOOKM_S2_C1_P6_S1_en-US.aac"
+                }
+            ]
+        }
+    ]
+}

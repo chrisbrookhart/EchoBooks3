@@ -1,0 +1,98 @@
+{
+    "chapterID": "e3d3382b-6a81-455f-8f28-a1b2c9d75334",
+    "language": "es-ES",
+    "chapterNumber": 1,
+    "chapterTitle": "The Golden Bird",
+    "paragraphs": [
+        {
+            "paragraphID": "086ba87a-1e73-48b0-a16c-1bda8ad5e59a",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "7795469a-ab84-44f0-917f-2db13fda677d",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 1,
+                    "reference": "",
+                    "text": "El Pájaro Dorado",
+                    "audioFile": "0000001_GRIMM_S1_C1_P1_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "fbc6f154-e5b8-4509-ba3d-7004f4e0bef2",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "10960e9d-2575-4833-bca8-775190202dd6",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 2,
+                    "reference": "",
+                    "text": "Un cierto rey tenía un hermoso jardín, y en el jardín había un árbol que daba manzanas doradas.",
+                    "audioFile": "0000002_GRIMM_S1_C1_P2_S1_es-ES.aac"
+                },
+                {
+                    "sentenceID": "870fb193-10f7-41ca-85fc-d3339523c9d7",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 3,
+                    "reference": "",
+                    "text": "Estas manzanas siempre se contaban, y alrededor del tiempo cuando comenzaban a madurar, se descubrió que cada noche desaparecía una de ellas.",
+                    "audioFile": "0000003_GRIMM_S1_C1_P2_S2_es-ES.aac"
+                },
+                {
+                    "sentenceID": "fe2e9841-e0db-4196-945f-0e1493ce5399",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 4,
+                    "reference": "",
+                    "text": "El rey se enfadó mucho por esto, y ordenó al jardinero que vigilara toda la noche bajo el árbol.",
+                    "audioFile": "0000004_GRIMM_S1_C1_P2_S3_es-ES.aac"
+                },
+                {
+                    "sentenceID": "a6cc34b9-2d3e-4ecd-bd1c-752e6bdc6b18",
+                    "sentenceIndex": 4,
+                    "globalSentenceIndex": 5,
+                    "reference": "",
+                    "text": "El jardinero puso a su hijo mayor a vigilar; pero alrededor de las doce de la noche se quedó dormido, y por la mañana faltaba otra de las manzanas.",
+                    "audioFile": "0000005_GRIMM_S1_C1_P2_S4_es-ES.aac"
+                },
+                {
+                    "sentenceID": "69c6dd35-f4a3-4bb4-abec-885890de60ef",
+                    "sentenceIndex": 5,
+                    "globalSentenceIndex": 6,
+                    "reference": "",
+                    "text": "Luego, se le ordenó al segundo hijo que vigilara; y a medianoche también se quedó dormido, y por la mañana otra manzana había desaparecido.",
+                    "audioFile": "0000006_GRIMM_S1_C1_P2_S5_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "aa4bad31-1766-4634-9f3d-e782d92d4bd3",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "e9192272-0a85-4b42-847f-66e0bedf371b",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 7,
+                    "reference": "",
+                    "text": "Entonces el hijo mayor del jardinero se puso en marcha y pensó que encontraría el pájaro dorado muy fácilmente; y cuando había avanzado un poco, llegó a un bosque, y al lado del bosque vio a un zorro sentado; así que tomó su arco y se preparó para dispararle.",
+                    "audioFile": "0000007_GRIMM_S1_C1_P3_S1_es-ES.aac"
+                },
+                {
+                    "sentenceID": "7376a6ef-5de2-4b84-a472-5c3913bd5773",
+                    "sentenceIndex": 2,
+                    "globalSentenceIndex": 8,
+                    "reference": "",
+                    "text": "Entonces el zorro dijo, ‘No me dispares, porque te daré un buen consejo; sé cuál es tu negocio y que quieres encontrar al pájaro dorado.",
+                    "audioFile": "0000008_GRIMM_S1_C1_P3_S2_es-ES.aac"
+                },
+                {
+                    "sentenceID": "5e1e5da8-40be-402e-98df-91dea6026a57",
+                    "sentenceIndex": 3,
+                    "globalSentenceIndex": 9,
+                    "reference": "",
+                    "text": "Llegarás a un pueblo por la tarde; y cuando llegues allí, verás dos posadas una frente a la otra, una de las cuales es muy agradable y hermosa a la vista: no entres allí, sino descansa por la noche en la otra, aunque te parezca muy pobre y humilde.",
+                    "audioFile": "0000009_GRIMM_S1_C1_P3_S3_es-ES.aac"
+                }
+            ]
+        }
+    ]
+}

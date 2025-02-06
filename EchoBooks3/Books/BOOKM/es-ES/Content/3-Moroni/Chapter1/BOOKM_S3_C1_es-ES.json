@@ -1,0 +1,92 @@
+{
+    "chapterID": "6f2916ed-9bb4-4911-913a-d349ae210649",
+    "language": "es-ES",
+    "chapterNumber": 1,
+    "chapterTitle": "1",
+    "paragraphs": [
+        {
+            "paragraphID": "cd5e6ae2-8e36-4a83-bb42-024b695805d1",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "a89fb7cc-8aae-4da9-960d-2a2f206928cc",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 21,
+                    "reference": "",
+                    "text": "EL LIBRO DE MORONI",
+                    "audioFile": "0000021_BOOKM_S3_C1_P1_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "58c5ddac-2e62-4669-a6ab-969097852a18",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "42048b3f-1bfa-4c51-aaca-64ab3b464f8c",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 22,
+                    "reference": "",
+                    "text": "Moroni Capítulo 1",
+                    "audioFile": "0000022_BOOKM_S3_C1_P2_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "696de745-c320-4dc6-b266-2a4ea0a1059d",
+            "paragraphIndex": 3,
+            "sentences": [
+                {
+                    "sentenceID": "27ec3b39-7e67-4d26-8273-e6afc4748a4b",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 23,
+                    "reference": "1:1",
+                    "text": "Ahora yo, Moroni, después de haber terminado de abreviar la cuenta del pueblo de Jared, supuse que no iba a escribir más, pero aún no he perecido; y no me doy a conocer a los lamanitas por temor a que me destruyan.",
+                    "audioFile": "0000023_BOOKM_S3_C1_P3_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "9f8f1c0d-aca3-49ac-a611-076be390a184",
+            "paragraphIndex": 4,
+            "sentences": [
+                {
+                    "sentenceID": "c1235e2b-329c-447c-a6a5-6baac0f9d68c",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 24,
+                    "reference": "1:2",
+                    "text": "Porque he aquí, sus guerras son extremadamente feroces entre ellos mismos; y debido a su odio, matan a todo Nefita que no niegue a Cristo.",
+                    "audioFile": "0000024_BOOKM_S3_C1_P4_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "296acec8-95f2-456c-8e13-3f26dfc53fcb",
+            "paragraphIndex": 5,
+            "sentences": [
+                {
+                    "sentenceID": "ab6c2692-2457-4918-9639-6b7d67ad920a",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 25,
+                    "reference": "1:3",
+                    "text": "Y yo, Moroni, no negaré a Cristo; por lo tanto, vagaré dondequiera que pueda por la seguridad de mi propia vida.",
+                    "audioFile": "0000025_BOOKM_S3_C1_P5_S1_es-ES.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "c12cd1bf-4d29-4bba-a962-9ba539817e36",
+            "paragraphIndex": 6,
+            "sentences": [
+                {
+                    "sentenceID": "c26f822d-6710-4457-9bc0-87b2cd0c806f",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 26,
+                    "reference": "1:4",
+                    "text": "Por lo tanto, escribo algunas cosas más, contrario a lo que había supuesto; porque supuse que no iba a escribir más; pero escribo algunas cosas más, que quizás puedan ser de valor para mis hermanos, los Lamanitas, en algún día futuro, según la voluntad del Señor.",
+                    "audioFile": "0000026_BOOKM_S3_C1_P6_S1_es-ES.aac"
+                }
+            ]
+        }
+    ]
+}

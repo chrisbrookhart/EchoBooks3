@@ -1,0 +1,36 @@
+{
+    "chapterID": "888b87fc-2c06-40cf-ae76-ed9bb74518ad",
+    "language": "en-US",
+    "chapterNumber": 1,
+    "chapterTitle": "Title Page of the Book of Mormon",
+    "paragraphs": [
+        {
+            "paragraphID": "5226c3d0-6457-46fa-8948-9c860724b90c",
+            "paragraphIndex": 1,
+            "sentences": [
+                {
+                    "sentenceID": "17e88e14-9059-46b4-a248-3681b2f005a2",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 1,
+                    "reference": "",
+                    "text": "THE BOOK OF MORMON",
+                    "audioFile": "0000001_BOOKM_S1_C1_P1_S1_en-US.aac"
+                }
+            ]
+        },
+        {
+            "paragraphID": "273a59b4-ac03-4105-9f95-ba65bc8e3aa3",
+            "paragraphIndex": 2,
+            "sentences": [
+                {
+                    "sentenceID": "fa76420a-ac86-483a-aaac-0bb3ee3245a0",
+                    "sentenceIndex": 1,
+                    "globalSentenceIndex": 2,
+                    "reference": "",
+                    "text": "Wherefore, it is an abridgment of the record of the people of Nephi, and also of the Lamanites—Written to the Lamanites, who are a remnant of the house of Israel; and also to Jew and Gentile—Written by way of commandment, and also by the spirit of prophecy and of revelation—Written and sealed up, and hid up unto the Lord, that they might not be destroyed—To come forth by the gift and power of God unto the interpretation thereof—Sealed by the hand of Moroni, and hid up unto the Lord, to come forth in due time by way of the Gentile—The interpretation thereof by the gift of God.",
+                    "audioFile": "0000002_BOOKM_S1_C1_P2_S1_en-US.aac"
+                }
+            ]
+        }
+    ]
+}

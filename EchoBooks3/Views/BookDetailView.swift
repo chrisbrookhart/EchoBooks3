@@ -1,5 +1,6 @@
 
-// works, but with deprecated onChange - before subview decomposition (subbookPicker, chapterPicker, sentenceTextBox)
+// BookDetailView.swift
+
 import SwiftUI
 import SwiftData
 
@@ -168,39 +169,40 @@ struct BookDetailView: View {
         .navigationTitle(book.bookTitle)
         .navigationBarTitleDisplayMode(.inline)
         // Attach onChange handlers for immediate persistence.
-        .onChange(of: selectedSubBookIndex) { _ in
+        // Note that fixing deprecation warning merely requires deleting " _ in" (to make it a zero parameter function)
+        .onChange(of: selectedSubBookIndex) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedChapterIndex) { _ in
+        .onChange(of: selectedChapterIndex) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: sliderValue) { _ in
+        .onChange(of: sliderValue) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedLanguage1) { _ in
+        .onChange(of: selectedLanguage1) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedLanguage2) { _ in
+        .onChange(of: selectedLanguage2) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedLanguage3) { _ in
+        .onChange(of: selectedLanguage3) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedSpeed1) { _ in
+        .onChange(of: selectedSpeed1) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedSpeed2) { _ in
+        .onChange(of: selectedSpeed2) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedSpeed3) { _ in
+        .onChange(of: selectedSpeed3) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }

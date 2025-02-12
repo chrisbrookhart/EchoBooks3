@@ -1,100 +1,85 @@
-//
-//  AudioPlaybackManager.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/8/25.
-//
-
-
 import Foundation
 import AVFoundation
 import SwiftUI
-import Combine
 
-/// An audio playback manager for handling basic audiobook playback.
-/// This manager uses AVAudioPlayer to load and play a local audio file.
-/// It exposes published properties for playback state and time so that SwiftUI views can update accordingly.
-final class AudioPlaybackManager: ObservableObject {
-    
-    // Published properties to drive the UI.
+/// A manager that handles audio playback using AVAudioPlayer.
+/// It is designed as an ObservableObject so that your UI can observe changes in playback state.
+class AudioPlaybackManager: NSObject, ObservableObject {
+    /// Published property so the UI can observe playback state.
     @Published var isPlaying: Bool = false
-    @Published var currentTime: TimeInterval = 0.0
-    @Published var duration: TimeInterval = 0.0
     
+    /// The underlying AVAudioPlayer instance.
     private var audioPlayer: AVAudioPlayer?
-    private var timer: Timer?
     
-    /// Loads an audio file from a local URL.
-    /// - Parameter url: The URL of the audio file to load.
-    func loadAudio(from url: URL) {
+    /// A closure that is called when playback finishes.
+    var onPlaybackFinished: (() -> Void)?
+    
+    /// Loads an audio file from the bundle using the given filename (including extension).
+    ///
+    /// - Parameter fileName: The name of the audio file (for example, "0000001_GRIMM_S1_C1_P1_S1_en-US.aac").
+    func loadAudio(fileName: String) {
+        let resourceName = (fileName as NSString).deletingPathExtension
+        let fileExtension = (fileName as NSString).pathExtension
+        
+        guard let url = Bundle.main.url(forResource: resourceName, withExtension: fileExtension) else {
+            print("AudioPlaybackManager: Audio file not found: \(fileName)")
+            return
+        }
+        
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.delegate = self
             audioPlayer?.prepareToPlay()
-            duration = audioPlayer?.duration ?? 0.0
-            currentTime = 0.0
-            print("Audio loaded, duration: \(duration)")
+            print("AudioPlaybackManager: Loaded audio file: \(fileName)")
+            if let duration = audioPlayer?.duration, duration > 0 {
+                print("AudioPlaybackManager: Audio file duration: \(duration) seconds")
+            }
         } catch {
-            print("Error loading audio: \(error)")
+            print("AudioPlaybackManager: Failed to load audio file \(fileName): \(error)")
         }
+    }
+    
+    /// Convenience method to load audio for a given sentence.
+    ///
+    /// - Parameter sentence: The SentenceContent instance that contains the audioFile property.
+    func loadAudio(for sentence: SentenceContent) {
+        loadAudio(fileName: sentence.audioFile)
     }
     
     /// Starts audio playback.
     func play() {
         guard let player = audioPlayer else {
-            print("No audio loaded.")
+            print("AudioPlaybackManager: No audio loaded.")
             return
         }
         player.play()
         isPlaying = true
-        startTimer()
-        print("Playback started.")
     }
     
     /// Pauses audio playback.
     func pause() {
-        guard let player = audioPlayer else { return }
-        player.pause()
+        audioPlayer?.pause()
         isPlaying = false
-        stopTimer()
-        print("Playback paused.")
     }
     
-    /// Skips forward by the specified number of seconds.
-    /// - Parameter seconds: The number of seconds to skip forward.
-    func skipForward(by seconds: TimeInterval = 15) {
-        guard let player = audioPlayer else { return }
-        let newTime = min(player.currentTime + seconds, player.duration)
-        player.currentTime = newTime
-        currentTime = newTime
-        print("Skipped forward to \(newTime) seconds.")
+    /// Stops audio playback.
+    func stop() {
+        audioPlayer?.stop()
+        isPlaying = false
     }
     
-    /// Skips backward by the specified number of seconds.
-    /// - Parameter seconds: The number of seconds to skip backward.
-    func skipBackward(by seconds: TimeInterval = 15) {
-        guard let player = audioPlayer else { return }
-        let newTime = max(player.currentTime - seconds, 0)
-        player.currentTime = newTime
-        currentTime = newTime
-        print("Skipped backward to \(newTime) seconds.")
+    /// Sets the playback rate.
+    ///
+    /// - Parameter rate: The desired playback rate (e.g. 1.0 for normal speed).
+    func setRate(_ rate: Float) {
+        audioPlayer?.enableRate = true
+        audioPlayer?.rate = rate
     }
-    
-    /// Starts a timer to update the current playback time.
-    private func startTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            guard let self = self, let player = self.audioPlayer else { return }
-            self.currentTime = player.currentTime
-            if !player.isPlaying {
-                self.isPlaying = false
-                self.stopTimer()
-            }
-        }
-    }
-    
-    /// Stops the timer that updates playback time.
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
+}
+
+extension AudioPlaybackManager: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        isPlaying = false
+        onPlaybackFinished?()
     }
 }

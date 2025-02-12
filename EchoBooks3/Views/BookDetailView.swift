@@ -1,8 +1,6 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - BookDetailView
-
 struct BookDetailView: View {
     let book: Book
     @Environment(\.modelContext) private var modelContext
@@ -20,7 +18,7 @@ struct BookDetailView: View {
     @State private var currentSentenceIndex: Int = 0
     @State private var advancementTimer: Timer? = nil
 
-    // **Make sure this state variable is declared!**
+    // New state to track manual slider interaction.
     @State private var isUserEditingSlider: Bool = false
 
     // MARK: - Playback Options State
@@ -32,6 +30,9 @@ struct BookDetailView: View {
     @State private var selectedSpeed2: Double = 1.0
     @State private var selectedSpeed3: Double = 1.0
 
+    // MARK: - Audio Playback Manager Integration
+    @StateObject private var audioManager = AudioPlaybackManager()
+    
     // Speed options for playback.
     private let speedOptions: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
@@ -78,7 +79,7 @@ struct BookDetailView: View {
     // MARK: - Initial Restoration Flag
     @State private var hasRestoredState: Bool = false
     
-    // For Approach 2, we set the slider range directly to 0 ... (totalSentences - 1)
+    // For a slider that directly represents sentence indices:
     var maxSliderValue: Double {
         totalSentences > 0 ? Double(totalSentences - 1) : 0.0
     }
@@ -87,7 +88,8 @@ struct BookDetailView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Subbook Picker
+                    
+                    // --- Subbook Picker ---
                     if book.subBooks.count > 1 {
                         HStack {
                             Spacer()
@@ -102,7 +104,7 @@ struct BookDetailView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Chapter Picker
+                    // --- Chapter Picker ---
                     if selectedSubBook.chapters.count > 1 {
                         HStack {
                             Spacer()
@@ -117,7 +119,7 @@ struct BookDetailView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Sentence Display
+                    // --- Sentence Display ---
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
                         Text(currentSentence)
@@ -129,10 +131,12 @@ struct BookDetailView: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
                     
-                    // Playback Controls
+                    // --- Playback Controls ---
                     HStack {
                         Spacer()
-                        Button(action: { skipBackwardAction() }) {
+                        Button(action: {
+                            skipBackwardAction()
+                        }) {
                             Image(systemName: "arrow.trianglehead.counterclockwise")
                                 .font(.title)
                         }
@@ -154,7 +158,9 @@ struct BookDetailView: View {
                         .foregroundColor(isAtEnd ? .gray : .primary)
                         .disabled(isAtEnd)
                         Spacer()
-                        Button(action: { skipForwardAction() }) {
+                        Button(action: {
+                            skipForwardAction()
+                        }) {
                             Image(systemName: "arrow.trianglehead.clockwise")
                                 .font(.title)
                         }
@@ -164,7 +170,7 @@ struct BookDetailView: View {
                     }
                     .padding(.horizontal)
                     
-                    // Slider for Chapter Navigation (Continuous updates as user drags)
+                    // --- Slider for Chapter Navigation ---
                     Slider(
                         value: Binding(
                             get: { sliderValue },
@@ -174,22 +180,23 @@ struct BookDetailView: View {
                                 currentSentenceIndex = targetIndex
                                 if let sentence = chapterContent.flatMap({ getCurrentSentence(from: $0, at: targetIndex) }) {
                                     currentSentence = sentence.text
+                                    // When a new sentence is loaded, load its audio and auto-play.
+                                    audioManager.loadAudio(for: sentence)
+                                    audioManager.play()
                                 }
-                            }
-                        ),
-                        in: 0...maxSliderValue,
-                        onEditingChanged: { editing in
-                            isUserEditingSlider = editing
-                            if !editing {
-                                // When user finishes dragging, update persistence.
                                 saveBookState()
                                 updateGlobalAppStateForBookDetail()
                             }
+                        ),
+                        in: 0...maxSliderValue,
+                        onEditingChanged: { _ in
+                            saveBookState()
+                            updateGlobalAppStateForBookDetail()
                         }
                     )
                     .padding(.horizontal)
                     
-                    // Playback Options: Language and Speed Pickers
+                    // --- Playback Options: Language and Speed Pickers ---
                     VStack(alignment: .leading, spacing: 16) {
                         PlaybackOptionRowView(
                             selectedLanguage: $selectedLanguage1,
@@ -227,6 +234,9 @@ struct BookDetailView: View {
                     currentSentence = sentence.text
                     let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
                     sliderValue = total > 1 ? Double(currentSentenceIndex) / Double(total - 1) * maxSliderValue : 0.0
+                    // When restoring the sentence, load its audio and auto-play.
+                    audioManager.loadAudio(for: sentence)
+                    audioManager.play()
                 }
                 DispatchQueue.main.async {
                     hasRestoredState = true
@@ -236,6 +246,7 @@ struct BookDetailView: View {
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
                 stopAdvancementTimer()
+                audioManager.pause()
             }
         }
         .navigationTitle(book.bookTitle)
@@ -245,6 +256,10 @@ struct BookDetailView: View {
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
+                if let sentence = currentSentenceContent() {
+                    audioManager.loadAudio(for: sentence)
+                    audioManager.play()
+                }
             }
         }
         .onChange(of: selectedChapterIndex) { _, _ in
@@ -252,6 +267,10 @@ struct BookDetailView: View {
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
+                if let sentence = currentSentenceContent() {
+                    audioManager.loadAudio(for: sentence)
+                    audioManager.play()
+                }
             }
         }
         .onChange(of: selectedLanguage1) {
@@ -269,19 +288,29 @@ struct BookDetailView: View {
         .onChange(of: selectedSpeed1) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
+            audioManager.setRate(Float($0))
         }
         .onChange(of: selectedSpeed2) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
+            audioManager.setRate(Float($0))
         }
         .onChange(of: selectedSpeed3) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
+            audioManager.setRate(Float($0))
         }
     }
     
-    // MARK: - Skip Button Actions
+    // MARK: - Helper: Get Current SentenceContent
+    private func currentSentenceContent() -> SentenceContent? {
+        if let content = chapterContent {
+            return getCurrentSentence(from: content, at: currentSentenceIndex)
+        }
+        return nil
+    }
     
+    // MARK: - Skip Button Actions
     private func skipBackwardAction() {
         guard let content = chapterContent else { return }
         let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
@@ -290,6 +319,8 @@ struct BookDetailView: View {
         sliderValue = total > 1 ? Double(newIndex) / Double(total - 1) * maxSliderValue : 0.0
         if let sentence = getCurrentSentence(from: content, at: newIndex) {
             currentSentence = sentence.text
+            audioManager.loadAudio(for: sentence)
+            audioManager.play()
         }
         saveBookState()
         updateGlobalAppStateForBookDetail()
@@ -303,13 +334,14 @@ struct BookDetailView: View {
         sliderValue = total > 1 ? Double(newIndex) / Double(total - 1) * maxSliderValue : 0.0
         if let sentence = getCurrentSentence(from: content, at: newIndex) {
             currentSentence = sentence.text
+            audioManager.loadAudio(for: sentence)
+            audioManager.play()
         }
         saveBookState()
         updateGlobalAppStateForBookDetail()
     }
     
     // MARK: - Auto-Advancement Functions
-    
     private func startAdvancementTimer() {
         stopAdvancementTimer()
         advancementTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
@@ -330,6 +362,10 @@ struct BookDetailView: View {
             sliderValue = Double(currentSentenceIndex) / Double(total - 1) * maxSliderValue
             if let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                 currentSentence = sentence.text
+                audioManager.loadAudio(for: sentence)
+                if isPlaying {
+                    audioManager.play()
+                }
             }
             saveBookState()
             updateGlobalAppStateForBookDetail()
@@ -342,6 +378,10 @@ struct BookDetailView: View {
                 if let content = chapterContent,
                    let firstSentence = getCurrentSentence(from: content, at: 0) {
                     currentSentence = firstSentence.text
+                    audioManager.loadAudio(for: firstSentence)
+                    if isPlaying {
+                        audioManager.play()
+                    }
                 }
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
@@ -354,6 +394,10 @@ struct BookDetailView: View {
                 if let content = chapterContent,
                    let firstSentence = getCurrentSentence(from: content, at: 0) {
                     currentSentence = firstSentence.text
+                    audioManager.loadAudio(for: firstSentence)
+                    if isPlaying {
+                        audioManager.play()
+                    }
                 }
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
@@ -365,7 +409,6 @@ struct BookDetailView: View {
     }
     
     // MARK: - Update Current Sentence on Selection Change
-    
     private func updateCurrentSentenceForSelection() {
         chapterContent = loadChapterContent()
         currentSentenceIndex = 0
@@ -373,13 +416,14 @@ struct BookDetailView: View {
         if let content = chapterContent,
            let firstSentence = getCurrentSentence(from: content, at: 0) {
             currentSentence = firstSentence.text
+            audioManager.loadAudio(for: firstSentence)
+            audioManager.play()
         } else {
             currentSentence = "No sentence available."
         }
     }
     
     // MARK: - JSON Parsing Helpers
-    
     private func chapterJSONFileName(language: String = "en-US") -> String {
         let bookCode = book.bookCode
         let subNumber = selectedSubBook.subBookNumber
@@ -420,7 +464,6 @@ struct BookDetailView: View {
     }
     
     // MARK: - Persistence Helper Functions
-    
     private func loadBookState() {
         let targetBookID = book.id
         let fetchRequest = FetchDescriptor<BookState>(predicate: #Predicate<BookState> { state in
@@ -478,4 +521,3 @@ struct BookDetailView: View {
         }
     }
 }
-

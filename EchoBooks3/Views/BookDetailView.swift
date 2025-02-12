@@ -1,8 +1,30 @@
-// BookDetailView.swift
-
 import SwiftUI
 import SwiftData
 
+//// MARK: - Chapter JSON Models
+//
+//struct ChapterContent: Decodable {
+//    let chapterID: String
+//    let language: String
+//    let chapterNumber: Int
+//    let chapterTitle: String
+//    let paragraphs: [ParagraphContent]
+//}
+//
+//struct ParagraphContent: Decodable {
+//    let paragraphID: String
+//    let paragraphIndex: Int
+//    let sentences: [SentenceContent]
+//}
+//
+//struct SentenceContent: Decodable {
+//    let sentenceID: String
+//    let sentenceIndex: Int
+//    let globalSentenceIndex: Int
+//    let reference: String?
+//    let text: String
+//    let audioFile: String
+//}
 
 // MARK: - BookDetailView
 
@@ -10,9 +32,6 @@ struct BookDetailView: View {
     let book: Book
     @Environment(\.modelContext) private var modelContext
 
-    // MARK: - Audio Playback (Placeholder for now)
-    // (Later, you'll integrate an AudioPlaybackManager.)
-    
     // MARK: - Navigation & Content State
     @State private var selectedSubBookIndex: Int = 0
     @State private var selectedChapterIndex: Int = 0
@@ -22,7 +41,7 @@ struct BookDetailView: View {
     @State private var sliderValue: Double = 0.0
     @State private var isPlaying: Bool = false
 
-    // New state for auto-advancement:
+    // New state for auto-advancement (used elsewhere)
     @State private var currentSentenceIndex: Int = 0
     @State private var advancementTimer: Timer? = nil
 
@@ -30,7 +49,7 @@ struct BookDetailView: View {
     @State private var selectedLanguage1: String = "English"
     @State private var selectedLanguage2: String = "None"
     @State private var selectedLanguage3: String = "None"
-
+    
     @State private var selectedSpeed1: Double = 1.0
     @State private var selectedSpeed2: Double = 1.0
     @State private var selectedSpeed3: Double = 1.0
@@ -68,21 +87,21 @@ struct BookDetailView: View {
         chapterContent?.paragraphs.reduce(0) { $0 + $1.sentences.count } ?? 0
     }
     
-    // MARK: - Computed Property: End-of-Book Check
-    /// Returns true if we are at the last sentence of the last chapter of the last subbook.
-    private var isEndOfBook: Bool {
-        let isLastSubBook = selectedSubBookIndex == (book.subBooks.count - 1)
-        let isLastChapter = selectedChapterIndex == (selectedSubBook.chapters.count - 1)
-        if let content = chapterContent {
-            let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
-            let isLastSentence = currentSentenceIndex == (total - 1)
-            return isLastSubBook && isLastChapter && isLastSentence
+    // Computed booleans for button states.
+    var isAtBeginning: Bool {
+        currentSentenceIndex == 0
+    }
+    var isAtEnd: Bool {
+        if totalSentences > 0 {
+            return currentSentenceIndex == (totalSentences - 1)
         }
         return false
     }
     
     var body: some View {
         GeometryReader { geo in
+            // Compute total sentences (if available) for button state.
+            let _ = totalSentences  // This forces evaluation of totalSentences.
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     
@@ -132,40 +151,39 @@ struct BookDetailView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            stopAdvancementTimer() // Cancel auto-advance for manual control.
-                            // (Placeholder for skip backward action.)
+                            skipBackwardAction()
                         }) {
                             Image(systemName: "arrow.trianglehead.counterclockwise")
                                 .font(.title)
                         }
+                        .disabled(isAtBeginning)
+                        .foregroundColor(isAtBeginning ? .gray : .primary)
+                        
                         Spacer()
                         Button(action: {
-                            if isEndOfBook {
-                                // At the end of the book: do nothing.
-                                print("End of book reached. Playback disabled.")
-                            } else {
-                                if isPlaying {
-                                    isPlaying = false
-                                    stopAdvancementTimer()
-                                } else {
-                                    isPlaying = true
-                                    startAdvancementTimer()
-                                }
+                            if isPlaying {
+                                isPlaying = false
+                                stopAdvancementTimer()
+                            } else if !isAtEnd {
+                                isPlaying = true
+                                startAdvancementTimer()
                             }
                         }) {
-                            Image(systemName: (isEndOfBook || !isPlaying) ? "play.circle.fill" : "pause.circle.fill")
+                            Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
                                 .font(.system(size: 50))
-                                .foregroundColor(isEndOfBook ? .gray : .primary)
                         }
-                        .disabled(isEndOfBook)
+                        .foregroundColor(isAtEnd ? .gray : .primary)
+                        .disabled(isAtEnd)
+                        
                         Spacer()
                         Button(action: {
-                            stopAdvancementTimer() // Cancel auto-advance for manual control.
-                            // (Placeholder for skip forward action.)
+                            skipForwardAction()
                         }) {
                             Image(systemName: "arrow.trianglehead.clockwise")
                                 .font(.title)
                         }
+                        .disabled(isAtEnd)
+                        .foregroundColor(isAtEnd ? .gray : .primary)
                         Spacer()
                     }
                     .padding(.horizontal)
@@ -232,7 +250,7 @@ struct BookDetailView: View {
         }
         .navigationTitle(book.bookTitle)
         .navigationBarTitleDisplayMode(.inline)
-        // onChange handlers for state changes.
+        // onChange handlers for other state variables.
         .onChange(of: selectedSubBookIndex) {
             updateCurrentSentenceForSelection()
             saveBookState()
@@ -269,9 +287,38 @@ struct BookDetailView: View {
         }
     }
     
+    // MARK: - Skip Button Actions
+    
+    private func skipBackwardAction() {
+        guard let content = chapterContent else { return }
+        let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
+        let newIndex = max(currentSentenceIndex - 5, 0)
+        currentSentenceIndex = newIndex
+        sliderValue = (total > 1 ? Double(newIndex) / Double(total - 1) * 100.0 : 0.0)
+        if let sentence = getCurrentSentence(from: content, at: newIndex) {
+            currentSentence = sentence.text
+            print("Skipped backward to sentence: \(sentence.text)")
+        }
+        saveBookState()
+        updateGlobalAppStateForBookDetail()
+    }
+    
+    private func skipForwardAction() {
+        guard let content = chapterContent else { return }
+        let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
+        let newIndex = min(currentSentenceIndex + 5, total - 1)
+        currentSentenceIndex = newIndex
+        sliderValue = (total > 1 ? Double(newIndex) / Double(total - 1) * 100.0 : 0.0)
+        if let sentence = getCurrentSentence(from: content, at: newIndex) {
+            currentSentence = sentence.text
+            print("Skipped forward to sentence: \(sentence.text)")
+        }
+        saveBookState()
+        updateGlobalAppStateForBookDetail()
+    }
+    
     // MARK: - Auto-Advancement Functions
     
-    /// Starts a timer that advances the sentence every 0.5 seconds.
     private func startAdvancementTimer() {
         stopAdvancementTimer() // Cancel any existing timer.
         advancementTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
@@ -279,13 +326,11 @@ struct BookDetailView: View {
         }
     }
     
-    /// Stops the auto-advancement timer.
     private func stopAdvancementTimer() {
         advancementTimer?.invalidate()
         advancementTimer = nil
     }
     
-    /// Advances to the next sentence. If the current chapter is finished, advances to the next chapter or subbook.
     private func advanceSentence() {
         guard let content = chapterContent else { return }
         let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
@@ -316,7 +361,7 @@ struct BookDetailView: View {
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
             } else if selectedSubBookIndex < book.subBooks.count - 1 {
-                // No more chapters in current subbook; advance to next subbook.
+                // Move to next subbook.
                 selectedSubBookIndex += 1
                 selectedChapterIndex = 0
                 currentSentenceIndex = 0
@@ -333,17 +378,17 @@ struct BookDetailView: View {
                 // End of the entire book reached.
                 print("Reached the end of the book. Auto-advancement stopped.")
                 stopAdvancementTimer()
-                isPlaying = false  // Ensure play/pause button reverts to play.
+                isPlaying = false
             }
         }
     }
     
-    /// Updates the current sentence for the current subbook/chapter selection.
     private func updateCurrentSentenceForSelection() {
         chapterContent = loadChapterContent()
         currentSentenceIndex = 0
         sliderValue = 0.0
-        if let content = chapterContent, let firstSentence = getCurrentSentence(from: content, at: 0) {
+        if let content = chapterContent,
+           let firstSentence = getCurrentSentence(from: content, at: 0) {
             currentSentence = firstSentence.text
             print("Updated current sentence for new selection: \(firstSentence.text)")
         } else {
@@ -354,8 +399,6 @@ struct BookDetailView: View {
     
     // MARK: - JSON Parsing Helpers
     
-    /// Computes the chapter JSON file name based on the naming convention:
-    /// "{bookCode}_S{subBookNumber}_C{chapterNumber}_en-US.json"
     private func chapterJSONFileName(language: String = "en-US") -> String {
         let bookCode = book.bookCode
         let subNumber = selectedSubBook.subBookNumber
@@ -363,7 +406,6 @@ struct BookDetailView: View {
         return "\(bookCode)_S\(subNumber)_C\(chapterNum)_\(language).json"
     }
     
-    /// Loads and decodes the chapter content from the JSON file in the main bundle.
     private func loadChapterContent() -> ChapterContent? {
         let fileName = chapterJSONFileName()
         let resource = (fileName as NSString).deletingPathExtension
@@ -384,7 +426,6 @@ struct BookDetailView: View {
         }
     }
     
-    /// Given ChapterContent and a target sentence index, returns the corresponding SentenceContent.
     private func getCurrentSentence(from chapter: ChapterContent, at targetIndex: Int) -> SentenceContent? {
         let total = chapter.paragraphs.reduce(0) { $0 + $1.sentences.count }
         guard total > 0 else { return nil }
@@ -489,6 +530,7 @@ struct PlaybackOptionRowView: View {
         }
     }
 }
+
 
 
 //// displays first sentence in chapter based on user selection

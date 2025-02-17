@@ -1,3 +1,11 @@
+//
+//  BookDetailView.swift
+//  EchoBooks3
+//
+//  Revised to update the current sentence when selectedLanguage1 changes.
+//  Also, play/pause and navigation functionality is maintained as before.
+//
+
 import SwiftUI
 import SwiftData
 
@@ -13,13 +21,7 @@ struct BookDetailView: View {
     @State private var currentSentence: String = "Loading sentence..."
     @State private var sliderValue: Double = 0.0
     @State private var isPlaying: Bool = false
-
-    // New state for auto-advancement:
     @State private var currentSentenceIndex: Int = 0
-    @State private var advancementTimer: Timer? = nil
-
-    // New state to track manual slider interaction.
-    @State private var isUserEditingSlider: Bool = false
 
     // MARK: - Playback Options State
     @State private var selectedLanguage1: String = "English"
@@ -42,6 +44,11 @@ struct BookDetailView: View {
     }
     var availableLanguagesWithNone: [String] {
         ["None"] + availableLanguageNames
+    }
+
+    // Computed property: returns the code for the primary selected language.
+    private var selectedLanguage1Code: String {
+        return LanguageCode.allCases.first(where: { $0.name == selectedLanguage1 })?.rawValue ?? "en-US"
     }
 
     // Convenience computed properties.
@@ -146,10 +153,18 @@ struct BookDetailView: View {
                         Button(action: {
                             if isPlaying {
                                 isPlaying = false
-                                stopAdvancementTimer()
+                                audioManager.pause()
+                                audioManager.onPlaybackFinished = nil
                             } else if !isAtEnd {
                                 isPlaying = true
-                                startAdvancementTimer()
+                                audioManager.onPlaybackFinished = {
+                                    self.audioDidFinishPlaying()
+                                }
+                                // Ensure the current sentence's audio is loaded.
+                                if let sentence = currentSentenceContent() {
+                                    audioManager.loadAudio(for: sentence)
+                                }
+                                audioManager.play()
                             }
                         }) {
                             Image(systemName: isAtEnd || !isPlaying ? "play.circle.fill" : "pause.circle.fill")
@@ -180,9 +195,10 @@ struct BookDetailView: View {
                                 currentSentenceIndex = targetIndex
                                 if let sentence = chapterContent.flatMap({ getCurrentSentence(from: $0, at: targetIndex) }) {
                                     currentSentence = sentence.text
-                                    // When a new sentence is loaded, load its audio and auto-play.
                                     audioManager.loadAudio(for: sentence)
-                                    audioManager.play()
+                                    if isPlaying {
+                                        audioManager.play()
+                                    }
                                 }
                                 saveBookState()
                                 updateGlobalAppStateForBookDetail()
@@ -226,17 +242,14 @@ struct BookDetailView: View {
             .onAppear {
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
-                chapterContent = loadChapterContent()
+                // Load chapter content using the primary selected language.
+                chapterContent = loadChapterContent(language: selectedLanguage1Code)
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0
                 if let content = chapterContent,
                    let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                     currentSentence = sentence.text
-                    let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
-                    sliderValue = total > 1 ? Double(currentSentenceIndex) / Double(total - 1) * maxSliderValue : 0.0
-                    // When restoring the sentence, load its audio and auto-play.
-                    audioManager.loadAudio(for: sentence)
-                    audioManager.play()
+                    // Do not auto-play on view appearance.
                 }
                 DispatchQueue.main.async {
                     hasRestoredState = true
@@ -245,35 +258,43 @@ struct BookDetailView: View {
             .onDisappear {
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
-                stopAdvancementTimer()
                 audioManager.pause()
+                audioManager.onPlaybackFinished = nil
             }
         }
         .navigationTitle(book.bookTitle)
         .navigationBarTitleDisplayMode(.inline)
+        // --- onChange Handlers ---
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState {
+                isPlaying = false
+                audioManager.pause()
+                audioManager.onPlaybackFinished = nil
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
-                if let sentence = currentSentenceContent() {
-                    audioManager.loadAudio(for: sentence)
-                    audioManager.play()
-                }
             }
         }
         .onChange(of: selectedChapterIndex) { _, _ in
             if hasRestoredState {
+                isPlaying = false
+                audioManager.pause()
+                audioManager.onPlaybackFinished = nil
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
-                if let sentence = currentSentenceContent() {
-                    audioManager.loadAudio(for: sentence)
-                    audioManager.play()
-                }
             }
         }
         .onChange(of: selectedLanguage1) {
+            // When the primary language changes, reload chapter content using the new language.
+            let languageCode = selectedLanguage1Code
+            chapterContent = loadChapterContent(language: languageCode)
+            if let content = chapterContent,
+               let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+                currentSentence = sentence.text
+            } else {
+                currentSentence = "No sentence available."
+            }
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
@@ -302,6 +323,13 @@ struct BookDetailView: View {
         }
     }
     
+    // MARK: - Audio Completion Handler
+    private func audioDidFinishPlaying() {
+        if isPlaying {
+            advanceSentence()
+        }
+    }
+    
     // MARK: - Helper: Get Current SentenceContent
     private func currentSentenceContent() -> SentenceContent? {
         if let content = chapterContent {
@@ -320,7 +348,9 @@ struct BookDetailView: View {
         if let sentence = getCurrentSentence(from: content, at: newIndex) {
             currentSentence = sentence.text
             audioManager.loadAudio(for: sentence)
-            audioManager.play()
+            if isPlaying {
+                audioManager.play()
+            }
         }
         saveBookState()
         updateGlobalAppStateForBookDetail()
@@ -335,25 +365,15 @@ struct BookDetailView: View {
         if let sentence = getCurrentSentence(from: content, at: newIndex) {
             currentSentence = sentence.text
             audioManager.loadAudio(for: sentence)
-            audioManager.play()
+            if isPlaying {
+                audioManager.play()
+            }
         }
         saveBookState()
         updateGlobalAppStateForBookDetail()
     }
     
-    // MARK: - Auto-Advancement Functions
-    private func startAdvancementTimer() {
-        stopAdvancementTimer()
-        advancementTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-            advanceSentence()
-        }
-    }
-    
-    private func stopAdvancementTimer() {
-        advancementTimer?.invalidate()
-        advancementTimer = nil
-    }
-    
+    // MARK: - Advance Sentence When Audio Finishes
     private func advanceSentence() {
         guard let content = chapterContent else { return }
         let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
@@ -370,11 +390,12 @@ struct BookDetailView: View {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         } else {
+            // Advance to next chapter or subbook if applicable.
             if selectedChapterIndex < selectedSubBook.chapters.count - 1 {
                 selectedChapterIndex += 1
                 currentSentenceIndex = 0
                 sliderValue = 0.0
-                chapterContent = loadChapterContent()
+                chapterContent = loadChapterContent(language: selectedLanguage1Code)
                 if let content = chapterContent,
                    let firstSentence = getCurrentSentence(from: content, at: 0) {
                     currentSentence = firstSentence.text
@@ -390,7 +411,7 @@ struct BookDetailView: View {
                 selectedChapterIndex = 0
                 currentSentenceIndex = 0
                 sliderValue = 0.0
-                chapterContent = loadChapterContent()
+                chapterContent = loadChapterContent(language: selectedLanguage1Code)
                 if let content = chapterContent,
                    let firstSentence = getCurrentSentence(from: content, at: 0) {
                     currentSentence = firstSentence.text
@@ -402,7 +423,6 @@ struct BookDetailView: View {
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
             } else {
-                stopAdvancementTimer()
                 isPlaying = false
             }
         }
@@ -410,29 +430,27 @@ struct BookDetailView: View {
     
     // MARK: - Update Current Sentence on Selection Change
     private func updateCurrentSentenceForSelection() {
-        chapterContent = loadChapterContent()
+        chapterContent = loadChapterContent(language: selectedLanguage1Code)
         currentSentenceIndex = 0
         sliderValue = 0.0
         if let content = chapterContent,
            let firstSentence = getCurrentSentence(from: content, at: 0) {
             currentSentence = firstSentence.text
-            audioManager.loadAudio(for: firstSentence)
-            audioManager.play()
         } else {
             currentSentence = "No sentence available."
         }
     }
     
     // MARK: - JSON Parsing Helpers
-    private func chapterJSONFileName(language: String = "en-US") -> String {
+    private func chapterJSONFileName(language: String) -> String {
         let bookCode = book.bookCode
         let subNumber = selectedSubBook.subBookNumber
         let chapterNum = selectedChapter.chapterNumber
         return "\(bookCode)_S\(subNumber)_C\(chapterNum)_\(language).json"
     }
     
-    private func loadChapterContent() -> ChapterContent? {
-        let fileName = chapterJSONFileName()
+    private func loadChapterContent(language: String = "en-US") -> ChapterContent? {
+        let fileName = chapterJSONFileName(language: language)
         let resource = (fileName as NSString).deletingPathExtension
         let ext = (fileName as NSString).pathExtension
         if let url = Bundle.main.url(forResource: resource, withExtension: ext) {

@@ -1,8 +1,6 @@
 //
 //  LanguageCode.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
+
 //
 
 import Foundation

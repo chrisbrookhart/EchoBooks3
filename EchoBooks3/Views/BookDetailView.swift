@@ -2,8 +2,9 @@
 //  BookDetailView.swift
 //  EchoBooks3
 //
-//  Revised with debugging output and delayed reset of internalNavigation flag
-//  so that internal chapter/subbook changes do not cause playback to pause.
+//  Revised to support multi-language playback and per-language speed selection,
+//  ensuring that when the view first appears and when play is pressed, the audio
+//  player’s rate is explicitly set after loading audio so that the persisted speed is used.
 //
 
 import SwiftUI
@@ -31,7 +32,7 @@ struct BookDetailView: View {
     /// 3 = tertiary (selectedLanguage3).
     @State private var currentPlaybackStage: Int = 1
 
-    /// Flag to indicate if the chapter/subbook change is due to internal advancement
+    /// Flag to indicate if chapter/subbook change is internal.
     @State private var internalNavigation: Bool = false
 
     // MARK: - Playback Options State
@@ -49,7 +50,7 @@ struct BookDetailView: View {
     // Speed options for playback.
     private let speedOptions: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
-    // Available language names from the book's languages.
+    // Available language names.
     var availableLanguageNames: [String] {
         book.languages.map { $0.name }
     }
@@ -113,16 +114,15 @@ struct BookDetailView: View {
         totalSentences > 0 ? Double(totalSentences - 1) : 0.0
     }
     
-    // Helper: Print global state variables.
+    // Helper: Print key global state variables.
     private func debugGlobalState(prefix: String) {
-        print("[DEBUG] \(prefix) Global State: selectedSubBookIndex: \(selectedSubBookIndex), selectedChapterIndex: \(selectedChapterIndex), sliderValue: \(sliderValue), currentSentenceIndex: \(currentSentenceIndex), isPlaying: \(isPlaying), currentPlaybackStage: \(currentPlaybackStage)")
+        print("[DEBUG] \(prefix) Global State: subBookIndex: \(selectedSubBookIndex), chapterIndex: \(selectedChapterIndex), sliderValue: \(sliderValue), sentenceIndex: \(currentSentenceIndex), isPlaying: \(isPlaying), playbackStage: \(currentPlaybackStage)")
     }
     
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    
                     // Subbook Picker
                     if book.subBooks.count > 1 {
                         HStack {
@@ -137,7 +137,6 @@ struct BookDetailView: View {
                         }
                         .padding(.horizontal)
                     }
-                    
                     // Chapter Picker
                     if selectedSubBook.chapters.count > 1 {
                         HStack {
@@ -152,7 +151,6 @@ struct BookDetailView: View {
                         }
                         .padding(.horizontal)
                     }
-                    
                     // Sentence Display
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
@@ -164,12 +162,10 @@ struct BookDetailView: View {
                     .frame(height: geo.size.height * 0.4)
                     .cornerRadius(8)
                     .padding(.horizontal)
-                    
                     // Playback Controls
                     HStack {
                         Spacer()
                         Button(action: {
-                            print("[DEBUG] Skip Backward pressed. currentSentenceIndex: \(currentSentenceIndex)")
                             skipBackwardAction()
                         }) {
                             Image(systemName: "arrow.trianglehead.counterclockwise")
@@ -180,21 +176,19 @@ struct BookDetailView: View {
                         Spacer()
                         Button(action: {
                             if isPlaying {
-                                print("[DEBUG] Play/Pause pressed: PAUSE. isPlaying was true.")
                                 isPlaying = false
                                 audioManager.pause()
                                 audioManager.onPlaybackFinished = nil
                             } else if !isAtEnd {
-                                print("[DEBUG] Play/Pause pressed: PLAY. isPlaying was false.")
                                 currentPlaybackStage = 1
                                 isPlaying = true
-                                audioManager.onPlaybackFinished = {
-                                    self.audioDidFinishPlaying()
-                                }
+                                print("[BookDetailView] Play button pressed: Setting primary speed to \(selectedSpeed1)")
+                                // Load audio for the current sentence, then reapply primary speed.
                                 if let sentence = currentSentenceContent() {
-                                    print("[DEBUG] Loading primary language audio for sentence at index \(currentSentenceIndex)")
                                     audioManager.loadAudio(for: sentence)
+                                    audioManager.setRate(Float(selectedSpeed1))
                                 }
+                                audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                                 audioManager.play()
                             }
                         }) {
@@ -205,7 +199,6 @@ struct BookDetailView: View {
                         .disabled(isAtEnd)
                         Spacer()
                         Button(action: {
-                            print("[DEBUG] Skip Forward pressed. currentSentenceIndex: \(currentSentenceIndex)")
                             skipForwardAction()
                         }) {
                             Image(systemName: "arrow.trianglehead.clockwise")
@@ -216,7 +209,6 @@ struct BookDetailView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
-                    
                     // Slider for Chapter Navigation
                     Slider(
                         value: Binding(
@@ -224,7 +216,6 @@ struct BookDetailView: View {
                             set: { newValue in
                                 sliderValue = newValue
                                 let targetIndex = Int(round(newValue))
-                                print("[DEBUG] Slider changed. New target index: \(targetIndex)")
                                 currentSentenceIndex = targetIndex
                                 if let sentence = chapterContent.flatMap({ getCurrentSentence(from: $0, at: targetIndex) }) {
                                     currentSentence = sentence.text
@@ -242,7 +233,6 @@ struct BookDetailView: View {
                         }
                     )
                     .padding(.horizontal)
-                    
                     // Playback Options: Language and Speed Pickers
                     VStack(alignment: .leading, spacing: 16) {
                         PlaybackOptionRowView(
@@ -265,13 +255,11 @@ struct BookDetailView: View {
                         )
                     }
                     .padding(.horizontal)
-                    
                     Spacer()
                 }
                 .padding(.vertical)
             }
             .onAppear {
-                print("[DEBUG] onAppear called. Loading book state and chapter content.")
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
                 chapterContent = loadChapterContent(language: selectedLanguage1Code)
@@ -280,14 +268,15 @@ struct BookDetailView: View {
                 if let content = chapterContent,
                    let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                     currentSentence = sentence.text
-                    print("[DEBUG] onAppear: currentSentenceIndex: \(currentSentenceIndex), Sentence: \(currentSentence)")
                 }
+                // Immediately set the primary audio player's speed.
+                print("[BookDetailView onAppear] Setting primary speed to \(selectedSpeed1)")
+                audioManager.setRate(Float(selectedSpeed1))
                 DispatchQueue.main.async {
                     hasRestoredState = true
                 }
             }
             .onDisappear {
-                print("[DEBUG] onDisappear called. Saving state and pausing audio.")
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
                 audioManager.pause()
@@ -296,39 +285,33 @@ struct BookDetailView: View {
         }
         .navigationTitle(book.bookTitle)
         .navigationBarTitleDisplayMode(.inline)
-        // onChange Handlers
+        // onChange Handlers for indices
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState {
                 if !internalNavigation {
-                    print("[DEBUG] onChange: selectedSubBookIndex changed by user. Pausing playback.")
                     isPlaying = false
                     audioManager.pause()
                     audioManager.onPlaybackFinished = nil
                     updateCurrentSentenceForSelection()
                     saveBookState()
                     updateGlobalAppStateForBookDetail()
-                } else {
-                    print("[DEBUG] onChange: selectedSubBookIndex changed internally. internalNavigation: \(internalNavigation)")
                 }
             }
         }
         .onChange(of: selectedChapterIndex) { _, _ in
             if hasRestoredState {
                 if !internalNavigation {
-                    print("[DEBUG] onChange: selectedChapterIndex changed by user. Pausing playback.")
                     isPlaying = false
                     audioManager.pause()
                     audioManager.onPlaybackFinished = nil
                     updateCurrentSentenceForSelection()
                     saveBookState()
                     updateGlobalAppStateForBookDetail()
-                } else {
-                    print("[DEBUG] onChange: selectedChapterIndex changed internally. internalNavigation: \(internalNavigation)")
                 }
             }
         }
-        .onChange(of: selectedLanguage1) { newValue in
-            print("[DEBUG] onChange: selectedLanguage1 changed to \(newValue). Reloading chapter content.")
+        // onChange Handlers for language selectors
+        .onChange(of: selectedLanguage1) {
             let languageCode = selectedLanguage1Code
             chapterContent = loadChapterContent(language: languageCode)
             if let content = chapterContent,
@@ -348,30 +331,30 @@ struct BookDetailView: View {
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
-        .onChange(of: selectedSpeed1) {
+        // onChange Handlers for speed selectors – update rate immediately.
+        .onChange(of: selectedSpeed1, initial: true) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
             audioManager.setRate(Float(selectedSpeed1))
+            print("[BookDetailView] Primary speed updated to \(selectedSpeed1)")
         }
-        .onChange(of: selectedSpeed2) {
+        .onChange(of: selectedSpeed2, initial: true) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
             audioManager.setRate(Float(selectedSpeed2))
+            print("[BookDetailView] Secondary speed updated to \(selectedSpeed2)")
         }
-        .onChange(of: selectedSpeed3) {
+        .onChange(of: selectedSpeed3, initial: true) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
             audioManager.setRate(Float(selectedSpeed3))
+            print("[BookDetailView] Tertiary speed updated to \(selectedSpeed3)")
         }
     }
     
     // MARK: - Audio Completion Handler
     private func audioDidFinishPlaying() {
-        guard isPlaying else {
-            print("[DEBUG] audioDidFinishPlaying called but isPlaying is false.")
-            return
-        }
-        print("[DEBUG] audioDidFinishPlaying: currentPlaybackStage: \(currentPlaybackStage), currentSentenceIndex: \(currentSentenceIndex)")
+        guard isPlaying else { return }
         
         if currentPlaybackStage == 1 {
             if let lang2 = selectedLanguage2Code,
@@ -381,7 +364,7 @@ struct BookDetailView: View {
                 audioManager.loadAudio(for: sentence2)
                 currentPlaybackStage = 2
                 audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-                print("[DEBUG] Switching to secondary language playback.")
+                audioManager.setRate(Float(selectedSpeed2))
                 audioManager.play()
                 return
             }
@@ -392,11 +375,10 @@ struct BookDetailView: View {
                 audioManager.loadAudio(for: sentence3)
                 currentPlaybackStage = 3
                 audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-                print("[DEBUG] Switching to tertiary language playback.")
+                audioManager.setRate(Float(selectedSpeed3))
                 audioManager.play()
                 return
             }
-            print("[DEBUG] No secondary/tertiary language available. Advancing sentence.")
             advanceSentenceWithReset()
         } else if currentPlaybackStage == 2 {
             if let lang3 = selectedLanguage3Code,
@@ -406,14 +388,12 @@ struct BookDetailView: View {
                 audioManager.loadAudio(for: sentence3)
                 currentPlaybackStage = 3
                 audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-                print("[DEBUG] Secondary finished. Switching to tertiary language playback.")
+                audioManager.setRate(Float(selectedSpeed3))
                 audioManager.play()
                 return
             }
-            print("[DEBUG] Secondary finished and no tertiary available. Advancing sentence.")
             advanceSentenceWithReset()
         } else if currentPlaybackStage == 3 {
-            print("[DEBUG] Tertiary finished. Advancing sentence.")
             advanceSentenceWithReset()
         }
     }
@@ -438,7 +418,6 @@ struct BookDetailView: View {
             audioManager.loadAudio(for: sentence)
             if isPlaying { audioManager.play() }
         }
-        print("[DEBUG] skipBackwardAction: new currentSentenceIndex: \(currentSentenceIndex)")
         saveBookState()
         updateGlobalAppStateForBookDetail()
     }
@@ -454,7 +433,6 @@ struct BookDetailView: View {
             audioManager.loadAudio(for: sentence)
             if isPlaying { audioManager.play() }
         }
-        print("[DEBUG] skipForwardAction: new currentSentenceIndex: \(currentSentenceIndex)")
         saveBookState()
         updateGlobalAppStateForBookDetail()
     }
@@ -462,7 +440,6 @@ struct BookDetailView: View {
     // MARK: - Advance Sentence When Audio Finishes (with reset)
     private func advanceSentenceWithReset() {
         currentPlaybackStage = 1
-        print("[DEBUG] advanceSentenceWithReset called. Resetting playback stage to 1.")
         advanceSentence()
     }
     
@@ -476,30 +453,23 @@ struct BookDetailView: View {
                 currentSentence = sentence.text
                 audioManager.loadAudio(for: sentence)
                 if isPlaying {
+                    audioManager.setRate(Float(selectedSpeed1))
                     audioManager.play()
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                 }
             }
-            print("[DEBUG] advanceSentence: Advanced to sentence index \(currentSentenceIndex) within current chapter.")
         } else {
-            print("[DEBUG] advanceSentence: End of chapter reached. Preparing to advance to next chapter/subbook.")
-            debugGlobalState(prefix: "BEFORE chapter change:")
-            
             if selectedChapterIndex < selectedSubBook.chapters.count - 1 {
                 internalNavigation = true
                 selectedChapterIndex += 1
-                print("[DEBUG] Advancing to next chapter within current subbook. New chapter index: \(selectedChapterIndex)")
             } else if selectedSubBookIndex < book.subBooks.count - 1 {
                 internalNavigation = true
                 selectedSubBookIndex += 1
                 selectedChapterIndex = 0
-                print("[DEBUG] Advancing to next subbook. New subbook index: \(selectedSubBookIndex), chapter reset to 0.")
             } else {
-                print("[DEBUG] End of book reached. Stopping playback.")
                 isPlaying = false
                 return
             }
-            // Reset indices and load new chapter content.
             currentSentenceIndex = 0
             sliderValue = 0.0
             chapterContent = loadChapterContent(language: selectedLanguage1Code)
@@ -509,17 +479,14 @@ struct BookDetailView: View {
                 currentSentence = firstSentence.text
                 audioManager.loadAudio(for: firstSentence)
                 if isPlaying {
+                    audioManager.setRate(Float(selectedSpeed1))
                     audioManager.play()
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                 }
             }
-            // Delay resetting internalNavigation so that onChange handlers see it as true.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.internalNavigation = false
-                print("[DEBUG] internalNavigation reset to false after chapter change.")
             }
-            debugGlobalState(prefix: "AFTER chapter change:")
-            print("[DEBUG] advanceSentence: Advanced to new chapter/subbook. Reset currentSentenceIndex to 0.")
         }
         saveBookState()
         updateGlobalAppStateForBookDetail()
@@ -536,7 +503,6 @@ struct BookDetailView: View {
         } else {
             currentSentence = "No sentence available."
         }
-        print("[DEBUG] updateCurrentSentenceForSelection: Updated current sentence after selection change.")
     }
     
     // MARK: - JSON Parsing Helpers
@@ -556,14 +522,11 @@ struct BookDetailView: View {
                 let data = try Data(contentsOf: url)
                 let decoder = JSONDecoder()
                 let content = try decoder.decode(ChapterContent.self, from: data)
-                print("[DEBUG] loadChapterContent: Loaded content for language \(language) from \(fileName)")
                 return content
             } catch {
-                print("[DEBUG] loadChapterContent: Error decoding \(fileName): \(error)")
                 return nil
             }
         } else {
-            print("[DEBUG] loadChapterContent: URL not found for \(fileName)")
             return nil
         }
     }
@@ -600,13 +563,11 @@ struct BookDetailView: View {
             selectedSpeed1 = state.selectedSpeed1
             selectedSpeed2 = state.selectedSpeed2
             selectedSpeed3 = state.selectedSpeed3
-            print("[DEBUG] loadBookState: Loaded book state.")
         } else {
             let newState = BookState(bookID: targetBookID)
             newState.lastGlobalSentenceIndex = 0
             modelContext.insert(newState)
             bookState = newState
-            print("[DEBUG] loadBookState: Created new book state.")
         }
     }
     
@@ -623,7 +584,6 @@ struct BookDetailView: View {
         state.selectedSpeed2 = selectedSpeed2
         state.selectedSpeed3 = selectedSpeed3
         try? modelContext.save()
-        print("[DEBUG] saveBookState: State saved.")
     }
     
     private func updateGlobalAppStateForBookDetail() {
@@ -635,14 +595,11 @@ struct BookDetailView: View {
             appState.lastOpenedView = .bookDetail
             appState.lastOpenedBookID = book.id
             try? modelContext.save()
-            print("[DEBUG] updateGlobalAppStateForBookDetail: Updated global app state.")
         } else {
             let newAppState = AppState(lastOpenedView: .bookDetail, lastOpenedBookID: book.id)
             newAppState.id = globalStateID
             modelContext.insert(newAppState)
             try? modelContext.save()
-            print("[DEBUG] updateGlobalAppStateForBookDetail: Created new global app state.")
         }
     }
 }
-

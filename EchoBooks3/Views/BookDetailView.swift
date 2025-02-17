@@ -288,17 +288,17 @@ struct BookDetailView: View {
         .onChange(of: selectedSpeed1) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
-            audioManager.setRate(Float($0))
+            audioManager.setRate(Float(selectedSpeed1))
         }
         .onChange(of: selectedSpeed2) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
-            audioManager.setRate(Float($0))
+            audioManager.setRate(Float(selectedSpeed2))
         }
         .onChange(of: selectedSpeed3) {
             saveBookState()
             updateGlobalAppStateForBookDetail()
-            audioManager.setRate(Float($0))
+            audioManager.setRate(Float(selectedSpeed3))
         }
     }
     

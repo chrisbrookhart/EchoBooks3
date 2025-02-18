@@ -20,7 +20,7 @@ struct BookImporter {
         
         // Find all JSON files in the main bundle.
         guard let jsonURLs = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: nil) else {
-            print("No JSON files found in the bundle.")
+//            print("No JSON files found in the bundle.")
             return books
         }
         
@@ -29,15 +29,15 @@ struct BookImporter {
             url.lastPathComponent.lowercased().contains("structure")
         }
         
-        print("Found \(structureURLs.count) structure file(s).")
+//        print("Found \(structureURLs.count) structure file(s).")
         for url in structureURLs {
             do {
                 let data = try Data(contentsOf: url)
                 let book = try decoder.decode(Book.self, from: data)
                 books.append(book)
-                print("Imported book: \(book.bookTitle)")
+//                print("Imported book: \(book.bookTitle)")
             } catch {
-                print("Error decoding book structure from \(url.lastPathComponent): \(error)")
+//                print("Error decoding book structure from \(url.lastPathComponent): \(error)")
             }
         }
         

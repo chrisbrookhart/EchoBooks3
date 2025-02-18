@@ -22,9 +22,7 @@ struct BookDetailView: View {
     // MARK: - Content Display & Playback State
     @State private var currentSentence: String = "Loading sentence..."
     @State private var sliderValue: Double = 0.0
-    @State private var isPlaying: Bool = false {
-        didSet { print("[DEBUG] isPlaying changed to \(isPlaying)") }
-    }
+    @State private var isPlaying: Bool = false
     @State private var currentSentenceIndex: Int = 0
 
     /// Playback stage:
@@ -178,17 +176,13 @@ struct BookDetailView: View {
                                 isPlaying = false
                                 audioManager.pause()
                                 audioManager.onPlaybackFinished = nil
-                                print("[Play/Pause] Pausing playback. Stage: \(currentPlaybackStage)")
                                 didPause = true
                             } else if !isAtEnd {
                                 if didPause {
-                                    print("[Play/Pause] Resuming playback from paused state. Stage: \(currentPlaybackStage)")
                                     isPlaying = true
-                                    // Reattach the onPlaybackFinished callback
                                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                                     audioManager.play()
                                 } else {
-                                    print("[Play/Pause] Starting playback. Stage: \(currentPlaybackStage), setting speed for current stage.")
                                     isPlaying = true
                                     if let sentence = sentenceForCurrentStage() {
                                         audioManager.loadAudio(for: sentence)
@@ -235,7 +229,6 @@ struct BookDetailView: View {
                                     currentSentence = sentence.text
                                     audioManager.loadAudio(for: sentence)
                                     if isPlaying {
-                                        // Immediately reapply the correct rate after reloading audio.
                                         if currentPlaybackStage == 1 {
                                             audioManager.setRate(Float(selectedSpeed1))
                                         } else if currentPlaybackStage == 2 {
@@ -287,20 +280,12 @@ struct BookDetailView: View {
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
                 chapterContent = loadChapterContent(language: selectedLanguage1Code)
-                
-                // Validate selectedChapterIndex: if it's out of range, reset it to 0.
-                if selectedChapterIndex >= selectedSubBook.chapters.count {
-                    selectedChapterIndex = 0
-                }
-
-                
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0
                 if let content = chapterContent,
                    let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                     currentSentence = sentence.text
                 }
-                print("[onAppear] Setting primary speed to \(selectedSpeed1)")
                 audioManager.setRate(Float(selectedSpeed1))
                 DispatchQueue.main.async {
                     hasRestoredState = true
@@ -315,7 +300,6 @@ struct BookDetailView: View {
         }
         .navigationTitle(book.bookTitle)
         .navigationBarTitleDisplayMode(.inline)
-        // onChange Handlers for indices
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState && !internalNavigation {
                 isPlaying = false
@@ -336,7 +320,6 @@ struct BookDetailView: View {
                 updateGlobalAppStateForBookDetail()
             }
         }
-        // onChange Handlers for language selectors
         .onChange(of: selectedLanguage1) {
             let languageCode = selectedLanguage1Code
             chapterContent = loadChapterContent(language: languageCode)
@@ -362,7 +345,6 @@ struct BookDetailView: View {
             updateGlobalAppStateForBookDetail()
             if currentPlaybackStage == 1 {
                 audioManager.setRate(Float(selectedSpeed1))
-                print("[Speed] Primary speed updated to \(selectedSpeed1)")
             }
         }
         .onChange(of: selectedSpeed2) {
@@ -370,7 +352,6 @@ struct BookDetailView: View {
             updateGlobalAppStateForBookDetail()
             if currentPlaybackStage == 2 {
                 audioManager.setRate(Float(selectedSpeed2))
-                print("[Speed] Primary speed updated to \(selectedSpeed2)")
             }
         }
         .onChange(of: selectedSpeed3) {
@@ -378,7 +359,6 @@ struct BookDetailView: View {
             updateGlobalAppStateForBookDetail()
             if currentPlaybackStage == 3 {
                 audioManager.setRate(Float(selectedSpeed3))
-                print("[Speed] Primary speed updated to \(selectedSpeed3)")
             }
         }
     }
@@ -648,3 +628,4 @@ struct BookDetailView: View {
         }
     }
 }
+

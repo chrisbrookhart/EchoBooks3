@@ -287,6 +287,13 @@ struct BookDetailView: View {
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
                 chapterContent = loadChapterContent(language: selectedLanguage1Code)
+                
+                // Validate selectedChapterIndex: if it's out of range, reset it to 0.
+                if let chaptersCount = chapterContent?.paragraphs.first?.sentences.count, // or use selectedSubBook.chapters.count if available
+                   selectedChapterIndex >= selectedSubBook.chapters.count {
+                    selectedChapterIndex = 0
+                }
+                
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0
                 if let content = chapterContent,
@@ -299,6 +306,23 @@ struct BookDetailView: View {
                     hasRestoredState = true
                 }
             }
+
+//            .onAppear {
+//                loadBookState()
+//                updateGlobalAppStateForBookDetail()
+//                chapterContent = loadChapterContent(language: selectedLanguage1Code)
+//                currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
+//                sliderValue = 0.0
+//                if let content = chapterContent,
+//                   let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+//                    currentSentence = sentence.text
+//                }
+//                print("[onAppear] Setting primary speed to \(selectedSpeed1)")
+//                audioManager.setRate(Float(selectedSpeed1))
+//                DispatchQueue.main.async {
+//                    hasRestoredState = true
+//                }
+//            }
             .onDisappear {
                 saveBookState()
                 updateGlobalAppStateForBookDetail()

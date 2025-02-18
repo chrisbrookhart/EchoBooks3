@@ -289,10 +289,10 @@ struct BookDetailView: View {
                 chapterContent = loadChapterContent(language: selectedLanguage1Code)
                 
                 // Validate selectedChapterIndex: if it's out of range, reset it to 0.
-                if let chaptersCount = chapterContent?.paragraphs.first?.sentences.count, // or use selectedSubBook.chapters.count if available
-                   selectedChapterIndex >= selectedSubBook.chapters.count {
+                if selectedChapterIndex >= selectedSubBook.chapters.count {
                     selectedChapterIndex = 0
                 }
+
                 
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0

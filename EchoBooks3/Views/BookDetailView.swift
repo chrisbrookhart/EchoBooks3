@@ -3,10 +3,10 @@
 //  EchoBooks3
 //
 //  Revised to support multi-language playback and per-language speed selection.
-//  When the user pauses and then resumes, playback continues from the same position.
-//  The play/pause action now reattaches the onPlaybackFinished callback on resume so that the
-//  chain of language playback (advancing from language 1 to language 2, etc.) occurs correctly.
-//
+//  The navigation bar now shows a custom header that displays the subbook and chapter
+//  (or just the chapter if the subbook is "Default") and the book title. Tapping the header
+//  opens a modal sheet with centered drop-down selections for subbook and chapter (without labels).
+//  Tapping "Done" dismisses the sheet and updates the current sentence.
 
 import SwiftUI
 import SwiftData
@@ -18,6 +18,7 @@ struct BookDetailView: View {
     // MARK: - Navigation & Content State
     @State private var selectedSubBookIndex: Int = 0
     @State private var selectedChapterIndex: Int = 0
+    @State private var showingNavigationSheet: Bool = false
 
     // MARK: - Content Display & Playback State
     @State private var currentSentence: String = "Loading sentence..."
@@ -34,7 +35,7 @@ struct BookDetailView: View {
     /// Flag to indicate if chapter/subbook change is internal.
     @State private var internalNavigation: Bool = false
 
-    /// Flag to track if playback was paused (to enable resuming from same location).
+    /// Flag to track if playback was paused.
     @State private var didPause: Bool = false
 
     // MARK: - Playback Options State
@@ -60,7 +61,7 @@ struct BookDetailView: View {
         ["None"] + availableLanguageNames
     }
 
-    // Computed property: returns the code for the primary selected language.
+    // Computed property for primary language code.
     private var selectedLanguage1Code: String {
         return LanguageCode.allCases.first(where: { $0.name == selectedLanguage1 })?.rawValue ?? "en-US"
     }
@@ -78,7 +79,7 @@ struct BookDetailView: View {
         }
         return nil
     }
-
+    
     // Convenience computed properties.
     var selectedSubBook: SubBook {
         book.subBooks[selectedSubBookIndex]
@@ -89,10 +90,10 @@ struct BookDetailView: View {
         }
         return selectedSubBook.chapters[selectedChapterIndex]
     }
-
+    
     // MARK: - Persistence State
     @State private var bookState: BookState?
-
+    
     // MARK: - Chapter Content State
     @State private var chapterContent: ChapterContent?
     
@@ -120,34 +121,7 @@ struct BookDetailView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Subbook Picker
-                    if book.subBooks.count > 1 {
-                        HStack {
-                            Spacer()
-                            Picker("Subbook", selection: $selectedSubBookIndex) {
-                                ForEach(0..<book.subBooks.count, id: \.self) { index in
-                                    Text(book.subBooks[index].subBookTitle).tag(index)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                    }
-                    // Chapter Picker
-                    if selectedSubBook.chapters.count > 1 {
-                        HStack {
-                            Spacer()
-                            Picker("Chapter", selection: $selectedChapterIndex) {
-                                ForEach(0..<selectedSubBook.chapters.count, id: \.self) { index in
-                                    Text(selectedSubBook.chapters[index].chapterTitle).tag(index)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                    }
+                    
                     // Sentence Display
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
@@ -159,6 +133,7 @@ struct BookDetailView: View {
                     .frame(height: geo.size.height * 0.4)
                     .cornerRadius(8)
                     .padding(.horizontal)
+                    
                     // Playback Controls
                     HStack {
                         Spacer()
@@ -217,6 +192,7 @@ struct BookDetailView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
+                    
                     // Slider for Chapter Navigation
                     Slider(
                         value: Binding(
@@ -250,7 +226,8 @@ struct BookDetailView: View {
                         }
                     )
                     .padding(.horizontal)
-                    // Playback Options: Language and Speed Pickers
+                    
+                    // Playback Options: Language and Speed Pickers remain inline.
                     VStack(alignment: .leading, spacing: 16) {
                         PlaybackOptionRowView(
                             selectedLanguage: $selectedLanguage1,
@@ -272,14 +249,56 @@ struct BookDetailView: View {
                         )
                     }
                     .padding(.horizontal)
+                    
                     Spacer()
                 }
                 .padding(.vertical)
+            }
+            .sheet(isPresented: $showingNavigationSheet) {
+                NavigationStack {
+                    Form {
+                        // If there is more than one subbook and the only subbook isn't "Default", show the subbook picker.
+                        if book.subBooks.count > 1 && book.subBooks.first?.subBookTitle.lowercased() != "default" {
+                            HStack {
+                                Spacer()
+                                Picker("", selection: $selectedSubBookIndex) {
+                                    ForEach(0..<book.subBooks.count, id: \.self) { index in
+                                        Text(book.subBooks[index].subBookTitle).tag(index)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                Spacer()
+                            }
+                        }
+                        HStack {
+                            Spacer()
+                            Picker("", selection: $selectedChapterIndex) {
+                                ForEach(0..<selectedSubBook.chapters.count, id: \.self) { index in
+                                    Text(selectedSubBook.chapters[index].chapterTitle).tag(index)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            Spacer()
+                        }
+                    }
+                    .padding()
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                showingNavigationSheet = false
+                                updateCurrentSentenceForSelection()
+                            }
+                        }
+                    }
+                }
             }
             .onAppear {
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
                 chapterContent = loadChapterContent(language: selectedLanguage1Code)
+                if selectedChapterIndex >= selectedSubBook.chapters.count {
+                    selectedChapterIndex = 0
+                }
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0
                 if let content = chapterContent,
@@ -298,7 +317,30 @@ struct BookDetailView: View {
                 audioManager.onPlaybackFinished = nil
             }
         }
-        .navigationTitle(book.bookTitle)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Button(action: {
+                    showingNavigationSheet = true
+                }) {
+                    VStack(spacing: 4) {
+                        if selectedSubBook.subBookTitle.lowercased() == "default" {
+                            Text(selectedChapter.chapterTitle)
+                                .font(.headline)
+                                .multilineTextAlignment(.center)
+                        } else {
+                            Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
+                                .font(.headline)
+                                .multilineTextAlignment(.center)
+                        }
+                        Text(book.bookTitle)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState && !internalNavigation {
@@ -377,10 +419,17 @@ struct BookDetailView: View {
         return nil
     }
     
+    // MARK: - Helper: Get Current SentenceContent (primary language)
+    private func currentSentenceContent() -> SentenceContent? {
+        if let content = chapterContent {
+            return getCurrentSentence(from: content, at: currentSentenceIndex)
+        }
+        return nil
+    }
+    
     // MARK: - Audio Completion Handler
     private func audioDidFinishPlaying() {
         guard isPlaying else { return }
-        
         if currentPlaybackStage == 1 {
             if let lang2 = selectedLanguage2Code,
                let content2 = loadChapterContent(language: lang2),
@@ -421,14 +470,6 @@ struct BookDetailView: View {
         } else if currentPlaybackStage == 3 {
             advanceSentenceWithReset()
         }
-    }
-    
-    // MARK: - Helper: Get Current SentenceContent (primary language)
-    private func currentSentenceContent() -> SentenceContent? {
-        if let content = chapterContent {
-            return getCurrentSentence(from: content, at: currentSentenceIndex)
-        }
-        return nil
     }
     
     // MARK: - Skip Button Actions

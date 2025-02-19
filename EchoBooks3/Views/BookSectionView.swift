@@ -41,7 +41,7 @@ struct BookSectionView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(books, id: \.id) { book in
-                            NavigationLink(destination: BookDetailViewStub(book: book)) {
+                            NavigationLink(destination: BookDetailView(book: book)) {
                                 BookItemView(book: book, width: itemWidth, height: itemHeight)
                                     .transition(.opacity)
                                     .animation(.easeInOut, value: books.count)

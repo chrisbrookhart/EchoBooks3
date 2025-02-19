@@ -54,7 +54,6 @@ struct LibraryView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 16) {
                                         ForEach(filteredBooks, id: \.id) { book in
-                                            // Essential change: open BookDetailView instead of BookDetailViewStub.
                                             NavigationLink(destination: BookDetailView(book: book)) {
                                                 VStack(spacing: 4) {
                                                     coverImage(for: book)
@@ -66,8 +65,9 @@ struct LibraryView: View {
                                                     Text(book.bookTitle)
                                                         .font(.caption)
                                                         .foregroundColor(.primary)
-                                                        .lineLimit(3)
+                                                        .lineLimit(4)
                                                         .multilineTextAlignment(.center)
+                                                        .frame(width: itemWidth, height: 60) // Reserve space for up to 4 lines
                                                 }
                                                 .transition(.opacity)
                                                 .animation(.easeInOut, value: filteredBooks.count)
@@ -100,6 +100,7 @@ struct LibraryView: View {
                                                 .foregroundColor(.primary)
                                                 .lineLimit(3)
                                                 .multilineTextAlignment(.center)
+                                                .frame(width: itemWidth)  // Constrain width for wrapping.
                                         }
                                         .transition(.opacity)
                                         .animation(.easeInOut, value: index)
@@ -114,7 +115,6 @@ struct LibraryView: View {
                     .padding(.vertical)
                 }
             }
-            // Remove any default navigation title.
             .navigationTitle("")
             .toolbar {
                 // Subscription icon in the top-right.
@@ -125,7 +125,6 @@ struct LibraryView: View {
                 }
             }
         }
-        // Place the search bar in the navigation bar.
         .searchable(text: $searchText, prompt: "Search Books")
         .onAppear {
             self.books = BookImporter.importBooks()
@@ -144,25 +143,6 @@ struct LibraryView: View {
     }
 }
 
-// MARK: - Stub Detail View (for preview fallback; should be replaced by your new BookDetailView)
-struct BookDetailViewStub: View {
-    let book: Book
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Title: \(book.bookTitle)")
-                .font(.title)
-            Text("Author: \(book.author)")
-                .font(.subheadline)
-            Text("Description: \(book.bookDescription ?? "N/A")")
-                .font(.body)
-            Spacer()
-        }
-        .padding()
-        .navigationTitle(book.bookTitle)
-    }
-}
-
-// MARK: - Preview
 struct LibraryView_Previews: PreviewProvider {
     static var previews: some View {
         LibraryView()

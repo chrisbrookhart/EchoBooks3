@@ -2,9 +2,9 @@
 //  BookDetailView.swift
 //  EchoBooks3
 //
-//  Revised to use global settings (via @AppStorage) for language and speed selections.
-//  The inline language and speed pickers have been removed; these settings are now managed
-//  in SettingsView. BookDetailView uses the persisted values for playback.
+//  Revised to use global settings for language and speed selections,
+//  and to move the subbook/chapter selection button into the main body.
+//  The navigation bar now displays the book title.
 import SwiftUI
 import SwiftData
 import UIKit
@@ -49,7 +49,7 @@ struct BookDetailView: View {
     // MARK: - Audio Playback Manager Integration
     @StateObject private var audioManager = AudioPlaybackManager()
     
-    // Speed options (not used in this view anymore, but retained for playback logic)
+    // Speed options.
     private let speedOptions: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
     // Available language names from the book.
@@ -62,26 +62,18 @@ struct BookDetailView: View {
     
     // Computed property for primary language code.
     private var selectedLanguage1Code: String {
-        let valid = LanguageCode.allCases.map { $0.rawValue }
-        return valid.contains(selectedLanguage1) ? selectedLanguage1 : "en-US"
+        return selectedLanguage1
     }
-
+    
     // Helper computed properties for secondary and tertiary language codes.
     private var selectedLanguage2Code: String? {
-        let valid = LanguageCode.allCases.map { $0.rawValue }
-        if selectedLanguage2 != "None", valid.contains(selectedLanguage2) {
-            return selectedLanguage2
-        }
+        if selectedLanguage2 != "None" { return selectedLanguage2 }
         return nil
     }
     private var selectedLanguage3Code: String? {
-        let valid = LanguageCode.allCases.map { $0.rawValue }
-        if selectedLanguage3 != "None", valid.contains(selectedLanguage3) {
-            return selectedLanguage3
-        }
+        if selectedLanguage3 != "None" { return selectedLanguage3 }
         return nil
     }
-
     
     // Convenience computed properties.
     var selectedSubBook: SubBook {
@@ -123,8 +115,28 @@ struct BookDetailView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Sentence Display
+                VStack(spacing: 20) {
+                    
+                    // "Select Chapter" Button.
+                    Button(action: { showingNavigationSheet = true }) {
+                        HStack {
+                            Spacer()
+                            if selectedSubBook.subBookTitle.lowercased() == "default" {
+                                Text(selectedChapter.chapterTitle)
+                                    .font(.headline)
+                            } else {
+                                Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
+                                    .font(.headline)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(8)
+                    }
+                    .padding(.horizontal)
+                    
+                    // Enlarged Sentence Display Area.
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
                         Text(currentSentence)
@@ -132,11 +144,11 @@ struct BookDetailView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                     }
-                    .frame(height: geo.size.height * 0.4)
+                    .frame(height: geo.size.height * 0.65)
                     .cornerRadius(8)
                     .padding(.horizontal)
                     
-                    // Playback Controls
+                    // Playback Controls.
                     HStack {
                         Spacer()
                         Button(action: { skipBackwardAction() }) {
@@ -191,7 +203,7 @@ struct BookDetailView: View {
                     }
                     .padding(.horizontal)
                     
-                    // Slider for Chapter Navigation
+                    // Slider for Chapter Navigation.
                     Slider(
                         value: Binding(
                             get: { sliderValue },
@@ -229,6 +241,7 @@ struct BookDetailView: View {
                 }
                 .padding(.vertical)
             }
+            // Modal Sheet for Subbook/Chapter Selection.
             .sheet(isPresented: $showingNavigationSheet) {
                 NavigationStack {
                     Form {
@@ -275,8 +288,7 @@ struct BookDetailView: View {
                 }
                 currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderValue = 0.0
-                if let content = chapterContent,
-                   let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+                if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                     currentSentence = sentence.text
                 }
                 audioManager.setRate(Float(selectedSpeed1))
@@ -291,38 +303,20 @@ struct BookDetailView: View {
                 audioManager.onPlaybackFinished = nil
             }
         }
+        .navigationTitle(book.bookTitle)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                Button(action: { showingNavigationSheet = true }) {
-                    VStack(spacing: 4) {
-                        if selectedSubBook.subBookTitle.lowercased() == "default" {
-                            Text(selectedChapter.chapterTitle)
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                        } else {
-                            Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                        }
-                        Text(book.bookTitle)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-            }
+            // Settings gear remains in the navigation bar.
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showSettings = true }) {
                     Image(systemName: "gear")
                 }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showSettings) {
-            // Pass the book's languages to SettingsView if needed.
             SettingsView(availableLanguages: book.languages)
         }
+        // onChange handlers remain to update reading progress if navigation changes.
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState && !internalNavigation {
                 isPlaying = false
@@ -346,8 +340,7 @@ struct BookDetailView: View {
         .onChange(of: selectedLanguage1) {
             let languageCode = selectedLanguage1Code
             chapterContent = loadChapterContent(language: languageCode)
-            if let content = chapterContent,
-               let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+            if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
                 currentSentence = sentence.text
             } else {
                 currentSentence = "No sentence available."
@@ -604,7 +597,6 @@ struct BookDetailView: View {
             selectedChapterIndex = state.lastChapterIndex
             sliderValue = state.lastSliderValue
             currentSentenceIndex = state.lastGlobalSentenceIndex
-            // Now, the language and speed settings are managed globally via @AppStorage.
         } else {
             let newState = BookState(bookID: targetBookID)
             newState.lastGlobalSentenceIndex = 0
@@ -641,15 +633,14 @@ struct BookDetailView: View {
 }
 
 
-
+//
 ////
 ////  BookDetailView.swift
 ////  EchoBooks3
 ////
-////  Revised to support multi-language playback and per-language speed selection.
-////  The language and speed selectors have been removed from this view.
-////  Instead, these settings are managed via the SettingsView (accessed via a gear icon).
-//
+////  Revised to use global settings for language and speed selections,
+////  and to move the subbook/chapter selection button from the navigation bar
+////  into the main body. Tapping “Select Chapter” presents the modal selection sheet.
 //import SwiftUI
 //import SwiftData
 //import UIKit
@@ -682,15 +673,14 @@ struct BookDetailView: View {
 //    /// Flag to track if playback was paused.
 //    @State private var didPause: Bool = false
 //
-//    // MARK: - Playback Options State
-//    // (These values are now managed in SettingsView, but remain here for playback logic.)
-//    @State private var selectedLanguage1: String = "English"
-//    @State private var selectedLanguage2: String = "None"
-//    @State private var selectedLanguage3: String = "None"
-//
-//    @State private var selectedSpeed1: Double = 1.0
-//    @State private var selectedSpeed2: Double = 1.0
-//    @State private var selectedSpeed3: Double = 1.0
+//    // MARK: - Global Playback Settings (via @AppStorage)
+//    @AppStorage("selectedLanguage1") private var selectedLanguage1: String = "en-US"
+//    @AppStorage("selectedLanguage2") private var selectedLanguage2: String = "None"
+//    @AppStorage("selectedLanguage3") private var selectedLanguage3: String = "None"
+//    
+//    @AppStorage("selectedSpeed1") private var selectedSpeed1: Double = 1.0
+//    @AppStorage("selectedSpeed2") private var selectedSpeed2: Double = 1.0
+//    @AppStorage("selectedSpeed3") private var selectedSpeed3: Double = 1.0
 //
 //    // MARK: - Audio Playback Manager Integration
 //    @StateObject private var audioManager = AudioPlaybackManager()
@@ -698,31 +688,26 @@ struct BookDetailView: View {
 //    // Speed options.
 //    private let speedOptions: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 //
-//    // Available language names.
+//    // Available language names from the book.
 //    var availableLanguageNames: [String] {
 //        book.languages.map { $0.name }
 //    }
 //    var availableLanguagesWithNone: [String] {
 //        ["None"] + availableLanguageNames
 //    }
-//
+//    
 //    // Computed property for primary language code.
 //    private var selectedLanguage1Code: String {
-//        // (This conversion might need to be updated to use persisted raw values.)
-//        return LanguageCode.allCases.first(where: { $0.name == selectedLanguage1 })?.rawValue ?? "en-US"
+//        return selectedLanguage1
 //    }
 //    
 //    // Helper computed properties for secondary and tertiary language codes.
 //    private var selectedLanguage2Code: String? {
-//        if selectedLanguage2 != "None" {
-//            return LanguageCode.allCases.first(where: { $0.name == selectedLanguage2 })?.rawValue
-//        }
+//        if selectedLanguage2 != "None" { return selectedLanguage2 }
 //        return nil
 //    }
 //    private var selectedLanguage3Code: String? {
-//        if selectedLanguage3 != "None" {
-//            return LanguageCode.allCases.first(where: { $0.name == selectedLanguage3 })?.rawValue
-//        }
+//        if selectedLanguage3 != "None" { return selectedLanguage3 }
 //        return nil
 //    }
 //    
@@ -737,7 +722,7 @@ struct BookDetailView: View {
 //        return selectedSubBook.chapters[selectedChapterIndex]
 //    }
 //    
-//    // MARK: - Persistence State
+//    // MARK: - Persistence State (Book-specific)
 //    @State private var bookState: BookState?
 //    
 //    // MARK: - Chapter Content State
@@ -766,9 +751,28 @@ struct BookDetailView: View {
 //    var body: some View {
 //        GeometryReader { geo in
 //            ScrollView {
-//                VStack(alignment: .leading, spacing: 20) {
+//                VStack(spacing: 20) {
+//                    // New "Select Chapter" button placed in the body.
+//                    Button(action: { showingNavigationSheet = true }) {
+//                        HStack {
+//                            Spacer()
+//                            if selectedSubBook.subBookTitle.lowercased() == "default" {
+//                                Text(selectedChapter.chapterTitle)
+//                                    .font(.headline)
+//                            } else {
+//                                Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
+//                                    .font(.headline)
+//                            }
+//                            Spacer()
+//                        }
+//                        .padding()
+//                        .background(Color(UIColor.systemGray6))
+//                        .cornerRadius(8)
+//                    }
+//                    .padding(.horizontal)
 //                    
-//                    // Sentence Display
+//                    
+//                    // Display the current sentence.
 //                    ZStack {
 //                        Color(UIColor.secondarySystemBackground)
 //                        Text(currentSentence)
@@ -776,11 +780,13 @@ struct BookDetailView: View {
 //                            .multilineTextAlignment(.center)
 //                            .padding()
 //                    }
-//                    .frame(height: geo.size.height * 0.4)
+//                    .frame(height: geo.size.height * 0.65)
 //                    .cornerRadius(8)
 //                    .padding(.horizontal)
 //                    
-//                    // Playback Controls
+//
+//                    
+//                    // Playback Controls remain as before.
 //                    HStack {
 //                        Spacer()
 //                        Button(action: { skipBackwardAction() }) {
@@ -835,7 +841,7 @@ struct BookDetailView: View {
 //                    }
 //                    .padding(.horizontal)
 //                    
-//                    // Slider for Chapter Navigation
+//                    // Slider for Chapter Navigation.
 //                    Slider(
 //                        value: Binding(
 //                            get: { sliderValue },
@@ -869,12 +875,11 @@ struct BookDetailView: View {
 //                    )
 //                    .padding(.horizontal)
 //                    
-//                    // (Inline language and speed selectors removed.)
-//                    
 //                    Spacer()
 //                }
 //                .padding(.vertical)
 //            }
+//            // The modal sheet for subbook/chapter selection.
 //            .sheet(isPresented: $showingNavigationSheet) {
 //                NavigationStack {
 //                    Form {
@@ -921,8 +926,7 @@ struct BookDetailView: View {
 //                }
 //                currentSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
 //                sliderValue = 0.0
-//                if let content = chapterContent,
-//                   let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+//                if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
 //                    currentSentence = sentence.text
 //                }
 //                audioManager.setRate(Float(selectedSpeed1))
@@ -938,42 +942,20 @@ struct BookDetailView: View {
 //            }
 //        }
 //        .toolbar {
-//            ToolbarItem(placement: .principal) {
-//                Button(action: {
-//                    showingNavigationSheet = true
-//                }) {
-//                    VStack(spacing: 4) {
-//                        if selectedSubBook.subBookTitle.lowercased() == "default" {
-//                            Text(selectedChapter.chapterTitle)
-//                                .font(.headline)
-//                                .multilineTextAlignment(.center)
-//                        } else {
-//                            Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
-//                                .font(.headline)
-//                                .multilineTextAlignment(.center)
-//                        }
-//                        Text(book.bookTitle)
-//                            .font(.subheadline)
-//                            .foregroundColor(.secondary)
-//                            .multilineTextAlignment(.center)
-//                    }
-//                    .frame(maxWidth: .infinity)
-//                }
-//            }
+//            // Removed the previous principal header that contained navigation selection.
+//            // Now only the settings gear remains in the toolbar.
 //            ToolbarItem(placement: .navigationBarTrailing) {
-//                Button(action: {
-//                    showSettings = true
-//                }) {
+//                Button(action: { showSettings = true }) {
 //                    Image(systemName: "gear")
 //                }
 //            }
 //        }
 //        .navigationBarTitleDisplayMode(.inline)
 //        .sheet(isPresented: $showSettings) {
-//            // Pass the current book’s languages to the settings view.
+//            // Pass the book's languages to SettingsView.
 //            SettingsView(availableLanguages: book.languages)
 //        }
-//
+//        // onChange handlers remain to update reading progress if navigation changes.
 //        .onChange(of: selectedSubBookIndex) { _, _ in
 //            if hasRestoredState && !internalNavigation {
 //                isPlaying = false
@@ -997,8 +979,7 @@ struct BookDetailView: View {
 //        .onChange(of: selectedLanguage1) {
 //            let languageCode = selectedLanguage1Code
 //            chapterContent = loadChapterContent(language: languageCode)
-//            if let content = chapterContent,
-//               let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
+//            if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: currentSentenceIndex) {
 //                currentSentence = sentence.text
 //            } else {
 //                currentSentence = "No sentence available."
@@ -1255,12 +1236,7 @@ struct BookDetailView: View {
 //            selectedChapterIndex = state.lastChapterIndex
 //            sliderValue = state.lastSliderValue
 //            currentSentenceIndex = state.lastGlobalSentenceIndex
-//            selectedLanguage1 = state.selectedLanguage1
-//            selectedLanguage2 = state.selectedLanguage2
-//            selectedLanguage3 = state.selectedLanguage3
-//            selectedSpeed1 = state.selectedSpeed1
-//            selectedSpeed2 = state.selectedSpeed2
-//            selectedSpeed3 = state.selectedSpeed3
+//            // Note: Language and speed settings are now managed globally via @AppStorage.
 //        } else {
 //            let newState = BookState(bookID: targetBookID)
 //            newState.lastGlobalSentenceIndex = 0
@@ -1275,12 +1251,6 @@ struct BookDetailView: View {
 //        state.lastChapterIndex = selectedChapterIndex
 //        state.lastSliderValue = sliderValue
 //        state.lastGlobalSentenceIndex = currentSentenceIndex
-//        state.selectedLanguage1 = selectedLanguage1
-//        state.selectedLanguage2 = selectedLanguage2
-//        state.selectedLanguage3 = selectedLanguage3
-//        state.selectedSpeed1 = selectedSpeed1
-//        state.selectedSpeed2 = selectedSpeed2
-//        state.selectedSpeed3 = selectedSpeed3
 //        try? modelContext.save()
 //    }
 //    
@@ -1301,4 +1271,3 @@ struct BookDetailView: View {
 //        }
 //    }
 //}
-//

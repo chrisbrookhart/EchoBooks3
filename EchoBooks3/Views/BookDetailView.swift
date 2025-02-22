@@ -10,6 +10,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct BookDetailView: View {
     let book: Book
@@ -402,6 +403,9 @@ struct BookDetailView: View {
             if currentPlaybackStage == 3 {
                 audioManager.setRate(Float(selectedSpeed3))
             }
+        }
+        .onChange(of: isPlaying) {
+            UIApplication.shared.isIdleTimerDisabled = isPlaying
         }
     }
     

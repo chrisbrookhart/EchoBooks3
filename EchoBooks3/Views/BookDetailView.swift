@@ -3,14 +3,13 @@
 //  EchoBooks3
 //
 //  Revised to support multi-language playback and per-language speed selection.
-//  The navigation bar now shows a custom header that displays the subbook and chapter
-//  (or just the chapter if the subbook is "Default") and the book title. Tapping the header
-//  opens a modal sheet with centered drop-down selections for subbook and chapter (without labels).
-//  Tapping "Done" dismisses the sheet and updates the current sentence.
+//  A settings icon is added in the top-right of the navigation bar. Tapping it presents a
+//  separate modal view (SettingsView) where the user can choose between playback modes.
 
 import SwiftUI
 import SwiftData
 import UIKit
+
 
 struct BookDetailView: View {
     let book: Book
@@ -20,6 +19,7 @@ struct BookDetailView: View {
     @State private var selectedSubBookIndex: Int = 0
     @State private var selectedChapterIndex: Int = 0
     @State private var showingNavigationSheet: Bool = false
+    @State private var showSettings: Bool = false
 
     // MARK: - Content Display & Playback State
     @State private var currentSentence: String = "Loading sentence..."
@@ -122,7 +122,6 @@ struct BookDetailView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    
                     // Sentence Display
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
@@ -258,7 +257,7 @@ struct BookDetailView: View {
             .sheet(isPresented: $showingNavigationSheet) {
                 NavigationStack {
                     Form {
-                        // If there is more than one subbook and the only subbook isn't "Default", show the subbook picker.
+                        // If more than one subbook and the first subbook isn't "default", show subbook picker.
                         if book.subBooks.count > 1 && book.subBooks.first?.subBookTitle.lowercased() != "default" {
                             HStack {
                                 Spacer()
@@ -319,6 +318,7 @@ struct BookDetailView: View {
             }
         }
         .toolbar {
+            // Custom navigation bar header in the principal position.
             ToolbarItem(placement: .principal) {
                 Button(action: {
                     showingNavigationSheet = true
@@ -341,8 +341,19 @@ struct BookDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
+            // Settings icon in the top-right corner.
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    showSettings = true
+                }) {
+                    Image(systemName: "gear")
+                }
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showSettings) {
+            SettingsView()  // Present a dedicated SettingsView.
+        }
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState && !internalNavigation {
                 isPlaying = false
@@ -403,9 +414,6 @@ struct BookDetailView: View {
             if currentPlaybackStage == 3 {
                 audioManager.setRate(Float(selectedSpeed3))
             }
-        }
-        .onChange(of: isPlaying) {
-            UIApplication.shared.isIdleTimerDisabled = isPlaying
         }
     }
     
@@ -673,4 +681,3 @@ struct BookDetailView: View {
         }
     }
 }
-

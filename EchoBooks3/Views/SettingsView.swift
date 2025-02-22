@@ -1,39 +1,32 @@
 import SwiftUI
 
 struct SettingsView: View {
-    // Persist the playback mode; default is Sentence.
+    let availableLanguages: [LanguageCode]
+    
+    // Persist the playback mode; default is "Sentence".
     @AppStorage("playbackMode") private var playbackMode: String = PlaybackMode.sentence.rawValue
 
-    // Persist language selections using raw values.
+    // Persist language selections as raw values.
     @AppStorage("selectedLanguage1") private var selectedLanguage1Raw: String = "en-US"
     @AppStorage("selectedLanguage2") private var selectedLanguage2Raw: String = "None"
     @AppStorage("selectedLanguage3") private var selectedLanguage3Raw: String = "None"
     
-    // Create computed bindings for the language selections.
+    // Computed binding for primary language that checks validity.
     private var selectedLanguage1: Binding<String> {
         Binding(
             get: {
-                let valid = LanguageCode.allCases.map { $0.rawValue }
-                return valid.contains(selectedLanguage1Raw) ? selectedLanguage1Raw : "en-US"
+                let valid = availableLanguages.map { $0.rawValue }
+                return valid.contains(selectedLanguage1Raw) ? selectedLanguage1Raw : (valid.first ?? "en-US")
             },
-            set: { newValue in
-                selectedLanguage1Raw = newValue
-            }
+            set: { newValue in selectedLanguage1Raw = newValue }
         )
     }
-    
+    // Secondary and tertiary remain as-is.
     private var selectedLanguage2: Binding<String> {
-        Binding(
-            get: { selectedLanguage2Raw },
-            set: { newValue in selectedLanguage2Raw = newValue }
-        )
+        Binding(get: { selectedLanguage2Raw }, set: { selectedLanguage2Raw = $0 })
     }
-    
     private var selectedLanguage3: Binding<String> {
-        Binding(
-            get: { selectedLanguage3Raw },
-            set: { newValue in selectedLanguage3Raw = newValue }
-        )
+        Binding(get: { selectedLanguage3Raw }, set: { selectedLanguage3Raw = $0 })
     }
     
     // Persist playback speeds.
@@ -60,21 +53,21 @@ struct SettingsView: View {
                 
                 Section(header: Text("Language Selection")) {
                     Picker("Primary", selection: selectedLanguage1) {
-                        ForEach(LanguageCode.allCases, id: \.rawValue) { lang in
+                        ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
                         }
                     }
                     
                     Picker("Secondary", selection: selectedLanguage2) {
                         Text("None").tag("None")
-                        ForEach(LanguageCode.allCases, id: \.rawValue) { lang in
+                        ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
                         }
                     }
                     
                     Picker("Tertiary", selection: selectedLanguage3) {
                         Text("None").tag("None")
-                        ForEach(LanguageCode.allCases, id: \.rawValue) { lang in
+                        ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
                         }
                     }
@@ -114,6 +107,8 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        // Preview using a dummy array of languages.
+        SettingsView(availableLanguages: [.enUS, .esES, .frFR])
     }
 }
+

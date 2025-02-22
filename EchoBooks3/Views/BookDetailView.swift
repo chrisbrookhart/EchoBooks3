@@ -3,13 +3,12 @@
 //  EchoBooks3
 //
 //  Revised to support multi-language playback and per-language speed selection.
-//  A settings icon is added in the top-right of the navigation bar. Tapping it presents a
-//  separate modal view (SettingsView) where the user can choose between playback modes.
+//  The language and speed selectors have been removed from this view.
+//  Instead, these settings are managed via the SettingsView (accessed via a gear icon).
 
 import SwiftUI
 import SwiftData
 import UIKit
-
 
 struct BookDetailView: View {
     let book: Book
@@ -28,9 +27,9 @@ struct BookDetailView: View {
     @State private var currentSentenceIndex: Int = 0
 
     /// Playback stage:
-    /// 1 = primary language (selectedLanguage1),
-    /// 2 = secondary (selectedLanguage2),
-    /// 3 = tertiary (selectedLanguage3).
+    /// 1 = primary language,
+    /// 2 = secondary,
+    /// 3 = tertiary.
     @State private var currentPlaybackStage: Int = 1
 
     /// Flag to indicate if chapter/subbook change is internal.
@@ -40,6 +39,7 @@ struct BookDetailView: View {
     @State private var didPause: Bool = false
 
     // MARK: - Playback Options State
+    // (These values are now managed in SettingsView, but remain here for playback logic.)
     @State private var selectedLanguage1: String = "English"
     @State private var selectedLanguage2: String = "None"
     @State private var selectedLanguage3: String = "None"
@@ -64,6 +64,7 @@ struct BookDetailView: View {
 
     // Computed property for primary language code.
     private var selectedLanguage1Code: String {
+        // (This conversion might need to be updated to use persisted raw values.)
         return LanguageCode.allCases.first(where: { $0.name == selectedLanguage1 })?.rawValue ?? "en-US"
     }
     
@@ -122,6 +123,7 @@ struct BookDetailView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    
                     // Sentence Display
                     ZStack {
                         Color(UIColor.secondarySystemBackground)
@@ -137,9 +139,7 @@ struct BookDetailView: View {
                     // Playback Controls
                     HStack {
                         Spacer()
-                        Button(action: {
-                            skipBackwardAction()
-                        }) {
+                        Button(action: { skipBackwardAction() }) {
                             Image(systemName: "arrow.trianglehead.counterclockwise")
                                 .font(.title)
                         }
@@ -181,9 +181,7 @@ struct BookDetailView: View {
                         .foregroundColor(isAtEnd ? .gray : .primary)
                         .disabled(isAtEnd)
                         Spacer()
-                        Button(action: {
-                            skipForwardAction()
-                        }) {
+                        Button(action: { skipForwardAction() }) {
                             Image(systemName: "arrow.trianglehead.clockwise")
                                 .font(.title)
                         }
@@ -227,28 +225,7 @@ struct BookDetailView: View {
                     )
                     .padding(.horizontal)
                     
-                    // Playback Options: Language and Speed Pickers remain inline.
-                    VStack(alignment: .leading, spacing: 16) {
-                        PlaybackOptionRowView(
-                            selectedLanguage: $selectedLanguage1,
-                            selectedSpeed: $selectedSpeed1,
-                            availableLanguages: availableLanguageNames,
-                            speedOptions: speedOptions
-                        )
-                        PlaybackOptionRowView(
-                            selectedLanguage: $selectedLanguage2,
-                            selectedSpeed: $selectedSpeed2,
-                            availableLanguages: availableLanguagesWithNone,
-                            speedOptions: speedOptions
-                        )
-                        PlaybackOptionRowView(
-                            selectedLanguage: $selectedLanguage3,
-                            selectedSpeed: $selectedSpeed3,
-                            availableLanguages: availableLanguagesWithNone,
-                            speedOptions: speedOptions
-                        )
-                    }
-                    .padding(.horizontal)
+                    // (Inline language and speed selectors removed.)
                     
                     Spacer()
                 }
@@ -257,7 +234,6 @@ struct BookDetailView: View {
             .sheet(isPresented: $showingNavigationSheet) {
                 NavigationStack {
                     Form {
-                        // If more than one subbook and the first subbook isn't "default", show subbook picker.
                         if book.subBooks.count > 1 && book.subBooks.first?.subBookTitle.lowercased() != "default" {
                             HStack {
                                 Spacer()
@@ -318,7 +294,6 @@ struct BookDetailView: View {
             }
         }
         .toolbar {
-            // Custom navigation bar header in the principal position.
             ToolbarItem(placement: .principal) {
                 Button(action: {
                     showingNavigationSheet = true
@@ -341,7 +316,6 @@ struct BookDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            // Settings icon in the top-right corner.
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     showSettings = true
@@ -352,8 +326,10 @@ struct BookDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showSettings) {
-            SettingsView()  // Present a dedicated SettingsView.
+            // Pass the current book’s languages to the settings view.
+            SettingsView(availableLanguages: book.languages)
         }
+
         .onChange(of: selectedSubBookIndex) { _, _ in
             if hasRestoredState && !internalNavigation {
                 isPlaying = false
@@ -681,3 +657,4 @@ struct BookDetailView: View {
         }
     }
 }
+

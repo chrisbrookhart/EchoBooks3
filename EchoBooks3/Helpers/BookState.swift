@@ -17,6 +17,7 @@ final class BookState: Identifiable {
     var lastChapterIndex: Int
     var lastSliderValue: Double
     
+    // Now we store the raw language values.
     var selectedLanguage1: String
     var selectedLanguage2: String
     var selectedLanguage3: String
@@ -30,7 +31,8 @@ final class BookState: Identifiable {
          lastSubBookIndex: Int = 0,
          lastChapterIndex: Int = 0,
          lastSliderValue: Double = 0.0,
-         selectedLanguage1: String = "English",
+         // Use the raw value for English, not "English"
+         selectedLanguage1: String = "en-US",
          selectedLanguage2: String = "None",
          selectedLanguage3: String = "None",
          selectedSpeed1: Double = 1.0,
@@ -49,4 +51,3 @@ final class BookState: Identifiable {
         self.selectedSpeed3 = selectedSpeed3
     }
 }
-

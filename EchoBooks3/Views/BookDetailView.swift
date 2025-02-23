@@ -1,14 +1,10 @@
-
-
-
 //
 //  BookDetailView.swift
 //  EchoBooks3
 //
 //  Revised to use global settings for language and speed selections,
 //  and to support two playback modes: "Sentence" (default) and "Paragraph".
-//  In Sentence mode the app plays one sentence at a time in each language,
-//  while in Paragraph mode it plays an entire paragraph in one language,
+//  In Paragraph mode the app plays an entire paragraph in one language,
 //  then replays the paragraph in the next language (if available),
 //  before advancing to the next paragraph (or chapter/subbook).
 import SwiftUI
@@ -224,7 +220,6 @@ struct BookDetailView: View {
                                     isPlaying = true
                                     if let sentence = sentenceForCurrentStage() {
                                         audioManager.loadAudio(for: sentence)
-                                        // Set the playback speed based on current stage.
                                         if currentPlaybackStage == 1 {
                                             audioManager.setRate(Float(selectedSpeed1))
                                         } else if currentPlaybackStage == 2 {
@@ -455,20 +450,18 @@ struct BookDetailView: View {
     
     // MARK: - Audio Completion Handler
     private func audioDidFinishPlaying() {
-        guard isPlaying else { return }
+        guard isPlaying, let chapter = chapterContent else { return }
         
-        // Check playback mode.
         if playbackMode == PlaybackMode.paragraph.rawValue {
             // In Paragraph mode:
-            if let indices = paragraphIndices(for: currentSentenceIndex, in: chapterContent!) {
-                let currentParagraph = chapterContent!.paragraphs[indices.paragraphIndex]
+            if let indices = paragraphIndices(for: currentSentenceIndex, in: chapter) {
+                let currentParagraph = chapter.paragraphs[indices.paragraphIndex]
                 if indices.localIndex < currentParagraph.sentences.count - 1 {
                     // Advance to the next sentence within the same paragraph.
                     currentSentenceIndex += 1
-                    if let sentence = getCurrentSentence(from: chapterContent!, at: currentSentenceIndex) {
+                    if let sentence = getCurrentSentence(from: chapter, at: currentSentenceIndex) {
                         currentSentence = sentence.text
                         audioManager.loadAudio(for: sentence)
-                        // Continue in the current language.
                         if currentPlaybackStage == 1 {
                             audioManager.setRate(Float(selectedSpeed1))
                         } else if currentPlaybackStage == 2 {
@@ -481,8 +474,7 @@ struct BookDetailView: View {
                     }
                 } else {
                     // End of paragraph reached.
-                    // Reset to the start of the current paragraph.
-                    if let startIndex = paragraphStartIndex(for: currentSentenceIndex, in: chapterContent!) {
+                    if let startIndex = paragraphStartIndex(for: currentSentenceIndex, in: chapter) {
                         currentSentenceIndex = startIndex
                     }
                     // Switch to the next language if available.
@@ -509,8 +501,8 @@ struct BookDetailView: View {
                             return
                         }
                     } else {
-                        // All languages have played for this paragraph; advance to next paragraph.
-                        // **Option 1 Fix:** Reload primary chapter content.
+                        // All languages have played for this paragraph.
+                        // Attempt to advance to the next paragraph.
                         chapterContent = loadChapterContent(language: selectedLanguage1Code)
                         if let nextParagraphStart = nextParagraphGlobalIndex(in: chapterContent!, after: currentSentenceIndex),
                            let sentence = getCurrentSentence(from: chapterContent!, at: nextParagraphStart) {
@@ -520,6 +512,11 @@ struct BookDetailView: View {
                             audioManager.loadAudio(for: sentence)
                             audioManager.setRate(Float(selectedSpeed1))
                             audioManager.play()
+                            return
+                        } else {
+                            // No next paragraph exists in the current chapter;
+                            // transition to the next chapter or subbook.
+                            advanceToNextChapterOrSubBook()
                             return
                         }
                     }
@@ -569,7 +566,6 @@ struct BookDetailView: View {
             }
         }
     }
-
     
     // MARK: - Skip Button Actions
     private func skipBackwardAction() {
@@ -754,6 +750,40 @@ struct BookDetailView: View {
             modelContext.insert(newAppState)
             try? modelContext.save()
         }
+    }
+    
+    // MARK: - Helper: Chapter/Subbook Transition
+    private func advanceToNextChapterOrSubBook() {
+        if selectedChapterIndex < selectedSubBook.chapters.count - 1 {
+            internalNavigation = true
+            selectedChapterIndex += 1
+        } else if selectedSubBookIndex < book.subBooks.count - 1 {
+            internalNavigation = true
+            selectedSubBookIndex += 1
+            selectedChapterIndex = 0
+        } else {
+            isPlaying = false
+            return
+        }
+        currentSentenceIndex = 0
+        sliderValue = 0.0
+        chapterContent = loadChapterContent(language: selectedLanguage1Code)
+        currentPlaybackStage = 1
+        if let newContent = chapterContent,
+           let firstSentence = getCurrentSentence(from: newContent, at: 0) {
+            currentSentence = firstSentence.text
+            audioManager.loadAudio(for: firstSentence)
+            if isPlaying {
+                audioManager.setRate(Float(selectedSpeed1))
+                audioManager.play()
+                audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.internalNavigation = false
+        }
+        saveBookState()
+        updateGlobalAppStateForBookDetail()
     }
 }
 

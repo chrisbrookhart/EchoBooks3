@@ -1,0 +1,63 @@
+{
+    "bookID": "440e7946-c555-49ad-a5ae-3e3e8db63e23",
+    "bookTitle": "The Adventures of Sherlock Holmes",
+    "author": "Arthur Conan Doyle",
+    "languages": [
+        "en-US",
+        "es-ES",
+        "fr-FR"
+    ],
+    "bookDescription": "A collection of short stories featuring the brilliant detective Sherlock Holmes and his loyal friend Dr. Watson as they solve intriguing mysteries using keen observation, logic, and deductive reasoning.",
+    "coverImageName": "SherlockHolmes.png",
+    "bookCode": "SHERL",
+    "defaultPlaybackOrder": [
+        "en-US",
+        "es-ES",
+        "fr-FR"
+    ],
+    "subBooks": [
+        {
+            "subBookID": "5dce3f60-2da6-40d5-a133-9d2da97639d7",
+            "subBookNumber": 1,
+            "subBookTitle": "Default",
+            "chapters": [
+                {
+                    "chapterID": "45bf2e43-a37e-45c3-b087-21a5d72f3243",
+                    "chapterNumber": 1,
+                    "chapterTitle": "A Scandal in Bohemia",
+                    "totalParagraphs": 260,
+                    "totalSentences": 665,
+                    "contentReferences": {
+                        "en-US": "SHERL_S1_C1_en-US.json",
+                        "es-ES": "SHERL_S1_C1_es-ES.json",
+                        "fr-FR": "SHERL_S1_C1_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "a949aa82-dfa6-47d5-ae8f-cda57c02b068",
+                    "chapterNumber": 2,
+                    "chapterTitle": "The Red-Headed League",
+                    "totalParagraphs": 216,
+                    "totalSentences": 562,
+                    "contentReferences": {
+                        "en-US": "SHERL_S1_C2_en-US.json",
+                        "es-ES": "SHERL_S1_C2_es-ES.json",
+                        "fr-FR": "SHERL_S1_C2_fr-FR.json"
+                    }
+                },
+                {
+                    "chapterID": "cdfdef42-cf01-47ef-9273-6f4bba4777d8",
+                    "chapterNumber": 3,
+                    "chapterTitle": "A Case of Identity",
+                    "totalParagraphs": 138,
+                    "totalSentences": 392,
+                    "contentReferences": {
+                        "en-US": "SHERL_S1_C3_en-US.json",
+                        "es-ES": "SHERL_S1_C3_es-ES.json",
+                        "fr-FR": "SHERL_S1_C3_fr-FR.json"
+                    }
+                }
+            ]
+        }
+    ]
+}

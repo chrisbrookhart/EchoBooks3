@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D18719782ECEACF9006BF972 /* Books in Copy Files */ = {isa = PBXBuildFile; fileRef = D18719772ECEACF9006BF972 /* Books */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D19CABE42D54598800B58266 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -23,7 +27,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D18718BD2ECC4990006BF972 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				D18719782ECEACF9006BF972 /* Books in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D18719772ECEACF9006BF972 /* Books */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Books; path = "../EchoBooks Content/Books"; sourceTree = "<group>"; };
 		D19CABD12D54598800B58266 /* EchoBooks3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoBooks3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D19CABE32D54598800B58266 /* EchoBooks3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoBooks3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D19CABED2D54598800B58266 /* EchoBooks3UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoBooks3UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +94,7 @@
 		D19CABC82D54598800B58266 = {
 			isa = PBXGroup;
 			children = (
+				D18719772ECEACF9006BF972 /* Books */,
 				D19CABD32D54598800B58266 /* EchoBooks3 */,
 				D19CABE62D54598800B58266 /* EchoBooks3Tests */,
 				D19CABF02D54598800B58266 /* EchoBooks3UITests */,
@@ -101,7 +121,9 @@
 			buildPhases = (
 				D19CABCD2D54598800B58266 /* Sources */,
 				D19CABCE2D54598800B58266 /* Frameworks */,
-				D19CABCF2D54598800B58266 /* Resources */,
+				D18718BD2ECC4990006BF972 /* Copy Files */,
+				D18718BE2ECC49AA006BF972 /* Resources */,
+				D18719722ECEA7D8006BF972 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -208,7 +230,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D19CABCF2D54598800B58266 /* Resources */ = {
+		D18718BE2ECC49AA006BF972 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -230,6 +252,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D18719722ECEA7D8006BF972 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D19CABCD2D54598800B58266 /* Sources */ = {

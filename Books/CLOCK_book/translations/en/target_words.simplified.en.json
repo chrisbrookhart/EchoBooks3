@@ -1,0 +1,10 @@
+{
+  "target_lang": "en",
+  "surface_map": {
+    "ticking": "ticking",
+    "keeper": "keeper",
+    "softly": "softly",
+    "shrug": "shrug",
+    "unfinished": "unfinished"
+  }
+}

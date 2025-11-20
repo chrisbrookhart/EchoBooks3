@@ -1,0 +1,66 @@
+{
+  "tw_version": 1,
+  "book_level": "B2",
+  "items": [
+    {
+      "tw_id": "ticking",
+      "lemma": "ticking",
+      "band": "C1",
+      "zipf": 3.46,
+      "chunk_coverage": 4
+    },
+    {
+      "tw_id": "keeper",
+      "lemma": "keeper",
+      "band": "C1",
+      "zipf": 4.02,
+      "chunk_coverage": 3
+    },
+    {
+      "tw_id": "softly",
+      "lemma": "softly",
+      "band": "C1",
+      "zipf": 3.77,
+      "chunk_coverage": 2
+    },
+    {
+      "tw_id": "shrug",
+      "lemma": "shrug",
+      "band": "C1",
+      "zipf": 3.3,
+      "chunk_coverage": 1
+    },
+    {
+      "tw_id": "unfinished",
+      "lemma": "unfinished",
+      "band": "C1",
+      "zipf": 3.72,
+      "chunk_coverage": 1
+    }
+  ],
+  "by_chunk": {
+    "c00002": [
+      "ticking",
+      "keeper",
+      "shrug"
+    ],
+    "c00003": [
+      "softly"
+    ],
+    "c00004": [
+      "ticking",
+      "keeper",
+      "unfinished"
+    ],
+    "c00006": [
+      "ticking",
+      "softly"
+    ],
+    "c00007": [
+      "ticking"
+    ],
+    "c00008": [
+      "keeper"
+    ]
+  }
+}

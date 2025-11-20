@@ -2,11 +2,9 @@
 //  BookDetailView.swift
 //  EchoBooks3
 //
-//  Revised to use global settings for language and speed selections,
-//  and to support two playback modes: "Sentence" (default) and "Paragraph".
-//  In Paragraph mode the app plays an entire paragraph in one language,
-//  then replays the paragraph in the next language (if available),
-//  before advancing to the next paragraph (or chapter/subbook).
+//  Updated to use ContentLoader for new format books.
+//  Removed all old format loading code.
+//
 import SwiftUI
 import SwiftData
 import UIKit
@@ -55,6 +53,9 @@ struct BookDetailView: View {
     // MARK: - Audio Playback Manager Integration
     @StateObject private var audioManager = AudioPlaybackManager()
     
+    // MARK: - Content Loader
+    @State private var contentLoader: ContentLoader?
+    
     // Speed options.
     private let speedOptions: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
@@ -83,7 +84,7 @@ struct BookDetailView: View {
     
     // Convenience computed properties.
     var selectedSubBook: SubBook {
-        book.subBooks[selectedSubBookIndex]
+        book.effectiveSubBooks[selectedSubBookIndex]
     }
     var selectedChapter: Chapter {
         guard selectedSubBook.chapters.indices.contains(selectedChapterIndex) else {
@@ -95,19 +96,18 @@ struct BookDetailView: View {
     // MARK: - Persistence State (Book-specific)
     @State private var bookState: BookState?
     
-    // MARK: - Chapter Content State
-    @State private var chapterContent: ChapterContent?
+    // MARK: - Chapter Content State (New Format)
+    @State private var chapterSentences: [SentenceData] = []
+    @State private var chapterParagraphs: [ParagraphData] = []
     
     var totalSentences: Int {
-        chapterContent?.paragraphs.reduce(0) { $0 + $1.sentences.count } ?? 0
+        chapterSentences.count
     }
     
     private var isAtEnd: Bool {
-        guard let content = chapterContent else { return true }
-        let totalSentencesInChapter = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
-        let atEndOfChapter = globalSentenceIndex >= totalSentencesInChapter - 1
+        let atEndOfChapter = globalSentenceIndex >= chapterSentences.count - 1
         let isLastChapter = selectedChapterIndex == (selectedSubBook.chapters.count - 1)
-        let isLastSubBook = selectedSubBookIndex == (book.subBooks.count - 1)
+        let isLastSubBook = selectedSubBookIndex == (book.effectiveSubBooks.count - 1)
         return atEndOfChapter && isLastChapter && isLastSubBook
     }
     
@@ -117,47 +117,64 @@ struct BookDetailView: View {
     // The slider now uses a normalized value between 0 and 1.
     var maxSliderNormalized: Double { 1.0 }
     
-    // MARK: - Paragraph Mode Helpers (defined as private methods)
+    // MARK: - Paragraph Mode Helpers
     
     /// Returns (paragraph index, local index) for a given global sentence index in a chapter.
-    private func paragraphIndices(for globalIndex: Int, in chapter: ChapterContent) -> (paragraphIndex: Int, localIndex: Int)? {
-        var runningIndex = 0
-        for (i, paragraph) in chapter.paragraphs.enumerated() {
-            let count = paragraph.sentences.count
-            if globalIndex < runningIndex + count {
-                return (i, globalIndex - runningIndex)
-            }
-            runningIndex += count
+    private func paragraphIndices(for globalIndex: Int) -> (paragraphIndex: Int, localIndex: Int)? {
+        guard globalIndex < chapterSentences.count else { return nil }
+        let sentence = chapterSentences[globalIndex]
+        
+        // Find the paragraph this sentence belongs to
+        guard let paragraphIndex = chapterParagraphs.firstIndex(where: { $0.paragraphId == sentence.paragraphId }) else {
+            return nil
         }
-        return nil
+        
+        // Find the local index within that paragraph
+        let paragraphSentences = chapterSentences.filter { $0.paragraphId == sentence.paragraphId }
+            .sorted { $0.sentenceIndexInParagraph < $1.sentenceIndexInParagraph }
+        
+        guard let localIndex = paragraphSentences.firstIndex(where: { $0.sentenceId == sentence.sentenceId }) else {
+            return nil
+        }
+        
+        return (paragraphIndex, localIndex)
     }
     
     /// Returns the global index of the first sentence in the next paragraph, if it exists.
-    private func nextParagraphGlobalIndex(in chapter: ChapterContent, after globalIndex: Int) -> Int? {
-        var runningIndex = 0
-        for paragraph in chapter.paragraphs {
-            let count = paragraph.sentences.count
-            if globalIndex < runningIndex + count {
-                let nextParagraphStart = runningIndex + count
-                let total = chapter.paragraphs.reduce(0) { $0 + $1.sentences.count }
-                return nextParagraphStart < total ? nextParagraphStart : nil
-            }
-            runningIndex += count
+    private func nextParagraphGlobalIndex(after globalIndex: Int) -> Int? {
+        guard globalIndex < chapterSentences.count else { return nil }
+        let currentSentence = chapterSentences[globalIndex]
+        
+        // Find current paragraph index
+        guard let currentParagraphIndex = chapterParagraphs.firstIndex(where: { $0.paragraphId == currentSentence.paragraphId }) else {
+            return nil
         }
+        
+        // Check if there's a next paragraph
+        guard currentParagraphIndex < chapterParagraphs.count - 1 else {
+            return nil
+        }
+        
+        let nextParagraph = chapterParagraphs[currentParagraphIndex + 1]
+        // Find first sentence of next paragraph
+        if let firstSentence = chapterSentences.first(where: { $0.paragraphId == nextParagraph.paragraphId }) {
+            return chapterSentences.firstIndex(where: { $0.sentenceId == firstSentence.sentenceId })
+        }
+        
         return nil
     }
     
     /// Returns the global index of the first sentence in the paragraph containing the given global index.
-    private func paragraphStartIndex(for globalIndex: Int, in chapter: ChapterContent) -> Int? {
-        var runningIndex = 0
-        for paragraph in chapter.paragraphs {
-            let count = paragraph.sentences.count
-            if globalIndex < runningIndex + count {
-                return runningIndex
-            }
-            runningIndex += count
-        }
-        return nil
+    private func paragraphStartIndex(for globalIndex: Int) -> Int? {
+        guard globalIndex < chapterSentences.count else { return nil }
+        let sentence = chapterSentences[globalIndex]
+        
+        // Find first sentence in the same paragraph
+        let paragraphSentences = chapterSentences.filter { $0.paragraphId == sentence.paragraphId }
+            .sorted { $0.sentenceIndexInParagraph < $1.sentenceIndexInParagraph }
+        
+        guard let firstSentence = paragraphSentences.first else { return nil }
+        return chapterSentences.firstIndex(where: { $0.sentenceId == firstSentence.sentenceId })
     }
     
     var body: some View {
@@ -218,8 +235,9 @@ struct BookDetailView: View {
                                     audioManager.play()
                                 } else {
                                     isPlaying = true
-                                    if let sentence = sentenceForCurrentStage() {
-                                        audioManager.loadAudio(for: sentence)
+                                    if let sentenceId = getCurrentSentenceId() {
+                                        let languageCode = getLanguageCodeForCurrentStage()
+                                        audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
                                         if currentPlaybackStage == 1 {
                                             audioManager.setRate(Float(selectedSpeed1))
                                         } else if currentPlaybackStage == 2 {
@@ -258,18 +276,20 @@ struct BookDetailView: View {
                                 sliderNormalized = newValue
                                 let computedIndex = Int(round(newValue * Double(totalSentences - 1)))
                                 globalSentenceIndex = computedIndex
-                                if let sentence = chapterContent.flatMap({ getCurrentSentence(from: $0, at: computedIndex) }) {
-                                    currentSentence = sentence.text
-                                    audioManager.loadAudio(for: sentence)
-                                    if isPlaying {
-                                        if currentPlaybackStage == 1 {
-                                            audioManager.setRate(Float(selectedSpeed1))
-                                        } else if currentPlaybackStage == 2 {
-                                            audioManager.setRate(Float(selectedSpeed2))
-                                        } else if currentPlaybackStage == 3 {
-                                            audioManager.setRate(Float(selectedSpeed3))
+                                if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+                                    currentSentence = sentenceText
+                                    if let sentenceId = getCurrentSentenceId() {
+                                        audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+                                        if isPlaying {
+                                            if currentPlaybackStage == 1 {
+                                                audioManager.setRate(Float(selectedSpeed1))
+                                            } else if currentPlaybackStage == 2 {
+                                                audioManager.setRate(Float(selectedSpeed2))
+                                            } else if currentPlaybackStage == 3 {
+                                                audioManager.setRate(Float(selectedSpeed3))
+                                            }
+                                            audioManager.play()
                                         }
-                                        audioManager.play()
                                     }
                                 }
                                 let computedSlider = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
@@ -294,12 +314,12 @@ struct BookDetailView: View {
             .sheet(isPresented: $showingNavigationSheet) {
                 NavigationStack {
                     Form {
-                        if book.subBooks.count > 1 && book.subBooks.first?.subBookTitle.lowercased() != "default" {
+                        if book.effectiveSubBooks.count > 1 && book.effectiveSubBooks.first?.subBookTitle.lowercased() != "default" {
                             HStack {
                                 Spacer()
                                 Picker("", selection: $selectedSubBookIndex) {
-                                    ForEach(0..<book.subBooks.count, id: \.self) { index in
-                                        Text(book.subBooks[index].subBookTitle).tag(index)
+                                    ForEach(0..<book.effectiveSubBooks.count, id: \.self) { index in
+                                        Text(book.effectiveSubBooks[index].subBookTitle).tag(index)
                                     }
                                 }
                                 .pickerStyle(MenuPickerStyle())
@@ -331,14 +351,15 @@ struct BookDetailView: View {
             .onAppear {
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
-                chapterContent = loadChapterContent(language: selectedLanguage1Code)
+                initializeContentLoader()
+                loadChapterContent()
                 if selectedChapterIndex >= selectedSubBook.chapters.count {
                     selectedChapterIndex = 0
                 }
                 globalSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
                 sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: globalSentenceIndex) {
-                    currentSentence = sentence.text
+                if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+                    currentSentence = sentenceText
                 }
                 audioManager.setRate(Float(selectedSpeed1))
                 print("DEBUG onAppear: totalSentences = \(totalSentences), globalSentenceIndex = \(globalSentenceIndex), sliderNormalized = \(sliderNormalized)")
@@ -367,31 +388,61 @@ struct BookDetailView: View {
             SettingsView(availableLanguages: book.languages)
         }
         // onChange handlers for navigation state.
-        .onChange(of: selectedSubBookIndex) { _, _ in
-            if hasRestoredState && !internalNavigation {
+//        .onChange(of: selectedSubBookIndex) { _, _ in
+//            if hasRestoredState && !internalNavigation {
+//                isPlaying = false
+//                audioManager.pause()
+//                audioManager.onPlaybackFinished = nil
+//                updateCurrentSentenceForSelection()
+//                saveBookState()
+//                updateGlobalAppStateForBookDetail()
+//            }
+//        }
+        .onChange(of: selectedSubBookIndex) { _, newValue in
+            // Always update immediately when subbook changes (unless it's internal navigation)
+            if !internalNavigation {
                 isPlaying = false
                 audioManager.pause()
                 audioManager.onPlaybackFinished = nil
+                // Reset chapter index when subbook changes
+                selectedChapterIndex = 0
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
+            } else {
+                // Reset internalNavigation flag after internal navigation completes
+                internalNavigation = false
             }
         }
-        .onChange(of: selectedChapterIndex) { _, _ in
-            if hasRestoredState && !internalNavigation {
+        
+//        .onChange(of: selectedChapterIndex) { _, _ in
+//            if hasRestoredState && !internalNavigation {
+//                isPlaying = false
+//                audioManager.pause()
+//                audioManager.onPlaybackFinished = nil
+//                updateCurrentSentenceForSelection()
+//                saveBookState()
+//                updateGlobalAppStateForBookDetail()
+//            }
+//        }
+        .onChange(of: selectedChapterIndex) { _, newValue in
+            // Always update immediately when chapter changes (unless it's internal navigation)
+            if !internalNavigation {
                 isPlaying = false
                 audioManager.pause()
                 audioManager.onPlaybackFinished = nil
                 updateCurrentSentenceForSelection()
                 saveBookState()
                 updateGlobalAppStateForBookDetail()
+            } else {
+                // Reset internalNavigation flag after internal navigation completes
+                internalNavigation = false
             }
         }
         .onChange(of: selectedLanguage1) {
-            let languageCode = selectedLanguage1Code
-            chapterContent = loadChapterContent(language: languageCode)
-            if let content = chapterContent, let sentence = getCurrentSentence(from: content, at: globalSentenceIndex) {
-                currentSentence = sentence.text
+            loadChapterContent()
+            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+                currentSentence = sentenceText
             } else {
                 currentSentence = "No sentence available."
             }
@@ -429,105 +480,334 @@ struct BookDetailView: View {
         }
     }
     
-    // MARK: - Helper: Get Sentence for Current Stage
-    private func sentenceForCurrentStage() -> SentenceContent? {
-        if currentPlaybackStage == 1 {
-            return currentSentenceContent()
-        } else if currentPlaybackStage == 2, let _ = selectedLanguage2Code {
-            let content = loadChapterContent(language: selectedLanguage2Code!)
-            return content.flatMap { getCurrentSentence(from: $0, at: globalSentenceIndex) }
-        } else if currentPlaybackStage == 3, let _ = selectedLanguage3Code {
-            let content = loadChapterContent(language: selectedLanguage3Code!)
-            return content.flatMap { getCurrentSentence(from: $0, at: globalSentenceIndex) }
+    // MARK: - Content Loading (New Format)
+    
+    /// Initializes the ContentLoader for this book
+    private func initializeContentLoader() {
+        if contentLoader == nil {
+            contentLoader = ContentLoader(bookCode: book.bookCode)
         }
-        return nil
     }
     
-    // MARK: - Helper: Get Current SentenceContent (primary language)
-    private func currentSentenceContent() -> SentenceContent? {
-        if let content = chapterContent {
-            return getCurrentSentence(from: content, at: globalSentenceIndex)
+    /// Loads chapter content using ContentLoader
+    private func loadChapterContent() {
+        guard let loader = contentLoader else {
+            initializeContentLoader()
+            guard let loader = contentLoader else { return }
+            loadChapterContentWithLoader(loader)
+            return
         }
-        return nil
+        loadChapterContentWithLoader(loader)
+    }
+    
+    private func loadChapterContentWithLoader(_ loader: ContentLoader) {
+        do {
+            let chapterIndex = selectedChapter.chapterNumber
+            chapterSentences = try loader.sentences(for: chapterIndex)
+            chapterParagraphs = try loader.paragraphs(for: chapterIndex)
+            
+            // Sort sentences by their index in paragraph to maintain order
+            chapterSentences.sort { s1, s2 in
+                if s1.paragraphId != s2.paragraphId {
+                    // First sort by paragraph order
+                    guard let p1Index = chapterParagraphs.firstIndex(where: { $0.paragraphId == s1.paragraphId }),
+                          let p2Index = chapterParagraphs.firstIndex(where: { $0.paragraphId == s2.paragraphId }) else {
+                        return false
+                    }
+                    if p1Index != p2Index {
+                        return p1Index < p2Index
+                    }
+                }
+                // Then by sentence index within paragraph
+                return s1.sentenceIndexInParagraph < s2.sentenceIndexInParagraph
+            }
+        } catch {
+            print("ERROR: Failed to load chapter content: \(error)")
+            chapterSentences = []
+            chapterParagraphs = []
+        }
+    }
+    
+    // MARK: - Helper: Get Sentence Data
+    
+    /// Gets the current sentence ID
+    private func getCurrentSentenceId() -> String? {
+        guard globalSentenceIndex < chapterSentences.count else { return nil }
+        return chapterSentences[globalSentenceIndex].sentenceId
+    }
+    
+    /// Gets the current sentence text in the specified language
+    private func getCurrentSentenceText(languageCode: String) -> String? {
+        guard globalSentenceIndex < chapterSentences.count else { return nil }
+        let sentenceData = chapterSentences[globalSentenceIndex]
+        
+        // Check if this is the primary language (simplified format uses primary language text)
+        let normalizedLang = normalizeLanguageCode(languageCode)
+        let primaryLang = normalizeLanguageCode(selectedLanguage1Code)
+        
+        if normalizedLang == primaryLang {
+            // Use the text from SentenceData (primary language)
+            return sentenceData.text
+        } else {
+            // Get translation from ContentLoader
+            guard let loader = contentLoader else { return sentenceData.text }
+            do {
+                if let translation = try loader.translation(for: sentenceData.sentenceId, languageCode: languageCode) {
+                    return translation
+                }
+            } catch {
+                print("ERROR: Failed to get translation: \(error)")
+            }
+            return sentenceData.text
+        }
+    }
+    
+    /// Normalizes a language code to its simplified form
+    private func normalizeLanguageCode(_ code: String) -> String {
+        if !code.contains("-") {
+            return code.lowercased()
+        }
+        let components = code.split(separator: "-")
+        return String(components[0]).lowercased()
+    }
+    
+    // MARK: - Helper: Get Language Code for Current Stage
+    private func getLanguageCodeForCurrentStage() -> String {
+        if currentPlaybackStage == 1 {
+            return selectedLanguage1Code
+        } else if currentPlaybackStage == 2, let lang2 = selectedLanguage2Code {
+            return lang2
+        } else if currentPlaybackStage == 3, let lang3 = selectedLanguage3Code {
+            return lang3
+        }
+        return selectedLanguage1Code
     }
     
     // MARK: - Audio Completion Handler
+//    private func audioDidFinishPlaying() {
+//        guard isPlaying else { return }
+//        
+//        if playbackMode == PlaybackMode.paragraph.rawValue {
+//            // In Paragraph mode:
+//            if let indices = paragraphIndices(for: globalSentenceIndex) {
+//                let paragraphId = chapterSentences[globalSentenceIndex].paragraphId
+//                let paragraphSentences = chapterSentences.filter { $0.paragraphId == paragraphId }
+//                    .sorted { $0.sentenceIndexInParagraph < $1.sentenceIndexInParagraph }
+//                
+//                if indices.localIndex < paragraphSentences.count - 1 {
+//                    // Advance to the next sentence within the same paragraph.
+//                    globalSentenceIndex += 1
+//                    sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+//                    if let sentenceText = getCurrentSentenceText(languageCode: getLanguageCodeForCurrentStage()) {
+//                        currentSentence = sentenceText
+//                        if let sentenceId = getCurrentSentenceId() {
+//                            let languageCode = getLanguageCodeForCurrentStage()
+//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+//                            if currentPlaybackStage == 1 {
+//                                audioManager.setRate(Float(selectedSpeed1))
+//                            } else if currentPlaybackStage == 2 {
+//                                audioManager.setRate(Float(selectedSpeed2))
+//                            } else if currentPlaybackStage == 3 {
+//                                audioManager.setRate(Float(selectedSpeed3))
+//                            }
+//                            print("DEBUG: Paragraph mode - Advanced within paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
+//                            audioManager.play()
+//                            return
+//                        }
+//                    }
+//                } else {
+//                    // End of paragraph reached.
+//                    if let startIndex = paragraphStartIndex(for: globalSentenceIndex) {
+//                        globalSentenceIndex = startIndex
+//                        sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+//                        print("DEBUG: Paragraph mode - End of paragraph reached; reset globalSentenceIndex to \(globalSentenceIndex)")
+//                    }
+//                    // Switch to the next language if available.
+//                    if currentPlaybackStage == 1, selectedLanguage2 != "None" {
+//                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage2),
+//                           let sentenceId = getCurrentSentenceId() {
+//                            currentSentence = sentenceText
+//                            currentPlaybackStage = 2
+//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage2)
+//                            audioManager.setRate(Float(selectedSpeed2))
+//                            print("DEBUG: Paragraph mode - Switching to secondary language at globalSentenceIndex = \(globalSentenceIndex)")
+//                            audioManager.play()
+//                            return
+//                        }
+//                    } else if currentPlaybackStage == 2, selectedLanguage3 != "None" {
+//                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage3),
+//                           let sentenceId = getCurrentSentenceId() {
+//                            currentSentence = sentenceText
+//                            currentPlaybackStage = 3
+//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage3)
+//                            audioManager.setRate(Float(selectedSpeed3))
+//                            print("DEBUG: Paragraph mode - Switching to tertiary language at globalSentenceIndex = \(globalSentenceIndex)")
+//                            audioManager.play()
+//                            return
+//                        }
+//                    } else {
+//                        // All languages have played for this paragraph.
+//                        loadChapterContent()
+//                        if let nextParagraphStart = nextParagraphGlobalIndex(after: globalSentenceIndex),
+//                           let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+//                           let sentenceId = getCurrentSentenceId() {
+//                            globalSentenceIndex = nextParagraphStart
+//                            sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+//                            currentPlaybackStage = 1
+//                            currentSentence = sentenceText
+//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+//                            audioManager.setRate(Float(selectedSpeed1))
+//                            print("DEBUG: Paragraph mode - Advancing to next paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
+//                            audioManager.play()
+//                            return
+//                        } else {
+//                            // No next paragraph exists in the current chapter;
+//                            advanceToNextChapterOrSubBook()
+//                            return
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            // Sentence mode: existing behavior.
+//            if currentPlaybackStage == 1 {
+//                if let lang2 = selectedLanguage2Code,
+//                   let sentenceText = getCurrentSentenceText(languageCode: lang2),
+//                   let sentenceId = getCurrentSentenceId() {
+//                    currentSentence = sentenceText
+//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang2)
+//                    currentPlaybackStage = 2
+//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
+//                    audioManager.setRate(Float(selectedSpeed2))
+//                    print("DEBUG: Sentence mode - Switching to secondary language at globalSentenceIndex = \(globalSentenceIndex)")
+//                    audioManager.play()
+//                    return
+//                }
+//                if let lang3 = selectedLanguage3Code,
+//                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
+//                   let sentenceId = getCurrentSentenceId() {
+//                    currentSentence = sentenceText
+//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
+//                    currentPlaybackStage = 3
+//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
+//                    audioManager.setRate(Float(selectedSpeed3))
+//                    print("DEBUG: Sentence mode - Switching to tertiary language at globalSentenceIndex = \(globalSentenceIndex)")
+//                    audioManager.play()
+//                    return
+//                }
+//                advanceSentenceWithReset()
+//            } else if currentPlaybackStage == 2 {
+//                if let lang3 = selectedLanguage3Code,
+//                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
+//                   let sentenceId = getCurrentSentenceId() {
+//                    currentSentence = sentenceText
+//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
+//                    currentPlaybackStage = 3
+//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
+//                    audioManager.setRate(Float(selectedSpeed3))
+//                    print("DEBUG: Sentence mode - Switching from secondary to tertiary at globalSentenceIndex = \(globalSentenceIndex)")
+//                    audioManager.play()
+//                    return
+//                }
+//                advanceSentenceWithReset()
+//            } else if currentPlaybackStage == 3 {
+//                advanceSentenceWithReset()
+//            }
+//        }
+//    }
+    // MARK: - Audio Completion Handler
     private func audioDidFinishPlaying() {
-        guard isPlaying, let chapter = chapterContent else { return }
+        guard isPlaying else { return }
         
         if playbackMode == PlaybackMode.paragraph.rawValue {
             // In Paragraph mode:
-            if let indices = paragraphIndices(for: globalSentenceIndex, in: chapter) {
-                let currentParagraph = chapter.paragraphs[indices.paragraphIndex]
-                if indices.localIndex < currentParagraph.sentences.count - 1 {
+            if let indices = paragraphIndices(for: globalSentenceIndex) {
+                let paragraphId = chapterSentences[globalSentenceIndex].paragraphId
+                let paragraphSentences = chapterSentences.filter { $0.paragraphId == paragraphId }
+                    .sorted { $0.sentenceIndexInParagraph < $1.sentenceIndexInParagraph }
+                
+                if indices.localIndex < paragraphSentences.count - 1 {
                     // Advance to the next sentence within the same paragraph.
                     globalSentenceIndex += 1
                     sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                    if let sentence = getCurrentSentence(from: chapter, at: globalSentenceIndex) {
-                        currentSentence = sentence.text
-                        audioManager.loadAudio(for: sentence)
-                        if currentPlaybackStage == 1 {
-                            audioManager.setRate(Float(selectedSpeed1))
-                        } else if currentPlaybackStage == 2 {
-                            audioManager.setRate(Float(selectedSpeed2))
-                        } else if currentPlaybackStage == 3 {
-                            audioManager.setRate(Float(selectedSpeed3))
+                    if let sentenceText = getCurrentSentenceText(languageCode: getLanguageCodeForCurrentStage()) {
+                        currentSentence = sentenceText
+                        if let sentenceId = getCurrentSentenceId() {
+                            let languageCode = getLanguageCodeForCurrentStage()
+                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                            if currentPlaybackStage == 1 {
+                                audioManager.setRate(Float(selectedSpeed1))
+                            } else if currentPlaybackStage == 2 {
+                                audioManager.setRate(Float(selectedSpeed2))
+                            } else if currentPlaybackStage == 3 {
+                                audioManager.setRate(Float(selectedSpeed3))
+                            }
+                            print("DEBUG: Paragraph mode - Advanced within paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
+                            audioManager.play()
+                            return
                         }
-                        print("DEBUG: Paragraph mode - Advanced within paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
-                        audioManager.play()
-                        return
                     }
                 } else {
                     // End of paragraph reached.
-                    if let startIndex = paragraphStartIndex(for: globalSentenceIndex, in: chapter) {
-                        globalSentenceIndex = startIndex
-                        sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                        print("DEBUG: Paragraph mode - End of paragraph reached; reset globalSentenceIndex to \(globalSentenceIndex)")
-                    }
                     // Switch to the next language if available.
                     if currentPlaybackStage == 1, selectedLanguage2 != "None" {
-                        if let content2 = loadChapterContent(language: selectedLanguage2),
-                           let sentence = getCurrentSentence(from: content2, at: globalSentenceIndex) {
-                            chapterContent = content2
-                            currentSentence = sentence.text
+                        // Reset to start of paragraph for language 2
+                        if let startIndex = paragraphStartIndex(for: globalSentenceIndex) {
+                            globalSentenceIndex = startIndex
+                            sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+                            print("DEBUG: Paragraph mode - End of paragraph reached; reset globalSentenceIndex to \(globalSentenceIndex) for language 2")
+                        }
+                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage2),
+                           let sentenceId = getCurrentSentenceId() {
+                            currentSentence = sentenceText
                             currentPlaybackStage = 2
-                            audioManager.loadAudio(for: sentence)
+                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage2)
                             audioManager.setRate(Float(selectedSpeed2))
                             print("DEBUG: Paragraph mode - Switching to secondary language at globalSentenceIndex = \(globalSentenceIndex)")
                             audioManager.play()
                             return
                         }
                     } else if currentPlaybackStage == 2, selectedLanguage3 != "None" {
-                        if let content3 = loadChapterContent(language: selectedLanguage3),
-                           let sentence = getCurrentSentence(from: content3, at: globalSentenceIndex) {
-                            chapterContent = content3
-                            currentSentence = sentence.text
+                        // Reset to start of paragraph for language 3
+                        if let startIndex = paragraphStartIndex(for: globalSentenceIndex) {
+                            globalSentenceIndex = startIndex
+                            sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+                            print("DEBUG: Paragraph mode - End of paragraph reached; reset globalSentenceIndex to \(globalSentenceIndex) for language 3")
+                        }
+                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage3),
+                           let sentenceId = getCurrentSentenceId() {
+                            currentSentence = sentenceText
                             currentPlaybackStage = 3
-                            audioManager.loadAudio(for: sentence)
+                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage3)
                             audioManager.setRate(Float(selectedSpeed3))
                             print("DEBUG: Paragraph mode - Switching to tertiary language at globalSentenceIndex = \(globalSentenceIndex)")
                             audioManager.play()
                             return
                         }
-                    } else {
-                        // All languages have played for this paragraph.
-                        chapterContent = loadChapterContent(language: selectedLanguage1Code)
-                        if let nextParagraphStart = nextParagraphGlobalIndex(in: chapterContent!, after: globalSentenceIndex),
-                           let sentence = getCurrentSentence(from: chapterContent!, at: nextParagraphStart) {
-                            globalSentenceIndex = nextParagraphStart
-                            sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                            currentPlaybackStage = 1
-                            currentSentence = sentence.text
-                            audioManager.loadAudio(for: sentence)
+                    }
+                    
+                    // All languages have played for this paragraph. Advance to next paragraph.
+                    // IMPORTANT: Don't reset globalSentenceIndex here - we want to advance to the next paragraph
+                    loadChapterContent()
+                    if let nextParagraphStart = nextParagraphGlobalIndex(after: globalSentenceIndex) {
+                        // Get the sentence ID for the next paragraph start, not the current (reset) index
+                        let savedIndex = globalSentenceIndex
+                        globalSentenceIndex = nextParagraphStart
+                        sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+                        currentPlaybackStage = 1
+                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+                           let sentenceId = getCurrentSentenceId() {
+                            currentSentence = sentenceText
+                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
                             audioManager.setRate(Float(selectedSpeed1))
-                            print("DEBUG: Paragraph mode - Advancing to next paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
+                            print("DEBUG: Paragraph mode - Advancing to next paragraph: from index \(savedIndex) to \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
                             audioManager.play()
                             return
-                        } else {
-                            // No next paragraph exists in the current chapter;
-                            advanceToNextChapterOrSubBook()
-                            return
                         }
+                    } else {
+                        // No next paragraph exists in the current chapter;
+                        advanceToNextChapterOrSubBook()
+                        return
                     }
                 }
             }
@@ -535,10 +815,10 @@ struct BookDetailView: View {
             // Sentence mode: existing behavior.
             if currentPlaybackStage == 1 {
                 if let lang2 = selectedLanguage2Code,
-                   let content2 = loadChapterContent(language: lang2),
-                   let sentence2 = getCurrentSentence(from: content2, at: globalSentenceIndex) {
-                    currentSentence = sentence2.text
-                    audioManager.loadAudio(for: sentence2)
+                   let sentenceText = getCurrentSentenceText(languageCode: lang2),
+                   let sentenceId = getCurrentSentenceId() {
+                    currentSentence = sentenceText
+                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang2)
                     currentPlaybackStage = 2
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                     audioManager.setRate(Float(selectedSpeed2))
@@ -547,10 +827,10 @@ struct BookDetailView: View {
                     return
                 }
                 if let lang3 = selectedLanguage3Code,
-                   let content3 = loadChapterContent(language: lang3),
-                   let sentence3 = getCurrentSentence(from: content3, at: globalSentenceIndex) {
-                    currentSentence = sentence3.text
-                    audioManager.loadAudio(for: sentence3)
+                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
+                   let sentenceId = getCurrentSentenceId() {
+                    currentSentence = sentenceText
+                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
                     currentPlaybackStage = 3
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                     audioManager.setRate(Float(selectedSpeed3))
@@ -561,10 +841,10 @@ struct BookDetailView: View {
                 advanceSentenceWithReset()
             } else if currentPlaybackStage == 2 {
                 if let lang3 = selectedLanguage3Code,
-                   let content3 = loadChapterContent(language: lang3),
-                   let sentence3 = getCurrentSentence(from: content3, at: globalSentenceIndex) {
-                    currentSentence = sentence3.text
-                    audioManager.loadAudio(for: sentence3)
+                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
+                   let sentenceId = getCurrentSentenceId() {
+                    currentSentence = sentenceText
+                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
                     currentPlaybackStage = 3
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                     audioManager.setRate(Float(selectedSpeed3))
@@ -581,15 +861,17 @@ struct BookDetailView: View {
     
     // MARK: - Skip Button Actions
     private func skipBackwardAction() {
-        guard let content = chapterContent else { return }
-        let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
+        let total = chapterSentences.count
         let newIndex = max(globalSentenceIndex - 5, 0)
         globalSentenceIndex = newIndex
         sliderNormalized = total > 0 ? Double(globalSentenceIndex) / Double(total - 1) : 0.0
-        if let sentence = getCurrentSentence(from: content, at: globalSentenceIndex) {
-            currentSentence = sentence.text
-            audioManager.loadAudio(for: sentence)
-            if isPlaying { audioManager.play() }
+        if let sentenceText = getCurrentSentenceText(languageCode: getLanguageCodeForCurrentStage()) {
+            currentSentence = sentenceText
+            if let sentenceId = getCurrentSentenceId() {
+                let languageCode = getLanguageCodeForCurrentStage()
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                if isPlaying { audioManager.play() }
+            }
         }
         print("DEBUG: Skip Backward - globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(total), sliderNormalized = \(sliderNormalized)")
         saveBookState()
@@ -597,15 +879,17 @@ struct BookDetailView: View {
     }
     
     private func skipForwardAction() {
-        guard let content = chapterContent else { return }
-        let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
+        let total = chapterSentences.count
         let newIndex = min(globalSentenceIndex + 5, total - 1)
         globalSentenceIndex = newIndex
         sliderNormalized = total > 0 ? Double(globalSentenceIndex) / Double(total - 1) : 0.0
-        if let sentence = getCurrentSentence(from: content, at: globalSentenceIndex) {
-            currentSentence = sentence.text
-            audioManager.loadAudio(for: sentence)
-            if isPlaying { audioManager.play() }
+        if let sentenceText = getCurrentSentenceText(languageCode: getLanguageCodeForCurrentStage()) {
+            currentSentence = sentenceText
+            if let sentenceId = getCurrentSentenceId() {
+                let languageCode = getLanguageCodeForCurrentStage()
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                if isPlaying { audioManager.play() }
+            }
         }
         print("DEBUG: Skip Forward - globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(total), sliderNormalized = \(sliderNormalized)")
         saveBookState()
@@ -619,14 +903,14 @@ struct BookDetailView: View {
     }
     
     private func advanceSentence() {
-        guard let content = chapterContent else { return }
-        let total = content.paragraphs.reduce(0) { $0 + $1.sentences.count }
+        let total = chapterSentences.count
         if globalSentenceIndex < total - 1 {
             globalSentenceIndex += 1
             sliderNormalized = total > 0 ? Double(globalSentenceIndex) / Double(total - 1) : 0.0
-            if let sentence = getCurrentSentence(from: content, at: globalSentenceIndex) {
-                currentSentence = sentence.text
-                audioManager.loadAudio(for: sentence)
+            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+               let sentenceId = getCurrentSentenceId() {
+                currentSentence = sentenceText
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
                 if isPlaying {
                     audioManager.setRate(Float(selectedSpeed1))
                     audioManager.play()
@@ -640,7 +924,7 @@ struct BookDetailView: View {
                 internalNavigation = true
                 selectedChapterIndex += 1
                 print("DEBUG: Advance Sentence - transitioning to next chapter")
-            } else if selectedSubBookIndex < book.subBooks.count - 1 {
+            } else if selectedSubBookIndex < book.effectiveSubBooks.count - 1 {
                 internalNavigation = true
                 selectedSubBookIndex += 1
                 selectedChapterIndex = 0
@@ -652,12 +936,12 @@ struct BookDetailView: View {
             }
             globalSentenceIndex = 0
             sliderNormalized = 0.0
-            chapterContent = loadChapterContent(language: selectedLanguage1Code)
+            loadChapterContent()
             currentPlaybackStage = 1
-            if let newContent = chapterContent,
-               let firstSentence = getCurrentSentence(from: newContent, at: 0) {
-                currentSentence = firstSentence.text
-                audioManager.loadAudio(for: firstSentence)
+            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+               let sentenceId = getCurrentSentenceId() {
+                currentSentence = sentenceText
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
                 if isPlaying {
                     audioManager.setRate(Float(selectedSpeed1))
                     audioManager.play()
@@ -674,58 +958,36 @@ struct BookDetailView: View {
     }
     
     // MARK: - Update Current Sentence on Selection Change
+//    private func updateCurrentSentenceForSelection() {
+//        loadChapterContent()
+//        globalSentenceIndex = 0
+//        sliderNormalized = 0.0
+//        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+//            currentSentence = sentenceText
+//        } else {
+//            currentSentence = "No sentence available."
+//        }
+//    }
+  
     private func updateCurrentSentenceForSelection() {
-        chapterContent = loadChapterContent(language: selectedLanguage1Code)
+        loadChapterContent()
         globalSentenceIndex = 0
         sliderNormalized = 0.0
-        if let content = chapterContent,
-           let firstSentence = getCurrentSentence(from: content, at: 0) {
-            currentSentence = firstSentence.text
+        currentPlaybackStage = 1  // Reset to primary language
+        
+        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+            currentSentence = sentenceText
         } else {
             currentSentence = "No sentence available."
         }
-    }
-    
-    // MARK: - JSON Parsing Helpers
-    private func chapterJSONFileName(language: String) -> String {
-        let bookCode = book.bookCode
-        let subNumber = selectedSubBook.subBookNumber
-        let chapterNum = selectedChapter.chapterNumber
-        return "\(bookCode)_S\(subNumber)_C\(chapterNum)_\(language).json"
-    }
-    
-    private func loadChapterContent(language: String = "en-US") -> ChapterContent? {
-        let fileName = chapterJSONFileName(language: language)
-        let resource = (fileName as NSString).deletingPathExtension
-        let ext = (fileName as NSString).pathExtension
-        if let url = Bundle.main.url(forResource: resource, withExtension: ext) {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let content = try decoder.decode(ChapterContent.self, from: data)
-                return content
-            } catch {
-                return nil
-            }
-        } else {
-            return nil
+        
+        // Load the audio for the first sentence of the new chapter
+        if let sentenceId = getCurrentSentenceId() {
+            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+            audioManager.setRate(Float(selectedSpeed1))
+            // Don't auto-play - let the user decide when to play
         }
     }
-    
-    private func getCurrentSentence(from chapter: ChapterContent, at targetIndex: Int) -> SentenceContent? {
-        let total = chapter.paragraphs.reduce(0) { $0 + $1.sentences.count }
-        guard total > 0 else { return nil }
-        var runningIndex = 0
-        for paragraph in chapter.paragraphs {
-            if runningIndex + paragraph.sentences.count > targetIndex {
-                let indexInParagraph = targetIndex - runningIndex
-                return paragraph.sentences[indexInParagraph]
-            }
-            runningIndex += paragraph.sentences.count
-        }
-        return nil
-    }
-    
     // MARK: - Persistence Helper Functions
     private func loadBookState() {
         let targetBookID = book.id
@@ -778,7 +1040,7 @@ struct BookDetailView: View {
             internalNavigation = true
             selectedChapterIndex += 1
             print("DEBUG: Transitioning to next chapter.")
-        } else if selectedSubBookIndex < book.subBooks.count - 1 {
+        } else if selectedSubBookIndex < book.effectiveSubBooks.count - 1 {
             internalNavigation = true
             selectedSubBookIndex += 1
             selectedChapterIndex = 0
@@ -790,12 +1052,12 @@ struct BookDetailView: View {
         }
         globalSentenceIndex = 0
         sliderNormalized = 0.0
-        chapterContent = loadChapterContent(language: selectedLanguage1Code)
+        loadChapterContent()
         currentPlaybackStage = 1
-        if let newContent = chapterContent,
-           let firstSentence = getCurrentSentence(from: newContent, at: 0) {
-            currentSentence = firstSentence.text
-            audioManager.loadAudio(for: firstSentence)
+        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+           let sentenceId = getCurrentSentenceId() {
+            currentSentence = sentenceText
+            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
             if isPlaying {
                 audioManager.setRate(Float(selectedSpeed1))
                 audioManager.play()
@@ -810,4 +1072,3 @@ struct BookDetailView: View {
         updateGlobalAppStateForBookDetail()
     }
 }
-

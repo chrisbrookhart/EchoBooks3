@@ -4,8 +4,9 @@
 //
 //  Created by [Your Name] on [Date].
 //
-//  This model represents a book that uses the subbook concept exclusively.
-//  Every book must have at least one subbook (for flat books, a "default" subbook).
+//  This model represents a book. SubBooks are optional - for new format books,
+//  a default subbook is created automatically. For old format books, subBooks
+//  are provided in the JSON structure.
 //  Content for each language is stored separately and loaded lazily via SwiftData.
 //
  
@@ -40,8 +41,9 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
     
     // MARK: - Relationships
     
-    /// The subbooks in this book. Every book must have at least one.
-    @Relationship var subBooks: [SubBook]
+    /// The subbooks in this book. Optional - for new format books, a default subbook is created.
+    /// For old format books, this array contains the subbooks from the JSON structure.
+    @Relationship var subBooks: [SubBook]?
     
     // MARK: - Coding Keys
     
@@ -68,7 +70,8 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
         self.coverImageName = try container.decode(String.self, forKey: .coverImageName)
         self.bookCode = try container.decode(String.self, forKey: .bookCode)
-        self.subBooks = try container.decode([SubBook].self, forKey: .subBooks)
+        // subBooks is optional - decode if present, otherwise nil
+        self.subBooks = try container.decodeIfPresent([SubBook].self, forKey: .subBooks)
     }
     
     // MARK: - Designated Initializer
@@ -81,7 +84,7 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         bookDescription: String? = nil,
         coverImageName: String,
         bookCode: String,
-        subBooks: [SubBook]
+        subBooks: [SubBook]? = nil
     ) {
         self.id = id
         self.bookTitle = bookTitle
@@ -91,6 +94,14 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.coverImageName = coverImageName
         self.bookCode = bookCode
         self.subBooks = subBooks
+    }
+    
+    // MARK: - Computed Properties
+    
+    /// Returns the subBooks array, or an empty array if nil.
+    /// This provides safe access for code that expects a non-optional array.
+    var effectiveSubBooks: [SubBook] {
+        return subBooks ?? []
     }
     
     // MARK: - Hashable & Equatable
@@ -108,10 +119,15 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
     func validate(with languages: [LanguageCode] = []) throws {
         let validationLanguages = languages.isEmpty ? self.languages : languages
         
-        // Ensure that there is at least one subBook.
-        if subBooks.isEmpty {
-            throw ValidationError.missingSubBooks
+        // If subBooks is nil or empty, that's acceptable for new format books
+        // (they will have a default subbook created during import)
+        guard let subBooks = subBooks, !subBooks.isEmpty else {
+            // For new format books, validation passes even without subBooks
+            // The BookImporter ensures a default subbook is created
+            return
         }
+        
+        // Validate each subBook if they exist
         for subBook in subBooks {
             try subBook.validate(with: validationLanguages)
         }

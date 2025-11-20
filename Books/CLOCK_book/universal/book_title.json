@@ -1,0 +1,18 @@
+{
+  "bookID": "73be4307-618a-4a07-a77f-051d5b1e263d",
+  "bookTitle": "The Clockmaker's Secret",
+  "bookCode": "CLOCK",
+  "author": "",
+  "languages": [
+    "en-US",
+    "es-ES",
+    "fr-FR"
+  ],
+  "bookDescription": "",
+  "coverImageName": "CLOCKCover.png",
+  "defaultPlaybackOrder": [
+    "en-US",
+    "es-ES",
+    "fr-FR"
+  ]
+}

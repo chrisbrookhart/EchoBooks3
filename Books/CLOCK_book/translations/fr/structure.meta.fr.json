@@ -1,0 +1,37 @@
+{
+  "bookTitle": "Le Secret de l'Horloger",
+  "chapters": [
+    {
+      "index": 1,
+      "title": "Chapitre 1 — L'Horloge Cassée"
+    },
+    {
+      "index": 2,
+      "title": "Chapitre 2 — La Note à l'Intérieur"
+    },
+    {
+      "index": 3,
+      "title": "Chapitre 3 — Le Son qui s'Est Arrêté"
+    },
+    {
+      "index": 4,
+      "title": "Chapitre 4 — Le Nouveau Gardien"
+    },
+    {
+      "index": 5,
+      "title": "Chapitre 5 — L'Invitation"
+    },
+    {
+      "index": 6,
+      "title": "Chapitre 6 — Le Retour Nocturne"
+    },
+    {
+      "index": 7,
+      "title": "Chapitre 7 — Le Passage du Temps"
+    },
+    {
+      "index": 8,
+      "title": "Chapitre 8 — Le Gardien de Windmere"
+    }
+  ]
+}

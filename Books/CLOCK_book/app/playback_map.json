@@ -1,0 +1,4311 @@
+{
+  "c00001": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00001.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000001",
+          "start_ms": 0,
+          "duration_ms": 3875
+        },
+        {
+          "sentence_id": "s000002",
+          "start_ms": 3875,
+          "duration_ms": 3725
+        },
+        {
+          "sentence_id": "s000003",
+          "start_ms": 7600,
+          "duration_ms": 4800
+        },
+        {
+          "sentence_id": "s000004",
+          "start_ms": 12400,
+          "duration_ms": 6200
+        },
+        {
+          "sentence_id": "s000005",
+          "start_ms": 18600,
+          "duration_ms": 7575
+        },
+        {
+          "sentence_id": "s000006",
+          "start_ms": 26175,
+          "duration_ms": 3713
+        },
+        {
+          "sentence_id": "s000007",
+          "start_ms": 29888,
+          "duration_ms": 4274
+        },
+        {
+          "sentence_id": "s000008",
+          "start_ms": 34162,
+          "duration_ms": 2100
+        },
+        {
+          "sentence_id": "s000009",
+          "start_ms": 36262,
+          "duration_ms": 1988
+        },
+        {
+          "sentence_id": "s000010",
+          "start_ms": 38250,
+          "duration_ms": 1050
+        },
+        {
+          "sentence_id": "s000011",
+          "start_ms": 39300,
+          "duration_ms": 1300
+        },
+        {
+          "sentence_id": "s000012",
+          "start_ms": 40600,
+          "duration_ms": 4625
+        },
+        {
+          "sentence_id": "s000013",
+          "start_ms": 45225,
+          "duration_ms": 1963
+        },
+        {
+          "sentence_id": "s000014",
+          "start_ms": 47188,
+          "duration_ms": 2512
+        },
+        {
+          "sentence_id": "s000015",
+          "start_ms": 49700,
+          "duration_ms": 7175
+        },
+        {
+          "sentence_id": "s000016",
+          "start_ms": 56875,
+          "duration_ms": 1687
+        },
+        {
+          "sentence_id": "s000017",
+          "start_ms": 58562,
+          "duration_ms": 3750
+        },
+        {
+          "sentence_id": "s000018",
+          "start_ms": 62312,
+          "duration_ms": 2113
+        },
+        {
+          "sentence_id": "s000019",
+          "start_ms": 64425,
+          "duration_ms": 4175
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00001",
+          "sentences": [
+            {
+              "sentence_id": "s000001",
+              "start_ms": 0,
+              "duration_ms": 3875
+            },
+            {
+              "sentence_id": "s000002",
+              "start_ms": 3875,
+              "duration_ms": 3725
+            },
+            {
+              "sentence_id": "s000003",
+              "start_ms": 7600,
+              "duration_ms": 4800
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00002",
+          "sentences": [
+            {
+              "sentence_id": "s000004",
+              "start_ms": 12400,
+              "duration_ms": 6200
+            },
+            {
+              "sentence_id": "s000005",
+              "start_ms": 18600,
+              "duration_ms": 7575
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00003",
+          "sentences": [
+            {
+              "sentence_id": "s000006",
+              "start_ms": 26175,
+              "duration_ms": 3713
+            },
+            {
+              "sentence_id": "s000007",
+              "start_ms": 29888,
+              "duration_ms": 4274
+            },
+            {
+              "sentence_id": "s000008",
+              "start_ms": 34162,
+              "duration_ms": 2100
+            },
+            {
+              "sentence_id": "s000009",
+              "start_ms": 36262,
+              "duration_ms": 1988
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00004",
+          "sentences": [
+            {
+              "sentence_id": "s000010",
+              "start_ms": 38250,
+              "duration_ms": 1050
+            },
+            {
+              "sentence_id": "s000011",
+              "start_ms": 39300,
+              "duration_ms": 1300
+            },
+            {
+              "sentence_id": "s000012",
+              "start_ms": 40600,
+              "duration_ms": 4625
+            },
+            {
+              "sentence_id": "s000013",
+              "start_ms": 45225,
+              "duration_ms": 1963
+            },
+            {
+              "sentence_id": "s000014",
+              "start_ms": 47188,
+              "duration_ms": 2512
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00005",
+          "sentences": [
+            {
+              "sentence_id": "s000015",
+              "start_ms": 49700,
+              "duration_ms": 7175
+            },
+            {
+              "sentence_id": "s000016",
+              "start_ms": 56875,
+              "duration_ms": 1687
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00006",
+          "sentences": [
+            {
+              "sentence_id": "s000017",
+              "start_ms": 58562,
+              "duration_ms": 3750
+            },
+            {
+              "sentence_id": "s000018",
+              "start_ms": 62312,
+              "duration_ms": 2113
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00007",
+          "sentences": [
+            {
+              "sentence_id": "s000019",
+              "start_ms": 64425,
+              "duration_ms": 4175
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00001.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000001",
+          "start_ms": 0,
+          "duration_ms": 3650
+        },
+        {
+          "sentence_id": "s000002",
+          "start_ms": 3650,
+          "duration_ms": 4725
+        },
+        {
+          "sentence_id": "s000003",
+          "start_ms": 8375,
+          "duration_ms": 5713
+        },
+        {
+          "sentence_id": "s000004",
+          "start_ms": 14088,
+          "duration_ms": 6724
+        },
+        {
+          "sentence_id": "s000005",
+          "start_ms": 20812,
+          "duration_ms": 9150
+        },
+        {
+          "sentence_id": "s000006",
+          "start_ms": 29962,
+          "duration_ms": 3838
+        },
+        {
+          "sentence_id": "s000007",
+          "start_ms": 33800,
+          "duration_ms": 5275
+        },
+        {
+          "sentence_id": "s000008",
+          "start_ms": 39075,
+          "duration_ms": 2175
+        },
+        {
+          "sentence_id": "s000009",
+          "start_ms": 41250,
+          "duration_ms": 2475
+        },
+        {
+          "sentence_id": "s000010",
+          "start_ms": 43725,
+          "duration_ms": 1137
+        },
+        {
+          "sentence_id": "s000011",
+          "start_ms": 44862,
+          "duration_ms": 1513
+        },
+        {
+          "sentence_id": "s000012",
+          "start_ms": 46375,
+          "duration_ms": 4637
+        },
+        {
+          "sentence_id": "s000013",
+          "start_ms": 51012,
+          "duration_ms": 2788
+        },
+        {
+          "sentence_id": "s000014",
+          "start_ms": 53800,
+          "duration_ms": 2512
+        },
+        {
+          "sentence_id": "s000015",
+          "start_ms": 56312,
+          "duration_ms": 6913
+        },
+        {
+          "sentence_id": "s000016",
+          "start_ms": 63225,
+          "duration_ms": 2087
+        },
+        {
+          "sentence_id": "s000017",
+          "start_ms": 65312,
+          "duration_ms": 4238
+        },
+        {
+          "sentence_id": "s000018",
+          "start_ms": 69550,
+          "duration_ms": 3388
+        },
+        {
+          "sentence_id": "s000019",
+          "start_ms": 72938,
+          "duration_ms": 4900
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00001",
+          "sentences": [
+            {
+              "sentence_id": "s000001",
+              "start_ms": 0,
+              "duration_ms": 3650
+            },
+            {
+              "sentence_id": "s000002",
+              "start_ms": 3650,
+              "duration_ms": 4725
+            },
+            {
+              "sentence_id": "s000003",
+              "start_ms": 8375,
+              "duration_ms": 5713
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00002",
+          "sentences": [
+            {
+              "sentence_id": "s000004",
+              "start_ms": 14088,
+              "duration_ms": 6724
+            },
+            {
+              "sentence_id": "s000005",
+              "start_ms": 20812,
+              "duration_ms": 9150
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00003",
+          "sentences": [
+            {
+              "sentence_id": "s000006",
+              "start_ms": 29962,
+              "duration_ms": 3838
+            },
+            {
+              "sentence_id": "s000007",
+              "start_ms": 33800,
+              "duration_ms": 5275
+            },
+            {
+              "sentence_id": "s000008",
+              "start_ms": 39075,
+              "duration_ms": 2175
+            },
+            {
+              "sentence_id": "s000009",
+              "start_ms": 41250,
+              "duration_ms": 2475
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00004",
+          "sentences": [
+            {
+              "sentence_id": "s000010",
+              "start_ms": 43725,
+              "duration_ms": 1137
+            },
+            {
+              "sentence_id": "s000011",
+              "start_ms": 44862,
+              "duration_ms": 1513
+            },
+            {
+              "sentence_id": "s000012",
+              "start_ms": 46375,
+              "duration_ms": 4637
+            },
+            {
+              "sentence_id": "s000013",
+              "start_ms": 51012,
+              "duration_ms": 2788
+            },
+            {
+              "sentence_id": "s000014",
+              "start_ms": 53800,
+              "duration_ms": 2512
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00005",
+          "sentences": [
+            {
+              "sentence_id": "s000015",
+              "start_ms": 56312,
+              "duration_ms": 6913
+            },
+            {
+              "sentence_id": "s000016",
+              "start_ms": 63225,
+              "duration_ms": 2087
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00006",
+          "sentences": [
+            {
+              "sentence_id": "s000017",
+              "start_ms": 65312,
+              "duration_ms": 4238
+            },
+            {
+              "sentence_id": "s000018",
+              "start_ms": 69550,
+              "duration_ms": 3388
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00007",
+          "sentences": [
+            {
+              "sentence_id": "s000019",
+              "start_ms": 72938,
+              "duration_ms": 4900
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00001.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000001",
+          "start_ms": 0,
+          "duration_ms": 4000
+        },
+        {
+          "sentence_id": "s000002",
+          "start_ms": 4000,
+          "duration_ms": 4462
+        },
+        {
+          "sentence_id": "s000003",
+          "start_ms": 8462,
+          "duration_ms": 5488
+        },
+        {
+          "sentence_id": "s000004",
+          "start_ms": 13950,
+          "duration_ms": 6712
+        },
+        {
+          "sentence_id": "s000005",
+          "start_ms": 20662,
+          "duration_ms": 8188
+        },
+        {
+          "sentence_id": "s000006",
+          "start_ms": 28850,
+          "duration_ms": 4200
+        },
+        {
+          "sentence_id": "s000007",
+          "start_ms": 33050,
+          "duration_ms": 5075
+        },
+        {
+          "sentence_id": "s000008",
+          "start_ms": 38125,
+          "duration_ms": 2137
+        },
+        {
+          "sentence_id": "s000009",
+          "start_ms": 40262,
+          "duration_ms": 2563
+        },
+        {
+          "sentence_id": "s000010",
+          "start_ms": 42825,
+          "duration_ms": 1050
+        },
+        {
+          "sentence_id": "s000011",
+          "start_ms": 43875,
+          "duration_ms": 1013
+        },
+        {
+          "sentence_id": "s000012",
+          "start_ms": 44888,
+          "duration_ms": 5274
+        },
+        {
+          "sentence_id": "s000013",
+          "start_ms": 50162,
+          "duration_ms": 1976
+        },
+        {
+          "sentence_id": "s000014",
+          "start_ms": 52138,
+          "duration_ms": 2750
+        },
+        {
+          "sentence_id": "s000015",
+          "start_ms": 54888,
+          "duration_ms": 7312
+        },
+        {
+          "sentence_id": "s000016",
+          "start_ms": 62200,
+          "duration_ms": 2400
+        },
+        {
+          "sentence_id": "s000017",
+          "start_ms": 64600,
+          "duration_ms": 3775
+        },
+        {
+          "sentence_id": "s000018",
+          "start_ms": 68375,
+          "duration_ms": 3163
+        },
+        {
+          "sentence_id": "s000019",
+          "start_ms": 71538,
+          "duration_ms": 4812
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00001",
+          "sentences": [
+            {
+              "sentence_id": "s000001",
+              "start_ms": 0,
+              "duration_ms": 4000
+            },
+            {
+              "sentence_id": "s000002",
+              "start_ms": 4000,
+              "duration_ms": 4462
+            },
+            {
+              "sentence_id": "s000003",
+              "start_ms": 8462,
+              "duration_ms": 5488
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00002",
+          "sentences": [
+            {
+              "sentence_id": "s000004",
+              "start_ms": 13950,
+              "duration_ms": 6712
+            },
+            {
+              "sentence_id": "s000005",
+              "start_ms": 20662,
+              "duration_ms": 8188
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00003",
+          "sentences": [
+            {
+              "sentence_id": "s000006",
+              "start_ms": 28850,
+              "duration_ms": 4200
+            },
+            {
+              "sentence_id": "s000007",
+              "start_ms": 33050,
+              "duration_ms": 5075
+            },
+            {
+              "sentence_id": "s000008",
+              "start_ms": 38125,
+              "duration_ms": 2137
+            },
+            {
+              "sentence_id": "s000009",
+              "start_ms": 40262,
+              "duration_ms": 2563
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00004",
+          "sentences": [
+            {
+              "sentence_id": "s000010",
+              "start_ms": 42825,
+              "duration_ms": 1050
+            },
+            {
+              "sentence_id": "s000011",
+              "start_ms": 43875,
+              "duration_ms": 1013
+            },
+            {
+              "sentence_id": "s000012",
+              "start_ms": 44888,
+              "duration_ms": 5274
+            },
+            {
+              "sentence_id": "s000013",
+              "start_ms": 50162,
+              "duration_ms": 1976
+            },
+            {
+              "sentence_id": "s000014",
+              "start_ms": 52138,
+              "duration_ms": 2750
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00005",
+          "sentences": [
+            {
+              "sentence_id": "s000015",
+              "start_ms": 54888,
+              "duration_ms": 7312
+            },
+            {
+              "sentence_id": "s000016",
+              "start_ms": 62200,
+              "duration_ms": 2400
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00006",
+          "sentences": [
+            {
+              "sentence_id": "s000017",
+              "start_ms": 64600,
+              "duration_ms": 3775
+            },
+            {
+              "sentence_id": "s000018",
+              "start_ms": 68375,
+              "duration_ms": 3163
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00007",
+          "sentences": [
+            {
+              "sentence_id": "s000019",
+              "start_ms": 71538,
+              "duration_ms": 4812
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00002": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00002.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000020",
+          "start_ms": 0,
+          "duration_ms": 4512
+        },
+        {
+          "sentence_id": "s000021",
+          "start_ms": 4512,
+          "duration_ms": 3850
+        },
+        {
+          "sentence_id": "s000022",
+          "start_ms": 8362,
+          "duration_ms": 3863
+        },
+        {
+          "sentence_id": "s000023",
+          "start_ms": 12225,
+          "duration_ms": 2925
+        },
+        {
+          "sentence_id": "s000024",
+          "start_ms": 15150,
+          "duration_ms": 1225
+        },
+        {
+          "sentence_id": "s000025",
+          "start_ms": 16375,
+          "duration_ms": 2300
+        },
+        {
+          "sentence_id": "s000026",
+          "start_ms": 18675,
+          "duration_ms": 2300
+        },
+        {
+          "sentence_id": "s000027",
+          "start_ms": 20975,
+          "duration_ms": 1450
+        },
+        {
+          "sentence_id": "s000028",
+          "start_ms": 22425,
+          "duration_ms": 1487
+        },
+        {
+          "sentence_id": "s000029",
+          "start_ms": 23912,
+          "duration_ms": 5726
+        },
+        {
+          "sentence_id": "s000030",
+          "start_ms": 29638,
+          "duration_ms": 3574
+        },
+        {
+          "sentence_id": "s000031",
+          "start_ms": 33212,
+          "duration_ms": 6013
+        },
+        {
+          "sentence_id": "s000032",
+          "start_ms": 39225,
+          "duration_ms": 1837
+        },
+        {
+          "sentence_id": "s000033",
+          "start_ms": 41062,
+          "duration_ms": 1650
+        },
+        {
+          "sentence_id": "s000034",
+          "start_ms": 42712,
+          "duration_ms": 1313
+        },
+        {
+          "sentence_id": "s000035",
+          "start_ms": 44025,
+          "duration_ms": 1350
+        },
+        {
+          "sentence_id": "s000036",
+          "start_ms": 45375,
+          "duration_ms": 4013
+        },
+        {
+          "sentence_id": "s000037",
+          "start_ms": 49388,
+          "duration_ms": 7537
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00008",
+          "sentences": [
+            {
+              "sentence_id": "s000020",
+              "start_ms": 0,
+              "duration_ms": 4512
+            },
+            {
+              "sentence_id": "s000021",
+              "start_ms": 4512,
+              "duration_ms": 3850
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00009",
+          "sentences": [
+            {
+              "sentence_id": "s000022",
+              "start_ms": 8362,
+              "duration_ms": 3863
+            },
+            {
+              "sentence_id": "s000023",
+              "start_ms": 12225,
+              "duration_ms": 2925
+            },
+            {
+              "sentence_id": "s000024",
+              "start_ms": 15150,
+              "duration_ms": 1225
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00010",
+          "sentences": [
+            {
+              "sentence_id": "s000025",
+              "start_ms": 16375,
+              "duration_ms": 2300
+            },
+            {
+              "sentence_id": "s000026",
+              "start_ms": 18675,
+              "duration_ms": 2300
+            },
+            {
+              "sentence_id": "s000027",
+              "start_ms": 20975,
+              "duration_ms": 1450
+            },
+            {
+              "sentence_id": "s000028",
+              "start_ms": 22425,
+              "duration_ms": 1487
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00011",
+          "sentences": [
+            {
+              "sentence_id": "s000029",
+              "start_ms": 23912,
+              "duration_ms": 5726
+            },
+            {
+              "sentence_id": "s000030",
+              "start_ms": 29638,
+              "duration_ms": 3574
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00012",
+          "sentences": [
+            {
+              "sentence_id": "s000031",
+              "start_ms": 33212,
+              "duration_ms": 6013
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00013",
+          "sentences": [
+            {
+              "sentence_id": "s000032",
+              "start_ms": 39225,
+              "duration_ms": 1837
+            },
+            {
+              "sentence_id": "s000033",
+              "start_ms": 41062,
+              "duration_ms": 1650
+            },
+            {
+              "sentence_id": "s000034",
+              "start_ms": 42712,
+              "duration_ms": 1313
+            },
+            {
+              "sentence_id": "s000035",
+              "start_ms": 44025,
+              "duration_ms": 1350
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00014",
+          "sentences": [
+            {
+              "sentence_id": "s000036",
+              "start_ms": 45375,
+              "duration_ms": 4013
+            },
+            {
+              "sentence_id": "s000037",
+              "start_ms": 49388,
+              "duration_ms": 7537
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00002.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000020",
+          "start_ms": 0,
+          "duration_ms": 5388
+        },
+        {
+          "sentence_id": "s000021",
+          "start_ms": 5388,
+          "duration_ms": 4887
+        },
+        {
+          "sentence_id": "s000022",
+          "start_ms": 10275,
+          "duration_ms": 3500
+        },
+        {
+          "sentence_id": "s000023",
+          "start_ms": 13775,
+          "duration_ms": 3850
+        },
+        {
+          "sentence_id": "s000024",
+          "start_ms": 17625,
+          "duration_ms": 1787
+        },
+        {
+          "sentence_id": "s000025",
+          "start_ms": 19412,
+          "duration_ms": 2113
+        },
+        {
+          "sentence_id": "s000026",
+          "start_ms": 21525,
+          "duration_ms": 2200
+        },
+        {
+          "sentence_id": "s000027",
+          "start_ms": 23725,
+          "duration_ms": 1850
+        },
+        {
+          "sentence_id": "s000028",
+          "start_ms": 25575,
+          "duration_ms": 1850
+        },
+        {
+          "sentence_id": "s000029",
+          "start_ms": 27425,
+          "duration_ms": 5650
+        },
+        {
+          "sentence_id": "s000030",
+          "start_ms": 33075,
+          "duration_ms": 3913
+        },
+        {
+          "sentence_id": "s000031",
+          "start_ms": 36988,
+          "duration_ms": 6550
+        },
+        {
+          "sentence_id": "s000032",
+          "start_ms": 43538,
+          "duration_ms": 2274
+        },
+        {
+          "sentence_id": "s000033",
+          "start_ms": 45812,
+          "duration_ms": 2788
+        },
+        {
+          "sentence_id": "s000034",
+          "start_ms": 48600,
+          "duration_ms": 1288
+        },
+        {
+          "sentence_id": "s000035",
+          "start_ms": 49888,
+          "duration_ms": 1850
+        },
+        {
+          "sentence_id": "s000036",
+          "start_ms": 51738,
+          "duration_ms": 4912
+        },
+        {
+          "sentence_id": "s000037",
+          "start_ms": 56650,
+          "duration_ms": 8200
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00008",
+          "sentences": [
+            {
+              "sentence_id": "s000020",
+              "start_ms": 0,
+              "duration_ms": 5388
+            },
+            {
+              "sentence_id": "s000021",
+              "start_ms": 5388,
+              "duration_ms": 4887
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00009",
+          "sentences": [
+            {
+              "sentence_id": "s000022",
+              "start_ms": 10275,
+              "duration_ms": 3500
+            },
+            {
+              "sentence_id": "s000023",
+              "start_ms": 13775,
+              "duration_ms": 3850
+            },
+            {
+              "sentence_id": "s000024",
+              "start_ms": 17625,
+              "duration_ms": 1787
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00010",
+          "sentences": [
+            {
+              "sentence_id": "s000025",
+              "start_ms": 19412,
+              "duration_ms": 2113
+            },
+            {
+              "sentence_id": "s000026",
+              "start_ms": 21525,
+              "duration_ms": 2200
+            },
+            {
+              "sentence_id": "s000027",
+              "start_ms": 23725,
+              "duration_ms": 1850
+            },
+            {
+              "sentence_id": "s000028",
+              "start_ms": 25575,
+              "duration_ms": 1850
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00011",
+          "sentences": [
+            {
+              "sentence_id": "s000029",
+              "start_ms": 27425,
+              "duration_ms": 5650
+            },
+            {
+              "sentence_id": "s000030",
+              "start_ms": 33075,
+              "duration_ms": 3913
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00012",
+          "sentences": [
+            {
+              "sentence_id": "s000031",
+              "start_ms": 36988,
+              "duration_ms": 6550
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00013",
+          "sentences": [
+            {
+              "sentence_id": "s000032",
+              "start_ms": 43538,
+              "duration_ms": 2274
+            },
+            {
+              "sentence_id": "s000033",
+              "start_ms": 45812,
+              "duration_ms": 2788
+            },
+            {
+              "sentence_id": "s000034",
+              "start_ms": 48600,
+              "duration_ms": 1288
+            },
+            {
+              "sentence_id": "s000035",
+              "start_ms": 49888,
+              "duration_ms": 1850
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00014",
+          "sentences": [
+            {
+              "sentence_id": "s000036",
+              "start_ms": 51738,
+              "duration_ms": 4912
+            },
+            {
+              "sentence_id": "s000037",
+              "start_ms": 56650,
+              "duration_ms": 8200
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00002.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000020",
+          "start_ms": 0,
+          "duration_ms": 5075
+        },
+        {
+          "sentence_id": "s000021",
+          "start_ms": 5075,
+          "duration_ms": 4425
+        },
+        {
+          "sentence_id": "s000022",
+          "start_ms": 9500,
+          "duration_ms": 3000
+        },
+        {
+          "sentence_id": "s000023",
+          "start_ms": 12500,
+          "duration_ms": 3088
+        },
+        {
+          "sentence_id": "s000024",
+          "start_ms": 15588,
+          "duration_ms": 2124
+        },
+        {
+          "sentence_id": "s000025",
+          "start_ms": 17712,
+          "duration_ms": 2476
+        },
+        {
+          "sentence_id": "s000026",
+          "start_ms": 20188,
+          "duration_ms": 2037
+        },
+        {
+          "sentence_id": "s000027",
+          "start_ms": 22225,
+          "duration_ms": 2037
+        },
+        {
+          "sentence_id": "s000028",
+          "start_ms": 24262,
+          "duration_ms": 1650
+        },
+        {
+          "sentence_id": "s000029",
+          "start_ms": 25912,
+          "duration_ms": 6426
+        },
+        {
+          "sentence_id": "s000030",
+          "start_ms": 32338,
+          "duration_ms": 3724
+        },
+        {
+          "sentence_id": "s000031",
+          "start_ms": 36062,
+          "duration_ms": 5413
+        },
+        {
+          "sentence_id": "s000032",
+          "start_ms": 41475,
+          "duration_ms": 2350
+        },
+        {
+          "sentence_id": "s000033",
+          "start_ms": 43825,
+          "duration_ms": 2463
+        },
+        {
+          "sentence_id": "s000034",
+          "start_ms": 46288,
+          "duration_ms": 1837
+        },
+        {
+          "sentence_id": "s000035",
+          "start_ms": 48125,
+          "duration_ms": 1813
+        },
+        {
+          "sentence_id": "s000036",
+          "start_ms": 49938,
+          "duration_ms": 4800
+        },
+        {
+          "sentence_id": "s000037",
+          "start_ms": 54738,
+          "duration_ms": 9037
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00008",
+          "sentences": [
+            {
+              "sentence_id": "s000020",
+              "start_ms": 0,
+              "duration_ms": 5075
+            },
+            {
+              "sentence_id": "s000021",
+              "start_ms": 5075,
+              "duration_ms": 4425
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00009",
+          "sentences": [
+            {
+              "sentence_id": "s000022",
+              "start_ms": 9500,
+              "duration_ms": 3000
+            },
+            {
+              "sentence_id": "s000023",
+              "start_ms": 12500,
+              "duration_ms": 3088
+            },
+            {
+              "sentence_id": "s000024",
+              "start_ms": 15588,
+              "duration_ms": 2124
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00010",
+          "sentences": [
+            {
+              "sentence_id": "s000025",
+              "start_ms": 17712,
+              "duration_ms": 2476
+            },
+            {
+              "sentence_id": "s000026",
+              "start_ms": 20188,
+              "duration_ms": 2037
+            },
+            {
+              "sentence_id": "s000027",
+              "start_ms": 22225,
+              "duration_ms": 2037
+            },
+            {
+              "sentence_id": "s000028",
+              "start_ms": 24262,
+              "duration_ms": 1650
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00011",
+          "sentences": [
+            {
+              "sentence_id": "s000029",
+              "start_ms": 25912,
+              "duration_ms": 6426
+            },
+            {
+              "sentence_id": "s000030",
+              "start_ms": 32338,
+              "duration_ms": 3724
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00012",
+          "sentences": [
+            {
+              "sentence_id": "s000031",
+              "start_ms": 36062,
+              "duration_ms": 5413
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00013",
+          "sentences": [
+            {
+              "sentence_id": "s000032",
+              "start_ms": 41475,
+              "duration_ms": 2350
+            },
+            {
+              "sentence_id": "s000033",
+              "start_ms": 43825,
+              "duration_ms": 2463
+            },
+            {
+              "sentence_id": "s000034",
+              "start_ms": 46288,
+              "duration_ms": 1837
+            },
+            {
+              "sentence_id": "s000035",
+              "start_ms": 48125,
+              "duration_ms": 1813
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00014",
+          "sentences": [
+            {
+              "sentence_id": "s000036",
+              "start_ms": 49938,
+              "duration_ms": 4800
+            },
+            {
+              "sentence_id": "s000037",
+              "start_ms": 54738,
+              "duration_ms": 9037
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00003": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00003.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000038",
+          "start_ms": 0,
+          "duration_ms": 2412
+        },
+        {
+          "sentence_id": "s000039",
+          "start_ms": 2412,
+          "duration_ms": 4363
+        },
+        {
+          "sentence_id": "s000040",
+          "start_ms": 6775,
+          "duration_ms": 3287
+        },
+        {
+          "sentence_id": "s000041",
+          "start_ms": 10062,
+          "duration_ms": 7576
+        },
+        {
+          "sentence_id": "s000042",
+          "start_ms": 17638,
+          "duration_ms": 6162
+        },
+        {
+          "sentence_id": "s000043",
+          "start_ms": 23800,
+          "duration_ms": 3550
+        },
+        {
+          "sentence_id": "s000044",
+          "start_ms": 27350,
+          "duration_ms": 6900
+        },
+        {
+          "sentence_id": "s000045",
+          "start_ms": 34250,
+          "duration_ms": 2925
+        },
+        {
+          "sentence_id": "s000046",
+          "start_ms": 37175,
+          "duration_ms": 3175
+        },
+        {
+          "sentence_id": "s000047",
+          "start_ms": 40350,
+          "duration_ms": 5362
+        },
+        {
+          "sentence_id": "s000048",
+          "start_ms": 45712,
+          "duration_ms": 3876
+        },
+        {
+          "sentence_id": "s000049",
+          "start_ms": 49588,
+          "duration_ms": 3612
+        },
+        {
+          "sentence_id": "s000050",
+          "start_ms": 53200,
+          "duration_ms": 1388
+        },
+        {
+          "sentence_id": "s000051",
+          "start_ms": 54588,
+          "duration_ms": 1187
+        },
+        {
+          "sentence_id": "s000052",
+          "start_ms": 55775,
+          "duration_ms": 1863
+        },
+        {
+          "sentence_id": "s000053",
+          "start_ms": 57638,
+          "duration_ms": 3387
+        },
+        {
+          "sentence_id": "s000054",
+          "start_ms": 61025,
+          "duration_ms": 2387
+        },
+        {
+          "sentence_id": "s000055",
+          "start_ms": 63412,
+          "duration_ms": 1976
+        },
+        {
+          "sentence_id": "s000056",
+          "start_ms": 65388,
+          "duration_ms": 4562
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00015",
+          "sentences": [
+            {
+              "sentence_id": "s000038",
+              "start_ms": 0,
+              "duration_ms": 2412
+            },
+            {
+              "sentence_id": "s000039",
+              "start_ms": 2412,
+              "duration_ms": 4363
+            },
+            {
+              "sentence_id": "s000040",
+              "start_ms": 6775,
+              "duration_ms": 3287
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00016",
+          "sentences": [
+            {
+              "sentence_id": "s000041",
+              "start_ms": 10062,
+              "duration_ms": 7576
+            },
+            {
+              "sentence_id": "s000042",
+              "start_ms": 17638,
+              "duration_ms": 6162
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00017",
+          "sentences": [
+            {
+              "sentence_id": "s000043",
+              "start_ms": 23800,
+              "duration_ms": 3550
+            },
+            {
+              "sentence_id": "s000044",
+              "start_ms": 27350,
+              "duration_ms": 6900
+            },
+            {
+              "sentence_id": "s000045",
+              "start_ms": 34250,
+              "duration_ms": 2925
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00018",
+          "sentences": [
+            {
+              "sentence_id": "s000046",
+              "start_ms": 37175,
+              "duration_ms": 3175
+            },
+            {
+              "sentence_id": "s000047",
+              "start_ms": 40350,
+              "duration_ms": 5362
+            },
+            {
+              "sentence_id": "s000048",
+              "start_ms": 45712,
+              "duration_ms": 3876
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00019",
+          "sentences": [
+            {
+              "sentence_id": "s000049",
+              "start_ms": 49588,
+              "duration_ms": 3612
+            },
+            {
+              "sentence_id": "s000050",
+              "start_ms": 53200,
+              "duration_ms": 1388
+            },
+            {
+              "sentence_id": "s000051",
+              "start_ms": 54588,
+              "duration_ms": 1187
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00020",
+          "sentences": [
+            {
+              "sentence_id": "s000052",
+              "start_ms": 55775,
+              "duration_ms": 1863
+            },
+            {
+              "sentence_id": "s000053",
+              "start_ms": 57638,
+              "duration_ms": 3387
+            },
+            {
+              "sentence_id": "s000054",
+              "start_ms": 61025,
+              "duration_ms": 2387
+            },
+            {
+              "sentence_id": "s000055",
+              "start_ms": 63412,
+              "duration_ms": 1976
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00021",
+          "sentences": [
+            {
+              "sentence_id": "s000056",
+              "start_ms": 65388,
+              "duration_ms": 4562
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00003.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000038",
+          "start_ms": 0,
+          "duration_ms": 2725
+        },
+        {
+          "sentence_id": "s000039",
+          "start_ms": 2725,
+          "duration_ms": 5163
+        },
+        {
+          "sentence_id": "s000040",
+          "start_ms": 7888,
+          "duration_ms": 3062
+        },
+        {
+          "sentence_id": "s000041",
+          "start_ms": 10950,
+          "duration_ms": 8125
+        },
+        {
+          "sentence_id": "s000042",
+          "start_ms": 19075,
+          "duration_ms": 7775
+        },
+        {
+          "sentence_id": "s000043",
+          "start_ms": 26850,
+          "duration_ms": 4088
+        },
+        {
+          "sentence_id": "s000044",
+          "start_ms": 30938,
+          "duration_ms": 7274
+        },
+        {
+          "sentence_id": "s000045",
+          "start_ms": 38212,
+          "duration_ms": 3288
+        },
+        {
+          "sentence_id": "s000046",
+          "start_ms": 41500,
+          "duration_ms": 3700
+        },
+        {
+          "sentence_id": "s000047",
+          "start_ms": 45200,
+          "duration_ms": 5988
+        },
+        {
+          "sentence_id": "s000048",
+          "start_ms": 51188,
+          "duration_ms": 4987
+        },
+        {
+          "sentence_id": "s000049",
+          "start_ms": 56175,
+          "duration_ms": 4037
+        },
+        {
+          "sentence_id": "s000050",
+          "start_ms": 60212,
+          "duration_ms": 2013
+        },
+        {
+          "sentence_id": "s000051",
+          "start_ms": 62225,
+          "duration_ms": 2013
+        },
+        {
+          "sentence_id": "s000052",
+          "start_ms": 64238,
+          "duration_ms": 2087
+        },
+        {
+          "sentence_id": "s000053",
+          "start_ms": 66325,
+          "duration_ms": 3925
+        },
+        {
+          "sentence_id": "s000054",
+          "start_ms": 70250,
+          "duration_ms": 3238
+        },
+        {
+          "sentence_id": "s000055",
+          "start_ms": 73488,
+          "duration_ms": 2450
+        },
+        {
+          "sentence_id": "s000056",
+          "start_ms": 75938,
+          "duration_ms": 4262
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00015",
+          "sentences": [
+            {
+              "sentence_id": "s000038",
+              "start_ms": 0,
+              "duration_ms": 2725
+            },
+            {
+              "sentence_id": "s000039",
+              "start_ms": 2725,
+              "duration_ms": 5163
+            },
+            {
+              "sentence_id": "s000040",
+              "start_ms": 7888,
+              "duration_ms": 3062
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00016",
+          "sentences": [
+            {
+              "sentence_id": "s000041",
+              "start_ms": 10950,
+              "duration_ms": 8125
+            },
+            {
+              "sentence_id": "s000042",
+              "start_ms": 19075,
+              "duration_ms": 7775
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00017",
+          "sentences": [
+            {
+              "sentence_id": "s000043",
+              "start_ms": 26850,
+              "duration_ms": 4088
+            },
+            {
+              "sentence_id": "s000044",
+              "start_ms": 30938,
+              "duration_ms": 7274
+            },
+            {
+              "sentence_id": "s000045",
+              "start_ms": 38212,
+              "duration_ms": 3288
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00018",
+          "sentences": [
+            {
+              "sentence_id": "s000046",
+              "start_ms": 41500,
+              "duration_ms": 3700
+            },
+            {
+              "sentence_id": "s000047",
+              "start_ms": 45200,
+              "duration_ms": 5988
+            },
+            {
+              "sentence_id": "s000048",
+              "start_ms": 51188,
+              "duration_ms": 4987
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00019",
+          "sentences": [
+            {
+              "sentence_id": "s000049",
+              "start_ms": 56175,
+              "duration_ms": 4037
+            },
+            {
+              "sentence_id": "s000050",
+              "start_ms": 60212,
+              "duration_ms": 2013
+            },
+            {
+              "sentence_id": "s000051",
+              "start_ms": 62225,
+              "duration_ms": 2013
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00020",
+          "sentences": [
+            {
+              "sentence_id": "s000052",
+              "start_ms": 64238,
+              "duration_ms": 2087
+            },
+            {
+              "sentence_id": "s000053",
+              "start_ms": 66325,
+              "duration_ms": 3925
+            },
+            {
+              "sentence_id": "s000054",
+              "start_ms": 70250,
+              "duration_ms": 3238
+            },
+            {
+              "sentence_id": "s000055",
+              "start_ms": 73488,
+              "duration_ms": 2450
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00021",
+          "sentences": [
+            {
+              "sentence_id": "s000056",
+              "start_ms": 75938,
+              "duration_ms": 4262
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00003.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000038",
+          "start_ms": 0,
+          "duration_ms": 2025
+        },
+        {
+          "sentence_id": "s000039",
+          "start_ms": 2025,
+          "duration_ms": 5113
+        },
+        {
+          "sentence_id": "s000040",
+          "start_ms": 7138,
+          "duration_ms": 2687
+        },
+        {
+          "sentence_id": "s000041",
+          "start_ms": 9825,
+          "duration_ms": 8950
+        },
+        {
+          "sentence_id": "s000042",
+          "start_ms": 18775,
+          "duration_ms": 7487
+        },
+        {
+          "sentence_id": "s000043",
+          "start_ms": 26262,
+          "duration_ms": 4763
+        },
+        {
+          "sentence_id": "s000044",
+          "start_ms": 31025,
+          "duration_ms": 6475
+        },
+        {
+          "sentence_id": "s000045",
+          "start_ms": 37500,
+          "duration_ms": 3362
+        },
+        {
+          "sentence_id": "s000046",
+          "start_ms": 40862,
+          "duration_ms": 3726
+        },
+        {
+          "sentence_id": "s000047",
+          "start_ms": 44588,
+          "duration_ms": 6400
+        },
+        {
+          "sentence_id": "s000048",
+          "start_ms": 50988,
+          "duration_ms": 4637
+        },
+        {
+          "sentence_id": "s000049",
+          "start_ms": 55625,
+          "duration_ms": 4113
+        },
+        {
+          "sentence_id": "s000050",
+          "start_ms": 59738,
+          "duration_ms": 1774
+        },
+        {
+          "sentence_id": "s000051",
+          "start_ms": 61512,
+          "duration_ms": 2150
+        },
+        {
+          "sentence_id": "s000052",
+          "start_ms": 63662,
+          "duration_ms": 2038
+        },
+        {
+          "sentence_id": "s000053",
+          "start_ms": 65700,
+          "duration_ms": 3575
+        },
+        {
+          "sentence_id": "s000054",
+          "start_ms": 69275,
+          "duration_ms": 2825
+        },
+        {
+          "sentence_id": "s000055",
+          "start_ms": 72100,
+          "duration_ms": 2575
+        },
+        {
+          "sentence_id": "s000056",
+          "start_ms": 74675,
+          "duration_ms": 4575
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00015",
+          "sentences": [
+            {
+              "sentence_id": "s000038",
+              "start_ms": 0,
+              "duration_ms": 2025
+            },
+            {
+              "sentence_id": "s000039",
+              "start_ms": 2025,
+              "duration_ms": 5113
+            },
+            {
+              "sentence_id": "s000040",
+              "start_ms": 7138,
+              "duration_ms": 2687
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00016",
+          "sentences": [
+            {
+              "sentence_id": "s000041",
+              "start_ms": 9825,
+              "duration_ms": 8950
+            },
+            {
+              "sentence_id": "s000042",
+              "start_ms": 18775,
+              "duration_ms": 7487
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00017",
+          "sentences": [
+            {
+              "sentence_id": "s000043",
+              "start_ms": 26262,
+              "duration_ms": 4763
+            },
+            {
+              "sentence_id": "s000044",
+              "start_ms": 31025,
+              "duration_ms": 6475
+            },
+            {
+              "sentence_id": "s000045",
+              "start_ms": 37500,
+              "duration_ms": 3362
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00018",
+          "sentences": [
+            {
+              "sentence_id": "s000046",
+              "start_ms": 40862,
+              "duration_ms": 3726
+            },
+            {
+              "sentence_id": "s000047",
+              "start_ms": 44588,
+              "duration_ms": 6400
+            },
+            {
+              "sentence_id": "s000048",
+              "start_ms": 50988,
+              "duration_ms": 4637
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00019",
+          "sentences": [
+            {
+              "sentence_id": "s000049",
+              "start_ms": 55625,
+              "duration_ms": 4113
+            },
+            {
+              "sentence_id": "s000050",
+              "start_ms": 59738,
+              "duration_ms": 1774
+            },
+            {
+              "sentence_id": "s000051",
+              "start_ms": 61512,
+              "duration_ms": 2150
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00020",
+          "sentences": [
+            {
+              "sentence_id": "s000052",
+              "start_ms": 63662,
+              "duration_ms": 2038
+            },
+            {
+              "sentence_id": "s000053",
+              "start_ms": 65700,
+              "duration_ms": 3575
+            },
+            {
+              "sentence_id": "s000054",
+              "start_ms": 69275,
+              "duration_ms": 2825
+            },
+            {
+              "sentence_id": "s000055",
+              "start_ms": 72100,
+              "duration_ms": 2575
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00021",
+          "sentences": [
+            {
+              "sentence_id": "s000056",
+              "start_ms": 74675,
+              "duration_ms": 4575
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00004": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00004.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000057",
+          "start_ms": 0,
+          "duration_ms": 5012
+        },
+        {
+          "sentence_id": "s000058",
+          "start_ms": 5012,
+          "duration_ms": 4176
+        },
+        {
+          "sentence_id": "s000059",
+          "start_ms": 9188,
+          "duration_ms": 3250
+        },
+        {
+          "sentence_id": "s000060",
+          "start_ms": 12438,
+          "duration_ms": 2287
+        },
+        {
+          "sentence_id": "s000061",
+          "start_ms": 14725,
+          "duration_ms": 1275
+        },
+        {
+          "sentence_id": "s000062",
+          "start_ms": 16000,
+          "duration_ms": 9850
+        },
+        {
+          "sentence_id": "s000063",
+          "start_ms": 25850,
+          "duration_ms": 3375
+        },
+        {
+          "sentence_id": "s000064",
+          "start_ms": 29225,
+          "duration_ms": 6425
+        },
+        {
+          "sentence_id": "s000065",
+          "start_ms": 35650,
+          "duration_ms": 4725
+        },
+        {
+          "sentence_id": "s000066",
+          "start_ms": 40375,
+          "duration_ms": 1513
+        },
+        {
+          "sentence_id": "s000067",
+          "start_ms": 41888,
+          "duration_ms": 3000
+        },
+        {
+          "sentence_id": "s000068",
+          "start_ms": 44888,
+          "duration_ms": 3900
+        },
+        {
+          "sentence_id": "s000069",
+          "start_ms": 48788,
+          "duration_ms": 8024
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00022",
+          "sentences": [
+            {
+              "sentence_id": "s000057",
+              "start_ms": 0,
+              "duration_ms": 5012
+            },
+            {
+              "sentence_id": "s000058",
+              "start_ms": 5012,
+              "duration_ms": 4176
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00023",
+          "sentences": [
+            {
+              "sentence_id": "s000059",
+              "start_ms": 9188,
+              "duration_ms": 3250
+            },
+            {
+              "sentence_id": "s000060",
+              "start_ms": 12438,
+              "duration_ms": 2287
+            },
+            {
+              "sentence_id": "s000061",
+              "start_ms": 14725,
+              "duration_ms": 1275
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00024",
+          "sentences": [
+            {
+              "sentence_id": "s000062",
+              "start_ms": 16000,
+              "duration_ms": 9850
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00025",
+          "sentences": [
+            {
+              "sentence_id": "s000063",
+              "start_ms": 25850,
+              "duration_ms": 3375
+            },
+            {
+              "sentence_id": "s000064",
+              "start_ms": 29225,
+              "duration_ms": 6425
+            },
+            {
+              "sentence_id": "s000065",
+              "start_ms": 35650,
+              "duration_ms": 4725
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00026",
+          "sentences": [
+            {
+              "sentence_id": "s000066",
+              "start_ms": 40375,
+              "duration_ms": 1513
+            },
+            {
+              "sentence_id": "s000067",
+              "start_ms": 41888,
+              "duration_ms": 3000
+            },
+            {
+              "sentence_id": "s000068",
+              "start_ms": 44888,
+              "duration_ms": 3900
+            },
+            {
+              "sentence_id": "s000069",
+              "start_ms": 48788,
+              "duration_ms": 8024
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00004.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000057",
+          "start_ms": 0,
+          "duration_ms": 5938
+        },
+        {
+          "sentence_id": "s000058",
+          "start_ms": 5938,
+          "duration_ms": 4337
+        },
+        {
+          "sentence_id": "s000059",
+          "start_ms": 10275,
+          "duration_ms": 4175
+        },
+        {
+          "sentence_id": "s000060",
+          "start_ms": 14450,
+          "duration_ms": 2325
+        },
+        {
+          "sentence_id": "s000061",
+          "start_ms": 16775,
+          "duration_ms": 1637
+        },
+        {
+          "sentence_id": "s000062",
+          "start_ms": 18412,
+          "duration_ms": 12488
+        },
+        {
+          "sentence_id": "s000063",
+          "start_ms": 30900,
+          "duration_ms": 4150
+        },
+        {
+          "sentence_id": "s000064",
+          "start_ms": 35050,
+          "duration_ms": 6612
+        },
+        {
+          "sentence_id": "s000065",
+          "start_ms": 41662,
+          "duration_ms": 4313
+        },
+        {
+          "sentence_id": "s000066",
+          "start_ms": 45975,
+          "duration_ms": 1987
+        },
+        {
+          "sentence_id": "s000067",
+          "start_ms": 47962,
+          "duration_ms": 3113
+        },
+        {
+          "sentence_id": "s000068",
+          "start_ms": 51075,
+          "duration_ms": 4600
+        },
+        {
+          "sentence_id": "s000069",
+          "start_ms": 55675,
+          "duration_ms": 8713
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00022",
+          "sentences": [
+            {
+              "sentence_id": "s000057",
+              "start_ms": 0,
+              "duration_ms": 5938
+            },
+            {
+              "sentence_id": "s000058",
+              "start_ms": 5938,
+              "duration_ms": 4337
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00023",
+          "sentences": [
+            {
+              "sentence_id": "s000059",
+              "start_ms": 10275,
+              "duration_ms": 4175
+            },
+            {
+              "sentence_id": "s000060",
+              "start_ms": 14450,
+              "duration_ms": 2325
+            },
+            {
+              "sentence_id": "s000061",
+              "start_ms": 16775,
+              "duration_ms": 1637
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00024",
+          "sentences": [
+            {
+              "sentence_id": "s000062",
+              "start_ms": 18412,
+              "duration_ms": 12488
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00025",
+          "sentences": [
+            {
+              "sentence_id": "s000063",
+              "start_ms": 30900,
+              "duration_ms": 4150
+            },
+            {
+              "sentence_id": "s000064",
+              "start_ms": 35050,
+              "duration_ms": 6612
+            },
+            {
+              "sentence_id": "s000065",
+              "start_ms": 41662,
+              "duration_ms": 4313
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00026",
+          "sentences": [
+            {
+              "sentence_id": "s000066",
+              "start_ms": 45975,
+              "duration_ms": 1987
+            },
+            {
+              "sentence_id": "s000067",
+              "start_ms": 47962,
+              "duration_ms": 3113
+            },
+            {
+              "sentence_id": "s000068",
+              "start_ms": 51075,
+              "duration_ms": 4600
+            },
+            {
+              "sentence_id": "s000069",
+              "start_ms": 55675,
+              "duration_ms": 8713
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00004.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000057",
+          "start_ms": 0,
+          "duration_ms": 5738
+        },
+        {
+          "sentence_id": "s000058",
+          "start_ms": 5738,
+          "duration_ms": 4612
+        },
+        {
+          "sentence_id": "s000059",
+          "start_ms": 10350,
+          "duration_ms": 4038
+        },
+        {
+          "sentence_id": "s000060",
+          "start_ms": 14388,
+          "duration_ms": 2050
+        },
+        {
+          "sentence_id": "s000061",
+          "start_ms": 16438,
+          "duration_ms": 1512
+        },
+        {
+          "sentence_id": "s000062",
+          "start_ms": 17950,
+          "duration_ms": 10062
+        },
+        {
+          "sentence_id": "s000063",
+          "start_ms": 28012,
+          "duration_ms": 3988
+        },
+        {
+          "sentence_id": "s000064",
+          "start_ms": 32000,
+          "duration_ms": 7175
+        },
+        {
+          "sentence_id": "s000065",
+          "start_ms": 39175,
+          "duration_ms": 3850
+        },
+        {
+          "sentence_id": "s000066",
+          "start_ms": 43025,
+          "duration_ms": 1563
+        },
+        {
+          "sentence_id": "s000067",
+          "start_ms": 44588,
+          "duration_ms": 3324
+        },
+        {
+          "sentence_id": "s000068",
+          "start_ms": 47912,
+          "duration_ms": 4076
+        },
+        {
+          "sentence_id": "s000069",
+          "start_ms": 51988,
+          "duration_ms": 9187
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00022",
+          "sentences": [
+            {
+              "sentence_id": "s000057",
+              "start_ms": 0,
+              "duration_ms": 5738
+            },
+            {
+              "sentence_id": "s000058",
+              "start_ms": 5738,
+              "duration_ms": 4612
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00023",
+          "sentences": [
+            {
+              "sentence_id": "s000059",
+              "start_ms": 10350,
+              "duration_ms": 4038
+            },
+            {
+              "sentence_id": "s000060",
+              "start_ms": 14388,
+              "duration_ms": 2050
+            },
+            {
+              "sentence_id": "s000061",
+              "start_ms": 16438,
+              "duration_ms": 1512
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00024",
+          "sentences": [
+            {
+              "sentence_id": "s000062",
+              "start_ms": 17950,
+              "duration_ms": 10062
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00025",
+          "sentences": [
+            {
+              "sentence_id": "s000063",
+              "start_ms": 28012,
+              "duration_ms": 3988
+            },
+            {
+              "sentence_id": "s000064",
+              "start_ms": 32000,
+              "duration_ms": 7175
+            },
+            {
+              "sentence_id": "s000065",
+              "start_ms": 39175,
+              "duration_ms": 3850
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00026",
+          "sentences": [
+            {
+              "sentence_id": "s000066",
+              "start_ms": 43025,
+              "duration_ms": 1563
+            },
+            {
+              "sentence_id": "s000067",
+              "start_ms": 44588,
+              "duration_ms": 3324
+            },
+            {
+              "sentence_id": "s000068",
+              "start_ms": 47912,
+              "duration_ms": 4076
+            },
+            {
+              "sentence_id": "s000069",
+              "start_ms": 51988,
+              "duration_ms": 9187
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00005": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00005.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000070",
+          "start_ms": 0,
+          "duration_ms": 1138
+        },
+        {
+          "sentence_id": "s000071",
+          "start_ms": 1138,
+          "duration_ms": 4624
+        },
+        {
+          "sentence_id": "s000072",
+          "start_ms": 5762,
+          "duration_ms": 3963
+        },
+        {
+          "sentence_id": "s000073",
+          "start_ms": 9725,
+          "duration_ms": 3513
+        },
+        {
+          "sentence_id": "s000074",
+          "start_ms": 13238,
+          "duration_ms": 8650
+        },
+        {
+          "sentence_id": "s000075",
+          "start_ms": 21888,
+          "duration_ms": 7287
+        },
+        {
+          "sentence_id": "s000076",
+          "start_ms": 29175,
+          "duration_ms": 1250
+        },
+        {
+          "sentence_id": "s000077",
+          "start_ms": 30425,
+          "duration_ms": 4525
+        },
+        {
+          "sentence_id": "s000078",
+          "start_ms": 34950,
+          "duration_ms": 3688
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00027",
+          "sentences": [
+            {
+              "sentence_id": "s000070",
+              "start_ms": 0,
+              "duration_ms": 1138
+            },
+            {
+              "sentence_id": "s000071",
+              "start_ms": 1138,
+              "duration_ms": 4624
+            },
+            {
+              "sentence_id": "s000072",
+              "start_ms": 5762,
+              "duration_ms": 3963
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00028",
+          "sentences": [
+            {
+              "sentence_id": "s000073",
+              "start_ms": 9725,
+              "duration_ms": 3513
+            },
+            {
+              "sentence_id": "s000074",
+              "start_ms": 13238,
+              "duration_ms": 8650
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00029",
+          "sentences": [
+            {
+              "sentence_id": "s000075",
+              "start_ms": 21888,
+              "duration_ms": 7287
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00030",
+          "sentences": [
+            {
+              "sentence_id": "s000076",
+              "start_ms": 29175,
+              "duration_ms": 1250
+            },
+            {
+              "sentence_id": "s000077",
+              "start_ms": 30425,
+              "duration_ms": 4525
+            },
+            {
+              "sentence_id": "s000078",
+              "start_ms": 34950,
+              "duration_ms": 3688
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00005.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000070",
+          "start_ms": 0,
+          "duration_ms": 1538
+        },
+        {
+          "sentence_id": "s000071",
+          "start_ms": 1538,
+          "duration_ms": 5100
+        },
+        {
+          "sentence_id": "s000072",
+          "start_ms": 6638,
+          "duration_ms": 4912
+        },
+        {
+          "sentence_id": "s000073",
+          "start_ms": 11550,
+          "duration_ms": 3325
+        },
+        {
+          "sentence_id": "s000074",
+          "start_ms": 14875,
+          "duration_ms": 8613
+        },
+        {
+          "sentence_id": "s000075",
+          "start_ms": 23488,
+          "duration_ms": 7124
+        },
+        {
+          "sentence_id": "s000076",
+          "start_ms": 30612,
+          "duration_ms": 1063
+        },
+        {
+          "sentence_id": "s000077",
+          "start_ms": 31675,
+          "duration_ms": 4737
+        },
+        {
+          "sentence_id": "s000078",
+          "start_ms": 36412,
+          "duration_ms": 4363
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00027",
+          "sentences": [
+            {
+              "sentence_id": "s000070",
+              "start_ms": 0,
+              "duration_ms": 1538
+            },
+            {
+              "sentence_id": "s000071",
+              "start_ms": 1538,
+              "duration_ms": 5100
+            },
+            {
+              "sentence_id": "s000072",
+              "start_ms": 6638,
+              "duration_ms": 4912
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00028",
+          "sentences": [
+            {
+              "sentence_id": "s000073",
+              "start_ms": 11550,
+              "duration_ms": 3325
+            },
+            {
+              "sentence_id": "s000074",
+              "start_ms": 14875,
+              "duration_ms": 8613
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00029",
+          "sentences": [
+            {
+              "sentence_id": "s000075",
+              "start_ms": 23488,
+              "duration_ms": 7124
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00030",
+          "sentences": [
+            {
+              "sentence_id": "s000076",
+              "start_ms": 30612,
+              "duration_ms": 1063
+            },
+            {
+              "sentence_id": "s000077",
+              "start_ms": 31675,
+              "duration_ms": 4737
+            },
+            {
+              "sentence_id": "s000078",
+              "start_ms": 36412,
+              "duration_ms": 4363
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00005.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000070",
+          "start_ms": 0,
+          "duration_ms": 1300
+        },
+        {
+          "sentence_id": "s000071",
+          "start_ms": 1300,
+          "duration_ms": 4888
+        },
+        {
+          "sentence_id": "s000072",
+          "start_ms": 6188,
+          "duration_ms": 5037
+        },
+        {
+          "sentence_id": "s000073",
+          "start_ms": 11225,
+          "duration_ms": 3450
+        },
+        {
+          "sentence_id": "s000074",
+          "start_ms": 14675,
+          "duration_ms": 9037
+        },
+        {
+          "sentence_id": "s000075",
+          "start_ms": 23712,
+          "duration_ms": 7538
+        },
+        {
+          "sentence_id": "s000076",
+          "start_ms": 31250,
+          "duration_ms": 1150
+        },
+        {
+          "sentence_id": "s000077",
+          "start_ms": 32400,
+          "duration_ms": 4025
+        },
+        {
+          "sentence_id": "s000078",
+          "start_ms": 36425,
+          "duration_ms": 4113
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00027",
+          "sentences": [
+            {
+              "sentence_id": "s000070",
+              "start_ms": 0,
+              "duration_ms": 1300
+            },
+            {
+              "sentence_id": "s000071",
+              "start_ms": 1300,
+              "duration_ms": 4888
+            },
+            {
+              "sentence_id": "s000072",
+              "start_ms": 6188,
+              "duration_ms": 5037
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00028",
+          "sentences": [
+            {
+              "sentence_id": "s000073",
+              "start_ms": 11225,
+              "duration_ms": 3450
+            },
+            {
+              "sentence_id": "s000074",
+              "start_ms": 14675,
+              "duration_ms": 9037
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00029",
+          "sentences": [
+            {
+              "sentence_id": "s000075",
+              "start_ms": 23712,
+              "duration_ms": 7538
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00030",
+          "sentences": [
+            {
+              "sentence_id": "s000076",
+              "start_ms": 31250,
+              "duration_ms": 1150
+            },
+            {
+              "sentence_id": "s000077",
+              "start_ms": 32400,
+              "duration_ms": 4025
+            },
+            {
+              "sentence_id": "s000078",
+              "start_ms": 36425,
+              "duration_ms": 4113
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00006": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00006.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000079",
+          "start_ms": 0,
+          "duration_ms": 7700
+        },
+        {
+          "sentence_id": "s000080",
+          "start_ms": 7700,
+          "duration_ms": 3988
+        },
+        {
+          "sentence_id": "s000081",
+          "start_ms": 11688,
+          "duration_ms": 5050
+        },
+        {
+          "sentence_id": "s000082",
+          "start_ms": 16738,
+          "duration_ms": 3987
+        },
+        {
+          "sentence_id": "s000083",
+          "start_ms": 20725,
+          "duration_ms": 1275
+        },
+        {
+          "sentence_id": "s000084",
+          "start_ms": 22000,
+          "duration_ms": 1150
+        },
+        {
+          "sentence_id": "s000085",
+          "start_ms": 23150,
+          "duration_ms": 2875
+        },
+        {
+          "sentence_id": "s000086",
+          "start_ms": 26025,
+          "duration_ms": 3525
+        },
+        {
+          "sentence_id": "s000087",
+          "start_ms": 29550,
+          "duration_ms": 4838
+        },
+        {
+          "sentence_id": "s000088",
+          "start_ms": 34388,
+          "duration_ms": 3800
+        },
+        {
+          "sentence_id": "s000089",
+          "start_ms": 38188,
+          "duration_ms": 1187
+        },
+        {
+          "sentence_id": "s000090",
+          "start_ms": 39375,
+          "duration_ms": 3825
+        },
+        {
+          "sentence_id": "s000091",
+          "start_ms": 43200,
+          "duration_ms": 3150
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00031",
+          "sentences": [
+            {
+              "sentence_id": "s000079",
+              "start_ms": 0,
+              "duration_ms": 7700
+            },
+            {
+              "sentence_id": "s000080",
+              "start_ms": 7700,
+              "duration_ms": 3988
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00032",
+          "sentences": [
+            {
+              "sentence_id": "s000081",
+              "start_ms": 11688,
+              "duration_ms": 5050
+            },
+            {
+              "sentence_id": "s000082",
+              "start_ms": 16738,
+              "duration_ms": 3987
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00033",
+          "sentences": [
+            {
+              "sentence_id": "s000083",
+              "start_ms": 20725,
+              "duration_ms": 1275
+            },
+            {
+              "sentence_id": "s000084",
+              "start_ms": 22000,
+              "duration_ms": 1150
+            },
+            {
+              "sentence_id": "s000085",
+              "start_ms": 23150,
+              "duration_ms": 2875
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00034",
+          "sentences": [
+            {
+              "sentence_id": "s000086",
+              "start_ms": 26025,
+              "duration_ms": 3525
+            },
+            {
+              "sentence_id": "s000087",
+              "start_ms": 29550,
+              "duration_ms": 4838
+            },
+            {
+              "sentence_id": "s000088",
+              "start_ms": 34388,
+              "duration_ms": 3800
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00035",
+          "sentences": [
+            {
+              "sentence_id": "s000089",
+              "start_ms": 38188,
+              "duration_ms": 1187
+            },
+            {
+              "sentence_id": "s000090",
+              "start_ms": 39375,
+              "duration_ms": 3825
+            },
+            {
+              "sentence_id": "s000091",
+              "start_ms": 43200,
+              "duration_ms": 3150
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00006.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000079",
+          "start_ms": 0,
+          "duration_ms": 7900
+        },
+        {
+          "sentence_id": "s000080",
+          "start_ms": 7900,
+          "duration_ms": 4812
+        },
+        {
+          "sentence_id": "s000081",
+          "start_ms": 12712,
+          "duration_ms": 5226
+        },
+        {
+          "sentence_id": "s000082",
+          "start_ms": 17938,
+          "duration_ms": 4374
+        },
+        {
+          "sentence_id": "s000083",
+          "start_ms": 22312,
+          "duration_ms": 1813
+        },
+        {
+          "sentence_id": "s000084",
+          "start_ms": 24125,
+          "duration_ms": 1275
+        },
+        {
+          "sentence_id": "s000085",
+          "start_ms": 25400,
+          "duration_ms": 3025
+        },
+        {
+          "sentence_id": "s000086",
+          "start_ms": 28425,
+          "duration_ms": 3875
+        },
+        {
+          "sentence_id": "s000087",
+          "start_ms": 32300,
+          "duration_ms": 5288
+        },
+        {
+          "sentence_id": "s000088",
+          "start_ms": 37588,
+          "duration_ms": 4312
+        },
+        {
+          "sentence_id": "s000089",
+          "start_ms": 41900,
+          "duration_ms": 1475
+        },
+        {
+          "sentence_id": "s000090",
+          "start_ms": 43375,
+          "duration_ms": 4375
+        },
+        {
+          "sentence_id": "s000091",
+          "start_ms": 47750,
+          "duration_ms": 4262
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00031",
+          "sentences": [
+            {
+              "sentence_id": "s000079",
+              "start_ms": 0,
+              "duration_ms": 7900
+            },
+            {
+              "sentence_id": "s000080",
+              "start_ms": 7900,
+              "duration_ms": 4812
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00032",
+          "sentences": [
+            {
+              "sentence_id": "s000081",
+              "start_ms": 12712,
+              "duration_ms": 5226
+            },
+            {
+              "sentence_id": "s000082",
+              "start_ms": 17938,
+              "duration_ms": 4374
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00033",
+          "sentences": [
+            {
+              "sentence_id": "s000083",
+              "start_ms": 22312,
+              "duration_ms": 1813
+            },
+            {
+              "sentence_id": "s000084",
+              "start_ms": 24125,
+              "duration_ms": 1275
+            },
+            {
+              "sentence_id": "s000085",
+              "start_ms": 25400,
+              "duration_ms": 3025
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00034",
+          "sentences": [
+            {
+              "sentence_id": "s000086",
+              "start_ms": 28425,
+              "duration_ms": 3875
+            },
+            {
+              "sentence_id": "s000087",
+              "start_ms": 32300,
+              "duration_ms": 5288
+            },
+            {
+              "sentence_id": "s000088",
+              "start_ms": 37588,
+              "duration_ms": 4312
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00035",
+          "sentences": [
+            {
+              "sentence_id": "s000089",
+              "start_ms": 41900,
+              "duration_ms": 1475
+            },
+            {
+              "sentence_id": "s000090",
+              "start_ms": 43375,
+              "duration_ms": 4375
+            },
+            {
+              "sentence_id": "s000091",
+              "start_ms": 47750,
+              "duration_ms": 4262
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00006.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000079",
+          "start_ms": 0,
+          "duration_ms": 7312
+        },
+        {
+          "sentence_id": "s000080",
+          "start_ms": 7312,
+          "duration_ms": 4676
+        },
+        {
+          "sentence_id": "s000081",
+          "start_ms": 11988,
+          "duration_ms": 4800
+        },
+        {
+          "sentence_id": "s000082",
+          "start_ms": 16788,
+          "duration_ms": 4087
+        },
+        {
+          "sentence_id": "s000083",
+          "start_ms": 20875,
+          "duration_ms": 1775
+        },
+        {
+          "sentence_id": "s000084",
+          "start_ms": 22650,
+          "duration_ms": 1088
+        },
+        {
+          "sentence_id": "s000085",
+          "start_ms": 23738,
+          "duration_ms": 3224
+        },
+        {
+          "sentence_id": "s000086",
+          "start_ms": 26962,
+          "duration_ms": 4200
+        },
+        {
+          "sentence_id": "s000087",
+          "start_ms": 31162,
+          "duration_ms": 4588
+        },
+        {
+          "sentence_id": "s000088",
+          "start_ms": 35750,
+          "duration_ms": 4788
+        },
+        {
+          "sentence_id": "s000089",
+          "start_ms": 40538,
+          "duration_ms": 1712
+        },
+        {
+          "sentence_id": "s000090",
+          "start_ms": 42250,
+          "duration_ms": 3925
+        },
+        {
+          "sentence_id": "s000091",
+          "start_ms": 46175,
+          "duration_ms": 4113
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00031",
+          "sentences": [
+            {
+              "sentence_id": "s000079",
+              "start_ms": 0,
+              "duration_ms": 7312
+            },
+            {
+              "sentence_id": "s000080",
+              "start_ms": 7312,
+              "duration_ms": 4676
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00032",
+          "sentences": [
+            {
+              "sentence_id": "s000081",
+              "start_ms": 11988,
+              "duration_ms": 4800
+            },
+            {
+              "sentence_id": "s000082",
+              "start_ms": 16788,
+              "duration_ms": 4087
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00033",
+          "sentences": [
+            {
+              "sentence_id": "s000083",
+              "start_ms": 20875,
+              "duration_ms": 1775
+            },
+            {
+              "sentence_id": "s000084",
+              "start_ms": 22650,
+              "duration_ms": 1088
+            },
+            {
+              "sentence_id": "s000085",
+              "start_ms": 23738,
+              "duration_ms": 3224
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00034",
+          "sentences": [
+            {
+              "sentence_id": "s000086",
+              "start_ms": 26962,
+              "duration_ms": 4200
+            },
+            {
+              "sentence_id": "s000087",
+              "start_ms": 31162,
+              "duration_ms": 4588
+            },
+            {
+              "sentence_id": "s000088",
+              "start_ms": 35750,
+              "duration_ms": 4788
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00035",
+          "sentences": [
+            {
+              "sentence_id": "s000089",
+              "start_ms": 40538,
+              "duration_ms": 1712
+            },
+            {
+              "sentence_id": "s000090",
+              "start_ms": 42250,
+              "duration_ms": 3925
+            },
+            {
+              "sentence_id": "s000091",
+              "start_ms": 46175,
+              "duration_ms": 4113
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00007": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00007.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000092",
+          "start_ms": 0,
+          "duration_ms": 4062
+        },
+        {
+          "sentence_id": "s000093",
+          "start_ms": 4062,
+          "duration_ms": 3538
+        },
+        {
+          "sentence_id": "s000094",
+          "start_ms": 7600,
+          "duration_ms": 2775
+        },
+        {
+          "sentence_id": "s000095",
+          "start_ms": 10375,
+          "duration_ms": 2925
+        },
+        {
+          "sentence_id": "s000096",
+          "start_ms": 13300,
+          "duration_ms": 1888
+        },
+        {
+          "sentence_id": "s000097",
+          "start_ms": 15188,
+          "duration_ms": 1837
+        },
+        {
+          "sentence_id": "s000098",
+          "start_ms": 17025,
+          "duration_ms": 2263
+        },
+        {
+          "sentence_id": "s000099",
+          "start_ms": 19288,
+          "duration_ms": 2250
+        },
+        {
+          "sentence_id": "s000100",
+          "start_ms": 21538,
+          "duration_ms": 10050
+        },
+        {
+          "sentence_id": "s000101",
+          "start_ms": 31588,
+          "duration_ms": 3450
+        },
+        {
+          "sentence_id": "s000102",
+          "start_ms": 35038,
+          "duration_ms": 7162
+        },
+        {
+          "sentence_id": "s000103",
+          "start_ms": 42200,
+          "duration_ms": 4212
+        },
+        {
+          "sentence_id": "s000104",
+          "start_ms": 46412,
+          "duration_ms": 2950
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00036",
+          "sentences": [
+            {
+              "sentence_id": "s000092",
+              "start_ms": 0,
+              "duration_ms": 4062
+            },
+            {
+              "sentence_id": "s000093",
+              "start_ms": 4062,
+              "duration_ms": 3538
+            },
+            {
+              "sentence_id": "s000094",
+              "start_ms": 7600,
+              "duration_ms": 2775
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00037",
+          "sentences": [
+            {
+              "sentence_id": "s000095",
+              "start_ms": 10375,
+              "duration_ms": 2925
+            },
+            {
+              "sentence_id": "s000096",
+              "start_ms": 13300,
+              "duration_ms": 1888
+            },
+            {
+              "sentence_id": "s000097",
+              "start_ms": 15188,
+              "duration_ms": 1837
+            },
+            {
+              "sentence_id": "s000098",
+              "start_ms": 17025,
+              "duration_ms": 2263
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00038",
+          "sentences": [
+            {
+              "sentence_id": "s000099",
+              "start_ms": 19288,
+              "duration_ms": 2250
+            },
+            {
+              "sentence_id": "s000100",
+              "start_ms": 21538,
+              "duration_ms": 10050
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00039",
+          "sentences": [
+            {
+              "sentence_id": "s000101",
+              "start_ms": 31588,
+              "duration_ms": 3450
+            },
+            {
+              "sentence_id": "s000102",
+              "start_ms": 35038,
+              "duration_ms": 7162
+            },
+            {
+              "sentence_id": "s000103",
+              "start_ms": 42200,
+              "duration_ms": 4212
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00040",
+          "sentences": [
+            {
+              "sentence_id": "s000104",
+              "start_ms": 46412,
+              "duration_ms": 2950
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00007.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000092",
+          "start_ms": 0,
+          "duration_ms": 4975
+        },
+        {
+          "sentence_id": "s000093",
+          "start_ms": 4975,
+          "duration_ms": 3563
+        },
+        {
+          "sentence_id": "s000094",
+          "start_ms": 8538,
+          "duration_ms": 3224
+        },
+        {
+          "sentence_id": "s000095",
+          "start_ms": 11762,
+          "duration_ms": 2976
+        },
+        {
+          "sentence_id": "s000096",
+          "start_ms": 14738,
+          "duration_ms": 2362
+        },
+        {
+          "sentence_id": "s000097",
+          "start_ms": 17100,
+          "duration_ms": 2012
+        },
+        {
+          "sentence_id": "s000098",
+          "start_ms": 19112,
+          "duration_ms": 3138
+        },
+        {
+          "sentence_id": "s000099",
+          "start_ms": 22250,
+          "duration_ms": 2912
+        },
+        {
+          "sentence_id": "s000100",
+          "start_ms": 25162,
+          "duration_ms": 11076
+        },
+        {
+          "sentence_id": "s000101",
+          "start_ms": 36238,
+          "duration_ms": 3750
+        },
+        {
+          "sentence_id": "s000102",
+          "start_ms": 39988,
+          "duration_ms": 6100
+        },
+        {
+          "sentence_id": "s000103",
+          "start_ms": 46088,
+          "duration_ms": 4912
+        },
+        {
+          "sentence_id": "s000104",
+          "start_ms": 51000,
+          "duration_ms": 3038
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00036",
+          "sentences": [
+            {
+              "sentence_id": "s000092",
+              "start_ms": 0,
+              "duration_ms": 4975
+            },
+            {
+              "sentence_id": "s000093",
+              "start_ms": 4975,
+              "duration_ms": 3563
+            },
+            {
+              "sentence_id": "s000094",
+              "start_ms": 8538,
+              "duration_ms": 3224
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00037",
+          "sentences": [
+            {
+              "sentence_id": "s000095",
+              "start_ms": 11762,
+              "duration_ms": 2976
+            },
+            {
+              "sentence_id": "s000096",
+              "start_ms": 14738,
+              "duration_ms": 2362
+            },
+            {
+              "sentence_id": "s000097",
+              "start_ms": 17100,
+              "duration_ms": 2012
+            },
+            {
+              "sentence_id": "s000098",
+              "start_ms": 19112,
+              "duration_ms": 3138
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00038",
+          "sentences": [
+            {
+              "sentence_id": "s000099",
+              "start_ms": 22250,
+              "duration_ms": 2912
+            },
+            {
+              "sentence_id": "s000100",
+              "start_ms": 25162,
+              "duration_ms": 11076
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00039",
+          "sentences": [
+            {
+              "sentence_id": "s000101",
+              "start_ms": 36238,
+              "duration_ms": 3750
+            },
+            {
+              "sentence_id": "s000102",
+              "start_ms": 39988,
+              "duration_ms": 6100
+            },
+            {
+              "sentence_id": "s000103",
+              "start_ms": 46088,
+              "duration_ms": 4912
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00040",
+          "sentences": [
+            {
+              "sentence_id": "s000104",
+              "start_ms": 51000,
+              "duration_ms": 3038
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00007.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000092",
+          "start_ms": 0,
+          "duration_ms": 4250
+        },
+        {
+          "sentence_id": "s000093",
+          "start_ms": 4250,
+          "duration_ms": 3612
+        },
+        {
+          "sentence_id": "s000094",
+          "start_ms": 7862,
+          "duration_ms": 3276
+        },
+        {
+          "sentence_id": "s000095",
+          "start_ms": 11138,
+          "duration_ms": 3150
+        },
+        {
+          "sentence_id": "s000096",
+          "start_ms": 14288,
+          "duration_ms": 2612
+        },
+        {
+          "sentence_id": "s000097",
+          "start_ms": 16900,
+          "duration_ms": 2100
+        },
+        {
+          "sentence_id": "s000098",
+          "start_ms": 19000,
+          "duration_ms": 2550
+        },
+        {
+          "sentence_id": "s000099",
+          "start_ms": 21550,
+          "duration_ms": 3012
+        },
+        {
+          "sentence_id": "s000100",
+          "start_ms": 24562,
+          "duration_ms": 10638
+        },
+        {
+          "sentence_id": "s000101",
+          "start_ms": 35200,
+          "duration_ms": 3500
+        },
+        {
+          "sentence_id": "s000102",
+          "start_ms": 38700,
+          "duration_ms": 5725
+        },
+        {
+          "sentence_id": "s000103",
+          "start_ms": 44425,
+          "duration_ms": 4813
+        },
+        {
+          "sentence_id": "s000104",
+          "start_ms": 49238,
+          "duration_ms": 2650
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00036",
+          "sentences": [
+            {
+              "sentence_id": "s000092",
+              "start_ms": 0,
+              "duration_ms": 4250
+            },
+            {
+              "sentence_id": "s000093",
+              "start_ms": 4250,
+              "duration_ms": 3612
+            },
+            {
+              "sentence_id": "s000094",
+              "start_ms": 7862,
+              "duration_ms": 3276
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00037",
+          "sentences": [
+            {
+              "sentence_id": "s000095",
+              "start_ms": 11138,
+              "duration_ms": 3150
+            },
+            {
+              "sentence_id": "s000096",
+              "start_ms": 14288,
+              "duration_ms": 2612
+            },
+            {
+              "sentence_id": "s000097",
+              "start_ms": 16900,
+              "duration_ms": 2100
+            },
+            {
+              "sentence_id": "s000098",
+              "start_ms": 19000,
+              "duration_ms": 2550
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00038",
+          "sentences": [
+            {
+              "sentence_id": "s000099",
+              "start_ms": 21550,
+              "duration_ms": 3012
+            },
+            {
+              "sentence_id": "s000100",
+              "start_ms": 24562,
+              "duration_ms": 10638
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00039",
+          "sentences": [
+            {
+              "sentence_id": "s000101",
+              "start_ms": 35200,
+              "duration_ms": 3500
+            },
+            {
+              "sentence_id": "s000102",
+              "start_ms": 38700,
+              "duration_ms": 5725
+            },
+            {
+              "sentence_id": "s000103",
+              "start_ms": 44425,
+              "duration_ms": 4813
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00040",
+          "sentences": [
+            {
+              "sentence_id": "s000104",
+              "start_ms": 49238,
+              "duration_ms": 2650
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "c00008": {
+    "en": {
+      "wav_path": "audio/en/CLOCK__c00008.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000105",
+          "start_ms": 0,
+          "duration_ms": 2375
+        },
+        {
+          "sentence_id": "s000106",
+          "start_ms": 2375,
+          "duration_ms": 4350
+        },
+        {
+          "sentence_id": "s000107",
+          "start_ms": 6725,
+          "duration_ms": 4787
+        },
+        {
+          "sentence_id": "s000108",
+          "start_ms": 11512,
+          "duration_ms": 4338
+        },
+        {
+          "sentence_id": "s000109",
+          "start_ms": 15850,
+          "duration_ms": 5750
+        },
+        {
+          "sentence_id": "s000110",
+          "start_ms": 21600,
+          "duration_ms": 1075
+        },
+        {
+          "sentence_id": "s000111",
+          "start_ms": 22675,
+          "duration_ms": 1763
+        },
+        {
+          "sentence_id": "s000112",
+          "start_ms": 24438,
+          "duration_ms": 3674
+        },
+        {
+          "sentence_id": "s000113",
+          "start_ms": 28112,
+          "duration_ms": 5500
+        },
+        {
+          "sentence_id": "s000114",
+          "start_ms": 33612,
+          "duration_ms": 7276
+        },
+        {
+          "sentence_id": "s000115",
+          "start_ms": 40888,
+          "duration_ms": 8287
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00041",
+          "sentences": [
+            {
+              "sentence_id": "s000105",
+              "start_ms": 0,
+              "duration_ms": 2375
+            },
+            {
+              "sentence_id": "s000106",
+              "start_ms": 2375,
+              "duration_ms": 4350
+            },
+            {
+              "sentence_id": "s000107",
+              "start_ms": 6725,
+              "duration_ms": 4787
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00042",
+          "sentences": [
+            {
+              "sentence_id": "s000108",
+              "start_ms": 11512,
+              "duration_ms": 4338
+            },
+            {
+              "sentence_id": "s000109",
+              "start_ms": 15850,
+              "duration_ms": 5750
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00043",
+          "sentences": [
+            {
+              "sentence_id": "s000110",
+              "start_ms": 21600,
+              "duration_ms": 1075
+            },
+            {
+              "sentence_id": "s000111",
+              "start_ms": 22675,
+              "duration_ms": 1763
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00044",
+          "sentences": [
+            {
+              "sentence_id": "s000112",
+              "start_ms": 24438,
+              "duration_ms": 3674
+            },
+            {
+              "sentence_id": "s000113",
+              "start_ms": 28112,
+              "duration_ms": 5500
+            },
+            {
+              "sentence_id": "s000114",
+              "start_ms": 33612,
+              "duration_ms": 7276
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00045",
+          "sentences": [
+            {
+              "sentence_id": "s000115",
+              "start_ms": 40888,
+              "duration_ms": 8287
+            }
+          ]
+        }
+      ]
+    },
+    "es": {
+      "wav_path": "audio/es/CLOCK__c00008.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000105",
+          "start_ms": 0,
+          "duration_ms": 3175
+        },
+        {
+          "sentence_id": "s000106",
+          "start_ms": 3175,
+          "duration_ms": 5487
+        },
+        {
+          "sentence_id": "s000107",
+          "start_ms": 8662,
+          "duration_ms": 5538
+        },
+        {
+          "sentence_id": "s000108",
+          "start_ms": 14200,
+          "duration_ms": 3788
+        },
+        {
+          "sentence_id": "s000109",
+          "start_ms": 17988,
+          "duration_ms": 8000
+        },
+        {
+          "sentence_id": "s000110",
+          "start_ms": 25988,
+          "duration_ms": 1112
+        },
+        {
+          "sentence_id": "s000111",
+          "start_ms": 27100,
+          "duration_ms": 1812
+        },
+        {
+          "sentence_id": "s000112",
+          "start_ms": 28912,
+          "duration_ms": 3438
+        },
+        {
+          "sentence_id": "s000113",
+          "start_ms": 32350,
+          "duration_ms": 5575
+        },
+        {
+          "sentence_id": "s000114",
+          "start_ms": 37925,
+          "duration_ms": 7375
+        },
+        {
+          "sentence_id": "s000115",
+          "start_ms": 45300,
+          "duration_ms": 8400
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00041",
+          "sentences": [
+            {
+              "sentence_id": "s000105",
+              "start_ms": 0,
+              "duration_ms": 3175
+            },
+            {
+              "sentence_id": "s000106",
+              "start_ms": 3175,
+              "duration_ms": 5487
+            },
+            {
+              "sentence_id": "s000107",
+              "start_ms": 8662,
+              "duration_ms": 5538
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00042",
+          "sentences": [
+            {
+              "sentence_id": "s000108",
+              "start_ms": 14200,
+              "duration_ms": 3788
+            },
+            {
+              "sentence_id": "s000109",
+              "start_ms": 17988,
+              "duration_ms": 8000
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00043",
+          "sentences": [
+            {
+              "sentence_id": "s000110",
+              "start_ms": 25988,
+              "duration_ms": 1112
+            },
+            {
+              "sentence_id": "s000111",
+              "start_ms": 27100,
+              "duration_ms": 1812
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00044",
+          "sentences": [
+            {
+              "sentence_id": "s000112",
+              "start_ms": 28912,
+              "duration_ms": 3438
+            },
+            {
+              "sentence_id": "s000113",
+              "start_ms": 32350,
+              "duration_ms": 5575
+            },
+            {
+              "sentence_id": "s000114",
+              "start_ms": 37925,
+              "duration_ms": 7375
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00045",
+          "sentences": [
+            {
+              "sentence_id": "s000115",
+              "start_ms": 45300,
+              "duration_ms": 8400
+            }
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "wav_path": "audio/fr/CLOCK__c00008.wav",
+      "sentences": [
+        {
+          "sentence_id": "s000105",
+          "start_ms": 0,
+          "duration_ms": 2638
+        },
+        {
+          "sentence_id": "s000106",
+          "start_ms": 2638,
+          "duration_ms": 5124
+        },
+        {
+          "sentence_id": "s000107",
+          "start_ms": 7762,
+          "duration_ms": 4563
+        },
+        {
+          "sentence_id": "s000108",
+          "start_ms": 12325,
+          "duration_ms": 3813
+        },
+        {
+          "sentence_id": "s000109",
+          "start_ms": 16138,
+          "duration_ms": 7000
+        },
+        {
+          "sentence_id": "s000110",
+          "start_ms": 23138,
+          "duration_ms": 950
+        },
+        {
+          "sentence_id": "s000111",
+          "start_ms": 24088,
+          "duration_ms": 1650
+        },
+        {
+          "sentence_id": "s000112",
+          "start_ms": 25738,
+          "duration_ms": 3462
+        },
+        {
+          "sentence_id": "s000113",
+          "start_ms": 29200,
+          "duration_ms": 5338
+        },
+        {
+          "sentence_id": "s000114",
+          "start_ms": 34538,
+          "duration_ms": 8350
+        },
+        {
+          "sentence_id": "s000115",
+          "start_ms": 42888,
+          "duration_ms": 8137
+        }
+      ],
+      "paragraphs": [
+        {
+          "paragraph_id": "p00041",
+          "sentences": [
+            {
+              "sentence_id": "s000105",
+              "start_ms": 0,
+              "duration_ms": 2638
+            },
+            {
+              "sentence_id": "s000106",
+              "start_ms": 2638,
+              "duration_ms": 5124
+            },
+            {
+              "sentence_id": "s000107",
+              "start_ms": 7762,
+              "duration_ms": 4563
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00042",
+          "sentences": [
+            {
+              "sentence_id": "s000108",
+              "start_ms": 12325,
+              "duration_ms": 3813
+            },
+            {
+              "sentence_id": "s000109",
+              "start_ms": 16138,
+              "duration_ms": 7000
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00043",
+          "sentences": [
+            {
+              "sentence_id": "s000110",
+              "start_ms": 23138,
+              "duration_ms": 950
+            },
+            {
+              "sentence_id": "s000111",
+              "start_ms": 24088,
+              "duration_ms": 1650
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00044",
+          "sentences": [
+            {
+              "sentence_id": "s000112",
+              "start_ms": 25738,
+              "duration_ms": 3462
+            },
+            {
+              "sentence_id": "s000113",
+              "start_ms": 29200,
+              "duration_ms": 5338
+            },
+            {
+              "sentence_id": "s000114",
+              "start_ms": 34538,
+              "duration_ms": 8350
+            }
+          ]
+        },
+        {
+          "paragraph_id": "p00045",
+          "sentences": [
+            {
+              "sentence_id": "s000115",
+              "start_ms": 42888,
+              "duration_ms": 8137
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

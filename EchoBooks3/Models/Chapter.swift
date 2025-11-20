@@ -40,6 +40,20 @@ final class Chapter: Identifiable, Hashable, Decodable, Validatable {
         self.paragraphs = try container.decodeIfPresent([Paragraph].self, forKey: .paragraphs) ?? []
     }
     
+    init(
+        id: UUID,
+        language: LanguageCode,
+        chapterNumber: Int,
+        chapterTitle: String,
+        paragraphs: [Paragraph] = []
+    ) {
+        self.id = id
+        self.language = language
+        self.chapterNumber = chapterNumber
+        self.chapterTitle = chapterTitle
+        self.paragraphs = paragraphs
+    }
+    
     func validate(with languages: [LanguageCode]) throws {
         // If no paragraphs exist, we assume this is a structure-level chapter.
         if paragraphs.isEmpty { return }

@@ -1,0 +1,10 @@
+{
+  "target_lang": "fr",
+  "surface_map": {
+    "ticking": "tic-tac",
+    "keeper": "gardien",
+    "softly": "doucement",
+    "shrug": "hausser les épaules",
+    "unfinished": "inachevé"
+  }
+}

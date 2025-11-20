@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "book_level": "B2",
+    "created_at": "2025-11-13",
+    "version": 1,
+    "families": {
+      "ticking-n": {
+        "lemma": "ticking",
+        "pos": "NOUN",
+        "count": 3
+      },
+      "keeper-n": {
+        "lemma": "keeper",
+        "pos": "NOUN",
+        "count": 3
+      },
+      "shrug-v": {
+        "lemma": "shrug",
+        "pos": "VERB",
+        "count": 1
+      },
+      "softly-a": {
+        "lemma": "softly",
+        "pos": "ADV",
+        "count": 2
+      },
+      "unfinished-a": {
+        "lemma": "unfinished",
+        "pos": "ADJ",
+        "count": 1
+      }
+    }
+  },
+  "glosses": [
+    {
+      "gloss_id": "ticking-n-001",
+      "sense_family_id": "ticking-n",
+      "lemma": "ticking",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "The sound made by a clock as it measures time, usually a regular and rhythmic noise.",
+      "examples": [
+        "She kept hearing the steady ticking of clocks in her mind — until, all at once, she imagined one of them stopping.",
+        "The ticking of the clock filled the quiet room as everyone waited for the exam to start.",
+        "She found the constant ticking soothing as she worked late into the night."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00002",
+          "sentence_id": "s000037"
+        }
+      ]
+    },
+    {
+      "gloss_id": "ticking-n-002",
+      "sense_family_id": "ticking-n",
+      "lemma": "ticking",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "A soft, regular sound made by clocks or similar devices, often indicating the passage of time.",
+      "examples": [
+        "As the town grew silent, she heard a soft ticking again — not from the watch, but from the walls, as if every clock in Windmere was breathing together.",
+        "The ticking of the old grandfather clock reminded him of his childhood.",
+        "As they sat in silence, the only sound was the ticking from the wall clock in the corner."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.5892556509887896,
+        "cluster_size": 2,
+        "low_confidence": false
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00004",
+          "sentence_id": "s000069"
+        },
+        {
+          "chunk_id": "c00007",
+          "sentence_id": "s000100"
+        }
+      ]
+    },
+    {
+      "gloss_id": "ticking-n-003",
+      "sense_family_id": "ticking-n",
+      "lemma": "ticking",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "The soft sound made by a clock as it measures time, usually a regular, rhythmic noise.",
+      "examples": [
+        "Inside, the air hummed with the soft ticking of hundreds of clocks again.",
+        "The ticking of the kitchen timer signaled that dinner was almost ready.",
+        "In the quiet library, the only noise was the gentle ticking of the clock on the wall."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00006",
+          "sentence_id": "s000081"
+        }
+      ]
+    },
+    {
+      "gloss_id": "keeper-n-001",
+      "sense_family_id": "keeper-n",
+      "lemma": "keeper",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "A person who protects or takes care of something important, often related to a role or responsibility.",
+      "examples": [
+        "Emma opened it and read aloud: \"To the next keeper of time — follow the sound that stops.\"",
+        "The zoo keeper ensures that all the animals are healthy and safe in their habitats.",
+        "As a team captain, she is the keeper of the team's spirit and motivation during tough matches."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00002",
+          "sentence_id": "s000031"
+        }
+      ]
+    },
+    {
+      "gloss_id": "keeper-n-002",
+      "sense_family_id": "keeper-n",
+      "lemma": "keeper",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "A person who takes care of something important or valuable, ensuring it is protected and maintained.",
+      "examples": [
+        "Inside was the pocket watch from the library and a short note: \"Every keeper must listen carefully.",
+        "The museum keeper carefully checks the artifacts every day to make sure they are in good condition.",
+        "In the library, the keeper organizes the books and helps visitors find what they need."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00004",
+          "sentence_id": "s000064"
+        }
+      ]
+    },
+    {
+      "gloss_id": "keeper-n-003",
+      "sense_family_id": "keeper-n",
+      "lemma": "keeper",
+      "pos": "NOUN",
+      "sense_key": null,
+      "definition": "A person who takes care of a place or thing, often responsible for its safety and maintenance.",
+      "examples": [
+        "And so Emma became the new keeper of Windmere, not by choice, but by listening to the moment that stopped and began again.",
+        "The park keeper works hard to keep the gardens beautiful and the paths clean for all visitors.",
+        "At the aquarium, the keeper monitors the water quality to ensure the fish and other sea creatures thrive."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00008",
+          "sentence_id": "s000115"
+        }
+      ]
+    },
+    {
+      "gloss_id": "shrug-v-001",
+      "sense_family_id": "shrug-v",
+      "lemma": "shrug",
+      "pos": "VERB",
+      "sense_key": null,
+      "definition": "To raise your shoulders and lower them quickly to show you don't know or care about something.",
+      "examples": [
+        "Mr. Dalton shrugged.",
+        "When asked about the missing homework, she just shrugged and said it was not her problem.",
+        "He shrugged when his friend asked if he wanted to go to the party, showing he wasn't interested."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00002",
+          "sentence_id": "s000033"
+        }
+      ]
+    },
+    {
+      "gloss_id": "softly-a-001",
+      "sense_family_id": "softly-a",
+      "lemma": "softly",
+      "pos": "ADV",
+      "sense_key": null,
+      "definition": "In a quiet or gentle way, without making much noise.",
+      "examples": [
+        "The watch ticked softly, but when she touched it, it stopped.",
+        "The baby slept softly in the crib, making only the faintest sounds.",
+        "She spoke softly to avoid waking anyone in the room."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00003",
+          "sentence_id": "s000048"
+        }
+      ]
+    },
+    {
+      "gloss_id": "softly-a-002",
+      "sense_family_id": "softly-a",
+      "lemma": "softly",
+      "pos": "ADV",
+      "sense_key": null,
+      "definition": "In a gentle and quiet way, without loud sounds or bright light.",
+      "examples": [
+        "The golden clock stood in the same corner, shining softly.",
+        "The wind blew softly through the trees, creating a peaceful atmosphere.",
+        "He played the guitar softly, filling the room with a calming melody."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00006",
+          "sentence_id": "s000090"
+        }
+      ]
+    },
+    {
+      "gloss_id": "unfinished-a-001",
+      "sense_family_id": "unfinished-a",
+      "lemma": "unfinished",
+      "pos": "ADJ",
+      "sense_key": null,
+      "definition": "Not completed or lacking a final touch, leaving a feeling that something is missing or not fully developed.",
+      "examples": [
+        "Something about the town, and the clockmaker, felt unfinished.",
+        "The painting looked unfinished, with blank spaces that needed more color and detail.",
+        "The project was left unfinished, so the team had to work extra hours to meet the deadline."
+      ],
+      "source": {
+        "picked_by": "cluster",
+        "confidence": 0.35,
+        "cluster_size": 1,
+        "low_confidence": true
+      },
+      "occurrences": [
+        {
+          "chunk_id": "c00004",
+          "sentence_id": "s000058"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "target_lang": "fr",
+  "glosses": {
+    "ticking": {
+      "headword": "tic-tac",
+      "definition": "Bruit régulier et rythmique produit par une horloge qui marque le temps.",
+      "examples": [
+        "Le tic-tac de l'horloge résonne dans la pièce silencieuse.",
+        "J'entends le tic-tac apaisant de la pendule dans ma chambre."
+      ]
+    },
+    "keeper": {
+      "headword": "gardien",
+      "definition": "Personne chargée de surveiller, protéger ou entretenir quelque chose d'important.",
+      "examples": [
+        "Le gardien du musée vérifie les salles chaque soir.",
+        "Le gardien du parc s'occupe de l'entretien des jardins."
+      ]
+    },
+    "softly": {
+      "headword": "doucement",
+      "definition": "D'une manière douce et calme, sans faire beaucoup de bruit.",
+      "examples": [
+        "Elle parle doucement pour ne pas réveiller le bébé.",
+        "La musique joue doucement en arrière-plan."
+      ]
+    },
+    "shrug": {
+      "headword": "hausser les épaules",
+      "definition": "Lever puis baisser les épaules pour montrer l'indifférence ou l'ignorance.",
+      "examples": [
+        "Il hausse les épaules quand il ne connaît pas la réponse.",
+        "Elle hausse les épaules pour montrer son désintérêt."
+      ]
+    },
+    "unfinished": {
+      "headword": "inachevé",
+      "definition": "Qui n'est pas terminé ou qui manque de finition.",
+      "examples": [
+        "Le tableau reste inachevé sur son chevalet.",
+        "Le roman est inachevé depuis le décès de l'auteur."
+      ]
+    }
+  }
+}

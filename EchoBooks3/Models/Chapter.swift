@@ -1,8 +1,5 @@
 //
 //  Chapter.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
 //
 //  Updated to support decoding from unified structure JSON. If the "language" key is missing,
 //  it defaults to .enUS. Extra keys like "totalParagraphs", "totalSentences", and "contentReferences"

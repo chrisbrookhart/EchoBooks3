@@ -1,16 +1,5 @@
 //
 //  Paragraph.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/5/25.
-//
-
-
-//
-//  Paragraph.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
 //
 //  This model represents a paragraph within a chapter.
 //  It contains an array of Sentence objects.

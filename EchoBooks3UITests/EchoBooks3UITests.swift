@@ -2,7 +2,6 @@
 //  EchoBooks3UITests.swift
 //  EchoBooks3UITests
 //
-//  Created by Chris Brookhart on 2/5/25.
 //
 
 import XCTest

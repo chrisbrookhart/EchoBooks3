@@ -1,6 +1,5 @@
 //
 //  AudioMappingLoader.swift
-//  EchoBooks3
 //
 //  Service for loading audio mapping information from content_index.json and playback_map.json.
 //  Provides access to audio segments and chunk-based playback information.
@@ -139,7 +138,7 @@ class AudioMappingLoader {
             sentenceId: sentenceId,
             offsetMs: audioInfo.offsetMs,
             durationMs: audioInfo.durationMs,
-            wavPath: audioInfo.wavPath,
+            audioPath: audioInfo.audioPath,
             sampleRateHz: audioInfo.sampleRateHz
         )
     }
@@ -159,7 +158,7 @@ class AudioMappingLoader {
                     sentenceId: sentenceId,
                     offsetMs: audioInfo.offsetMs,
                     durationMs: audioInfo.durationMs,
-                    wavPath: audioInfo.wavPath,
+                    audioPath: audioInfo.audioPath,
                     sampleRateHz: audioInfo.sampleRateHz
                 )
             }
@@ -211,8 +210,8 @@ class AudioMappingLoader {
     /// - Parameters:
     ///   - chunkId: The chunk ID
     ///   - languageCode: The language code
-    /// - Returns: WAV file path if found, nil otherwise
-    func wavPath(for chunkId: String, languageCode: String) throws -> String? {
+    /// - Returns: Audio file path if found, nil otherwise
+    func audioPath(for chunkId: String, languageCode: String) throws -> String? {
         let playbackMap = try loadPlaybackMap()
         let normalizedLang = normalizeLanguageCode(languageCode)
         
@@ -221,7 +220,7 @@ class AudioMappingLoader {
             return nil
         }
         
-        return langInfo.wavPath
+        return langInfo.audioPath
     }
     
     /// Gets paragraph information for a chunk in a specific language.

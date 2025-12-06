@@ -2,15 +2,6 @@
 //  BookItemView.swift
 //  EchoBooks3
 //
-//  Created by Chris Brookhart on 2/6/25.
-//
-
-
-//
-//  BookItemView.swift
-//  EchoBooks3
-//
-//  Created by [Your Name] on [Date].
 //  A view that displays a single book’s cover image and title.
 //  It strips any file extension from the cover image name and falls back to "DefaultCover" if necessary.
 //

@@ -1,8 +1,6 @@
 //
 //  Book.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
+
 //
 //  This model represents a book. SubBooks are optional - for new format books,
 //  a default subbook is created automatically. For old format books, subBooks

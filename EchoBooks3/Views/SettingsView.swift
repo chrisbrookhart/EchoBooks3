@@ -107,7 +107,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        // Preview using a dummy array of languages.
+        // Preview using a dummy array of languages. 
         SettingsView(availableLanguages: [.enUS, .esES, .frFR])
     }
 }

@@ -1,16 +1,5 @@
 //
 //  SubBook.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/5/25.
-//
-
-
-//
-//  SubBook.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
 //
 //  This model represents a subbook within a Book. For flat books, this will be the default subbook.
 //  A SubBook contains an array of Chapter objects.

@@ -1,17 +1,6 @@
 //
 //  ManageSubscriptionView.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/6/25.
-//
-
-
-//
-//  ManageSubscriptionView.swift
-//  EchoBooks3
-//
-//  Created by [Your Name] on [Date].
-//
+// 
 //  A placeholder view for managing subscription accounts.
 //
 

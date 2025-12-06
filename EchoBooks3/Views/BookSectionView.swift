@@ -1,16 +1,5 @@
 //
 //  BookSectionView.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/6/25.
-//
-
-
-//
-//  BookSectionView.swift
-//  EchoBooks3
-//
-//  Created by [Your Name] on [Date].
 //  A view that displays a section header and a horizontal scroll view of BookItemViews.
 //
 
@@ -29,7 +18,7 @@ struct BookSectionView: View {
                 .padding(.horizontal)
             
             if books.isEmpty {
-                // Empty state view for this section.
+                // Empty state view for this section. 
                 VStack(spacing: 8) {
                     Text("No books found.")
                     Text("Please check back later.")

@@ -1,16 +1,5 @@
 //
 //  Sentence.swift
-//  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/5/25.
-//
-
-
-//
-//  Sentence.swift
-//  YourAppName
-//
-//  Created by [Your Name] on [Date].
 //
 //  This model represents a sentence within a paragraph.
 //  It includes a globalSentenceIndex for navigation purposes and uses a dictionary keyed by LanguageCode

@@ -1,6 +1,5 @@
 //
 //  AudioSegment.swift
-//  EchoBooks3
 //
 //  Represents a single audio segment for a sentence with timing information.
 //
@@ -19,7 +18,7 @@ struct AudioSegment: Codable, Equatable {
     let durationMs: Int
     
     /// The path to the audio file (relative to the book's root directory).
-    let wavPath: String
+    let audioPath: String
     
     /// The sample rate of the audio file in Hz.
     let sampleRateHz: Int?
@@ -28,7 +27,7 @@ struct AudioSegment: Codable, Equatable {
         case sentenceId = "sentence_id"
         case startMs = "start_ms"
         case durationMs = "duration_ms"
-        case wavPath = "wav_path"
+        case audioPath = "audio_path"
         case sampleRateHz = "sample_rate_hz"
     }
     
@@ -37,13 +36,13 @@ struct AudioSegment: Codable, Equatable {
     ///   - sentenceId: The sentence ID
     ///   - offsetMs: The offset in milliseconds (from content_index.json)
     ///   - durationMs: The duration in milliseconds
-    ///   - wavPath: The path to the audio file
+    ///   - audioPath: The path to the audio file
     ///   - sampleRateHz: Optional sample rate
-    init(sentenceId: String, offsetMs: Int, durationMs: Int, wavPath: String, sampleRateHz: Int? = nil) {
+    init(sentenceId: String, offsetMs: Int, durationMs: Int, audioPath: String, sampleRateHz: Int? = nil) {
         self.sentenceId = sentenceId
         self.startMs = offsetMs
         self.durationMs = durationMs
-        self.wavPath = wavPath
+        self.audioPath = audioPath
         self.sampleRateHz = sampleRateHz
     }
 }

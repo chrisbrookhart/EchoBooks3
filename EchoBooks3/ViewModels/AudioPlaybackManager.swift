@@ -1,8 +1,7 @@
 //
 //  AudioPlaybackManager.swift
-//  EchoBooks3
 //
-//  Updated to support chunk-based WAV audio playback with time offsets.
+//  Updated to support chunk-based MP3 audio playback with time offsets.
 //  Uses AudioMappingLoader to get audio segment information and handles
 //  seeking within chunks and chunk transitions.
 //
@@ -59,7 +58,7 @@ class AudioPlaybackManager: NSObject, ObservableObject {
                 print("ERROR: Could not find audio segment for sentence \(sentenceId) with language \(languageCode)")
                 return
             }
-            print("✅ AudioPlaybackManager: Found audio segment - offsetMs: \(segment.startMs), durationMs: \(segment.durationMs), wavPath: \(segment.wavPath)")
+            print("✅ AudioPlaybackManager: Found audio segment - offsetMs: \(segment.startMs), durationMs: \(segment.durationMs), audioPath: \(segment.audioPath)")
             
             // Get the chunk ID for this sentence
             guard let chunkId = try loader.chunkId(for: sentenceId, languageCode: languageCode) else {
@@ -68,12 +67,12 @@ class AudioPlaybackManager: NSObject, ObservableObject {
             }
             print("✅ AudioPlaybackManager: Found chunk ID: \(chunkId) for language \(languageCode)")
             
-            // Get the WAV file path for this chunk
-            guard let wavPath = try loader.wavPath(for: chunkId, languageCode: languageCode) else {
-                print("ERROR: Could not find WAV path for chunk \(chunkId) with language \(languageCode)")
+            // Get the audio file path for this chunk
+            guard let audioPath = try loader.audioPath(for: chunkId, languageCode: languageCode) else {
+                print("ERROR: Could not find audio path for chunk \(chunkId) with language \(languageCode)")
                 return
             }
-            print("✅ AudioPlaybackManager: Found WAV path: \(wavPath) for chunk \(chunkId) with language \(languageCode)")
+            print("✅ AudioPlaybackManager: Found audio path: \(audioPath) for chunk \(chunkId) with language \(languageCode)")
             
             // Calculate segment end time (start + duration in seconds)
             let startTime = TimeInterval(segment.startMs) / 1000.0
@@ -83,15 +82,15 @@ class AudioPlaybackManager: NSObject, ObservableObject {
             // We need to reload if:
             // 1. No player exists, OR
             // 2. The chunk ID changed, OR
-            // 3. The WAV path changed (different language or different chunk file)
+            // 3. The audio path changed (different language or different chunk file)
             let needsNewChunk = audioPlayer == nil ||
                                 currentChunkId != chunkId ||
-                                currentSegment?.wavPath != segment.wavPath
+                                currentSegment?.audioPath != segment.audioPath
             
             print("   needsNewChunk: \(needsNewChunk)")
             print("   audioPlayer exists: \(audioPlayer != nil)")
             print("   currentChunkId: \(currentChunkId ?? "nil"), newChunkId: \(chunkId)")
-            print("   currentWavPath: \(currentSegment?.wavPath ?? "nil"), newWavPath: \(segment.wavPath)")
+            print("   currentAudioPath: \(currentSegment?.audioPath ?? "nil"), newAudioPath: \(segment.audioPath)")
             
             // Store current state (after checking if we need a new chunk)
             currentBookCode = bookCode
@@ -114,13 +113,13 @@ class AudioPlaybackManager: NSObject, ObservableObject {
                     audioPlayer?.stop()
                 }
                 
-                // Load the chunk WAV file
-                // wavPath is relative to book root, e.g., "audio/en/CLOCK__c00001.wav"
+                // Load the chunk audio file
+                // audioPath is relative to book root, e.g., "audio/en/CLOCK__c00001.mp3"
                 let bookRootPath = "\(bookCode)_book"
-                let fullPath = "\(bookRootPath)/\(wavPath)"
+                let fullPath = "\(bookRootPath)/\(audioPath)"
                 
                 print("🔊 AudioPlaybackManager: Loading chunk file")
-                print("   wavPath from loader: \(wavPath)")
+                print("   audioPath from loader: \(audioPath)")
                 print("   bookRootPath: \(bookRootPath)")
                 print("   fullPath: \(fullPath)")
                 print("   languageCode: \(languageCode)")
@@ -223,6 +222,19 @@ class AudioPlaybackManager: NSObject, ObservableObject {
                 }
                 
                 print("🎵 AudioPlaybackManager: Loading audio from: \(audioURL.path)")
+                print("   File exists: \(FileManager.default.fileExists(atPath: audioURL.path))")
+                
+                // Check file size properly
+                if let attributes = try? FileManager.default.attributesOfItem(atPath: audioURL.path),
+                   let fileSize = attributes[.size] as? Int64 {
+                    print("   File size: \(fileSize) bytes (\(Double(fileSize) / 1024.0 / 1024.0) MB)")
+                    if fileSize == 0 {
+                        print("   ⚠️ WARNING: File is 0 bytes! This will cause playback to fail.")
+                        print("   Please check that the audio file is properly included in the Xcode project and has content.")
+                    }
+                } else {
+                    print("   ⚠️ WARNING: Could not read file attributes")
+                }
                 
                 do {
                     // Small delay to ensure old player stops cleanly (if transitioning)
@@ -231,14 +243,31 @@ class AudioPlaybackManager: NSObject, ObservableObject {
                         RunLoop.current.run(until: Date().addingTimeInterval(0.06))
                     }
                     
+                    print("   Attempting to create AVAudioPlayer...")
                     audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
                     audioPlayer?.delegate = self
                     audioPlayer?.volume = 1.0 // Ensure volume is reset
-                    audioPlayer?.prepareToPlay()
+                    
+                    print("   Preparing to play...")
+                    let prepared = audioPlayer?.prepareToPlay() ?? false
+                    print("   prepareToPlay() returned: \(prepared)")
+                    
+                    if let player = audioPlayer {
+                        print("   Player duration: \(player.duration) seconds")
+                        print("   Player format: \(player.format)")
+                    }
                     
                     print("✅ AudioPlaybackManager: Successfully created AVAudioPlayer")
                 } catch {
-                    print("ERROR: Failed to create AVAudioPlayer: \(error)")
+                    print("❌ ERROR: Failed to create AVAudioPlayer")
+                    print("   Error type: \(type(of: error))")
+                    print("   Error description: \(error.localizedDescription)")
+                    print("   Error details: \(error)")
+                    if let nsError = error as NSError? {
+                        print("   Error domain: \(nsError.domain)")
+                        print("   Error code: \(nsError.code)")
+                        print("   Error userInfo: \(nsError.userInfo)")
+                    }
                     return
                 }
             } else {

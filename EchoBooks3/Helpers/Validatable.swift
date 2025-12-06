@@ -2,8 +2,6 @@
 //  Validatable.swift
 //  YourAppName
 //
-//  Created by [Your Name] on [Date].
-//
 //  This protocol defines an interface for validating model objects.
 //  Models conforming to Validatable must implement the validate(with:) method.
 //

@@ -1,8 +1,7 @@
 //
 //  PlaybackMode.swift
 //  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/21/25.
+// 
 //
 
 

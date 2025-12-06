@@ -2,8 +2,6 @@
 //  ValidationError.swift
 //  YourAppName
 //
-//  Created by [Your Name] on [Date].
-//
 //  This file defines errors used during model validation.
 //
  

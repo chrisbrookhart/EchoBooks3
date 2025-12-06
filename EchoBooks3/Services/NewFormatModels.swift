@@ -1,7 +1,7 @@
 //
 //  NewFormatModels.swift
 //  EchoBooks3
-//
+// 
 //  Data models for decoding the new book format JSON files.
 //
 
@@ -100,13 +100,13 @@ struct ParagraphData: Codable, Identifiable {
 
 /// Audio information for a specific language
 struct LanguageAudioInfo: Codable {
-    let wavPath: String
+    let audioPath: String
     let offsetMs: Int
     let durationMs: Int
     let sampleRateHz: Int
     
     enum CodingKeys: String, CodingKey {
-        case wavPath = "wav_path"
+        case audioPath = "audio_path"
         case offsetMs = "offset_ms"
         case durationMs = "duration_ms"
         case sampleRateHz = "sample_rate_hz"
@@ -162,12 +162,12 @@ struct ChunkParagraph: Codable {
 
 /// Playback information for a specific language within a chunk
 struct ChunkLanguageInfo: Codable {
-    let wavPath: String
+    let audioPath: String
     let sentences: [ChunkSentence]
     let paragraphs: [ChunkParagraph]
     
     enum CodingKeys: String, CodingKey {
-        case wavPath = "wav_path"
+        case audioPath = "audio_path"
         case sentences = "sentences"
         case paragraphs = "paragraphs"
     }

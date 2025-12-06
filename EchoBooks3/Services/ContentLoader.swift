@@ -1,6 +1,5 @@
 //
 //  ContentLoader.swift
-//  EchoBooks3
 //
 //  Service for loading content from the new book format structure.
 //  Handles loading universal content, language-specific translations, and chapter metadata.

@@ -1,8 +1,5 @@
-//
+// 
 //  LibraryView.swift
-//  EchoBooks3
-//
-//  Created by [Your Name] on [Date].
 //  This view displays two horizontal sections: one for books on device and one for books available for download.
 //  It uses a responsive layout, a search bar in the navigation bar, and a subscription icon that navigates
 //  to a placeholder Manage Subscription view.
@@ -30,89 +27,96 @@ struct LibraryView: View {
             GeometryReader { geometry in
                 // Compute item dimensions based on available width.
                 let screenWidth = geometry.size.width
-                let itemWidth = max(80, screenWidth * 0.25)
+                let itemWidth = max(DesignSystem.Layout.bookCoverMinWidth, screenWidth * 0.25)
                 let itemHeight = itemWidth * 1.5  // Assume a 2:3 ratio for a typical book cover.
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.sectionSpacing) {
                         // On Device Section
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                             Text("On Device")
-                                .font(.headline)
-                                .padding(.horizontal)
+                                .font(DesignSystem.Typography.h2)
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                             
                             if filteredBooks.isEmpty {
                                 // Empty state view for downloaded books.
-                                VStack(spacing: 8) {
+                                VStack(spacing: DesignSystem.Spacing.sm) {
                                     Text("No downloaded books found.")
+                                        .font(DesignSystem.Typography.body)
+                                        .foregroundColor(DesignSystem.Colors.textPrimary)
                                     Text("Please download some books.")
-                                        .foregroundColor(.secondary)
+                                        .font(DesignSystem.Typography.bodySmall)
+                                        .foregroundColor(DesignSystem.Colors.textSecondary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding()
+                                .padding(DesignSystem.Spacing.lg)
                             } else {
                                 ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 16) {
+                                    HStack(spacing: DesignSystem.Spacing.md) {
                                         ForEach(filteredBooks, id: \.id) { book in
                                             NavigationLink(destination: BookDetailView(book: book)) {
-                                                VStack(spacing: 4) {
+                                                VStack(spacing: DesignSystem.Spacing.xs) {
                                                     coverImage(for: book)
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fill)
                                                         .frame(width: itemWidth, height: itemHeight)
                                                         .clipped()
-                                                        .cornerRadius(8)
+                                                        .cornerRadius(DesignSystem.CornerRadius.bookCover)
+                                                        .shadow(DesignSystem.Shadow.card)
                                                     Text(book.bookTitle)
-                                                        .font(.caption)
-                                                        .foregroundColor(.primary)
+                                                        .font(DesignSystem.Typography.caption)
+                                                        .foregroundColor(DesignSystem.Colors.textPrimary)
                                                         .lineLimit(4)
                                                         .multilineTextAlignment(.center)
                                                         .frame(width: itemWidth, height: 60) // Reserve space for up to 4 lines
                                                 }
                                                 .transition(.opacity)
-                                                .animation(.easeInOut, value: filteredBooks.count)
+                                                .animation(DesignSystem.Animation.springQuick, value: filteredBooks.count)
                                             }
                                         }
                                     }
-                                    .padding(.horizontal)
+                                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                                 }
                             }
                         }
                         
                         // Available for Download Section (Placeholder)
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                             Text("Available for Download")
-                                .font(.headline)
-                                .padding(.horizontal)
+                                .font(DesignSystem.Typography.h2)
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
+                                HStack(spacing: DesignSystem.Spacing.md) {
                                     ForEach(0..<7, id: \.self) { index in
-                                        VStack(spacing: 4) {
+                                        VStack(spacing: DesignSystem.Spacing.xs) {
                                             Image("DefaultCover")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .frame(width: itemWidth, height: itemHeight)
                                                 .clipped()
-                                                .cornerRadius(8)
+                                                .cornerRadius(DesignSystem.CornerRadius.bookCover)
+                                                .shadow(DesignSystem.Shadow.card)
                                             Text("Placeholder \(index + 1)")
-                                                .font(.caption)
-                                                .foregroundColor(.primary)
+                                                .font(DesignSystem.Typography.caption)
+                                                .foregroundColor(DesignSystem.Colors.textPrimary)
                                                 .lineLimit(3)
                                                 .multilineTextAlignment(.center)
                                                 .frame(width: itemWidth)  // Constrain width for wrapping.
                                         }
                                         .transition(.opacity)
-                                        .animation(.easeInOut, value: index)
+                                        .animation(DesignSystem.Animation.springQuick, value: index)
                                     }
                                 }
-                                .padding(.horizontal)
+                                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                             }
                         }
                         
                         Spacer()
                     }
-                    .padding(.vertical)
+                    .padding(.vertical, DesignSystem.Spacing.lg)
                 }
             }
             .navigationTitle("")
@@ -121,6 +125,7 @@ struct LibraryView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: ManageSubscriptionView()) {
                         Image(systemName: "person.crop.circle")
+                            .foregroundColor(DesignSystem.Colors.primary)
                     }
                 }
             }
@@ -148,4 +153,3 @@ struct LibraryView_Previews: PreviewProvider {
         LibraryView()
     }
 }
-

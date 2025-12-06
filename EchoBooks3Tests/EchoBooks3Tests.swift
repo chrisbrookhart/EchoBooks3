@@ -2,7 +2,6 @@
 //  EchoBooks3Tests.swift
 //  EchoBooks3Tests
 //
-//  Created by Chris Brookhart on 2/5/25.
 //
 
 import Testing

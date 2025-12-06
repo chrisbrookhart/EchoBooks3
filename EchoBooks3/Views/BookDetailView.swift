@@ -1,7 +1,7 @@
 //
 //  BookDetailView.swift
 //  EchoBooks3
-//
+// 
 //  Updated to use ContentLoader for new format books.
 //  Removed all old format loading code.
 //
@@ -180,47 +180,62 @@ struct BookDetailView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(spacing: DesignSystem.Spacing.lg) {
                     // "Select Chapter" Button.
                     Button(action: { showingNavigationSheet = true }) {
                         HStack {
-                            Spacer()
                             if selectedSubBook.subBookTitle.lowercased() == "default" {
                                 Text(selectedChapter.chapterTitle)
-                                    .font(.headline)
+                                    .font(DesignSystem.Typography.h3)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
                             } else {
                                 Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
-                                    .font(.headline)
+                                    .font(DesignSystem.Typography.h3)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
                             }
                             Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(DesignSystem.Typography.label)
+                                .foregroundColor(DesignSystem.Colors.textSecondary)
                         }
-                        .padding()
-                        .background(Color(UIColor.systemGray6))
-                        .cornerRadius(8)
+                        .padding(DesignSystem.Spacing.md)
+                        .background(DesignSystem.Colors.cardBackground)
+                        .cornerRadius(DesignSystem.CornerRadius.card)
+                        .shadow(DesignSystem.Shadow.small)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                     
                     // Enlarged Sentence Display Area.
                     ZStack {
-                        Color(UIColor.secondarySystemBackground)
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                DesignSystem.Colors.gradientStart,
+                                DesignSystem.Colors.gradientEnd
+                            ]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
                         Text(currentSentence)
-                            .font(.title3)
+                            .font(DesignSystem.Typography.sentenceDisplay)
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
                             .multilineTextAlignment(.center)
-                            .padding()
+                            .lineSpacing(DesignSystem.Spacing.sm)
+                            .padding(DesignSystem.Spacing.lg)
                     }
                     .frame(height: geo.size.height * 0.65)
-                    .cornerRadius(8)
-                    .padding(.horizontal)
+                    .cornerRadius(DesignSystem.CornerRadius.lg)
+                    .shadow(DesignSystem.Shadow.medium)
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                     
                     // Playback Controls.
                     HStack {
                         Spacer()
                         Button(action: { skipBackwardAction() }) {
                             Image(systemName: "arrow.trianglehead.counterclockwise")
-                                .font(.title)
+                                .font(.system(size: DesignSystem.Layout.playbackControlSize))
                         }
                         .disabled(globalSentenceIndex == 0)
-                        .foregroundColor(globalSentenceIndex == 0 ? .gray : .primary)
+                        .foregroundColor(globalSentenceIndex == 0 ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
                         Spacer()
                         Button(action: {
                             if isPlaying {
@@ -253,20 +268,20 @@ struct BookDetailView: View {
                             }
                         }) {
                             Image(systemName: isAtEnd || !isPlaying ? "play.circle.fill" : "pause.circle.fill")
-                                .font(.system(size: 50))
+                                .font(.system(size: DesignSystem.Layout.playbackButtonSize))
                         }
-                        .foregroundColor(isAtEnd ? .gray : .primary)
+                        .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
                         .disabled(isAtEnd)
                         Spacer()
                         Button(action: { skipForwardAction() }) {
                             Image(systemName: "arrow.trianglehead.clockwise")
-                                .font(.title)
+                                .font(.system(size: DesignSystem.Layout.playbackControlSize))
                         }
                         .disabled(isAtEnd)
-                        .foregroundColor(isAtEnd ? .gray : .primary)
+                        .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
                         Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                     
                     // Normalized Slider for Chapter Navigation.
                     Slider(
@@ -304,11 +319,11 @@ struct BookDetailView: View {
                             updateGlobalAppStateForBookDetail()
                         }
                     )
-                    .padding(.horizontal)
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                     
                     Spacer()
                 }
-                .padding(.vertical)
+                .padding(.vertical, DesignSystem.Spacing.lg)
             }
             // Modal Sheet for Subbook/Chapter Selection.
             .sheet(isPresented: $showingNavigationSheet) {
@@ -337,13 +352,15 @@ struct BookDetailView: View {
                             Spacer()
                         }
                     }
-                    .padding()
+                    .padding(DesignSystem.Spacing.md)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Done") {
                                 showingNavigationSheet = false
                                 updateCurrentSentenceForSelection()
                             }
+                            .font(DesignSystem.Typography.button)
+                            .foregroundColor(DesignSystem.Colors.primary)
                         }
                     }
                 }
@@ -381,23 +398,13 @@ struct BookDetailView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showSettings = true }) {
                     Image(systemName: "gear")
+                        .foregroundColor(DesignSystem.Colors.primary)
                 }
             }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(availableLanguages: book.languages)
         }
-        // onChange handlers for navigation state.
-//        .onChange(of: selectedSubBookIndex) { _, _ in
-//            if hasRestoredState && !internalNavigation {
-//                isPlaying = false
-//                audioManager.pause()
-//                audioManager.onPlaybackFinished = nil
-//                updateCurrentSentenceForSelection()
-//                saveBookState()
-//                updateGlobalAppStateForBookDetail()
-//            }
-//        }
         .onChange(of: selectedSubBookIndex) { _, newValue in
             // Always update immediately when subbook changes (unless it's internal navigation)
             if !internalNavigation {
@@ -414,17 +421,6 @@ struct BookDetailView: View {
                 internalNavigation = false
             }
         }
-        
-//        .onChange(of: selectedChapterIndex) { _, _ in
-//            if hasRestoredState && !internalNavigation {
-//                isPlaying = false
-//                audioManager.pause()
-//                audioManager.onPlaybackFinished = nil
-//                updateCurrentSentenceForSelection()
-//                saveBookState()
-//                updateGlobalAppStateForBookDetail()
-//            }
-//        }
         .onChange(of: selectedChapterIndex) { _, newValue in
             // Always update immediately when chapter changes (unless it's internal navigation)
             if !internalNavigation {
@@ -583,138 +579,6 @@ struct BookDetailView: View {
         return selectedLanguage1Code
     }
     
-    // MARK: - Audio Completion Handler
-//    private func audioDidFinishPlaying() {
-//        guard isPlaying else { return }
-//        
-//        if playbackMode == PlaybackMode.paragraph.rawValue {
-//            // In Paragraph mode:
-//            if let indices = paragraphIndices(for: globalSentenceIndex) {
-//                let paragraphId = chapterSentences[globalSentenceIndex].paragraphId
-//                let paragraphSentences = chapterSentences.filter { $0.paragraphId == paragraphId }
-//                    .sorted { $0.sentenceIndexInParagraph < $1.sentenceIndexInParagraph }
-//                
-//                if indices.localIndex < paragraphSentences.count - 1 {
-//                    // Advance to the next sentence within the same paragraph.
-//                    globalSentenceIndex += 1
-//                    sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-//                    if let sentenceText = getCurrentSentenceText(languageCode: getLanguageCodeForCurrentStage()) {
-//                        currentSentence = sentenceText
-//                        if let sentenceId = getCurrentSentenceId() {
-//                            let languageCode = getLanguageCodeForCurrentStage()
-//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
-//                            if currentPlaybackStage == 1 {
-//                                audioManager.setRate(Float(selectedSpeed1))
-//                            } else if currentPlaybackStage == 2 {
-//                                audioManager.setRate(Float(selectedSpeed2))
-//                            } else if currentPlaybackStage == 3 {
-//                                audioManager.setRate(Float(selectedSpeed3))
-//                            }
-//                            print("DEBUG: Paragraph mode - Advanced within paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
-//                            audioManager.play()
-//                            return
-//                        }
-//                    }
-//                } else {
-//                    // End of paragraph reached.
-//                    if let startIndex = paragraphStartIndex(for: globalSentenceIndex) {
-//                        globalSentenceIndex = startIndex
-//                        sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-//                        print("DEBUG: Paragraph mode - End of paragraph reached; reset globalSentenceIndex to \(globalSentenceIndex)")
-//                    }
-//                    // Switch to the next language if available.
-//                    if currentPlaybackStage == 1, selectedLanguage2 != "None" {
-//                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage2),
-//                           let sentenceId = getCurrentSentenceId() {
-//                            currentSentence = sentenceText
-//                            currentPlaybackStage = 2
-//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage2)
-//                            audioManager.setRate(Float(selectedSpeed2))
-//                            print("DEBUG: Paragraph mode - Switching to secondary language at globalSentenceIndex = \(globalSentenceIndex)")
-//                            audioManager.play()
-//                            return
-//                        }
-//                    } else if currentPlaybackStage == 2, selectedLanguage3 != "None" {
-//                        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage3),
-//                           let sentenceId = getCurrentSentenceId() {
-//                            currentSentence = sentenceText
-//                            currentPlaybackStage = 3
-//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage3)
-//                            audioManager.setRate(Float(selectedSpeed3))
-//                            print("DEBUG: Paragraph mode - Switching to tertiary language at globalSentenceIndex = \(globalSentenceIndex)")
-//                            audioManager.play()
-//                            return
-//                        }
-//                    } else {
-//                        // All languages have played for this paragraph.
-//                        loadChapterContent()
-//                        if let nextParagraphStart = nextParagraphGlobalIndex(after: globalSentenceIndex),
-//                           let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
-//                           let sentenceId = getCurrentSentenceId() {
-//                            globalSentenceIndex = nextParagraphStart
-//                            sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-//                            currentPlaybackStage = 1
-//                            currentSentence = sentenceText
-//                            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
-//                            audioManager.setRate(Float(selectedSpeed1))
-//                            print("DEBUG: Paragraph mode - Advancing to next paragraph: globalSentenceIndex = \(globalSentenceIndex), totalSentences = \(totalSentences), sliderNormalized = \(sliderNormalized)")
-//                            audioManager.play()
-//                            return
-//                        } else {
-//                            // No next paragraph exists in the current chapter;
-//                            advanceToNextChapterOrSubBook()
-//                            return
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            // Sentence mode: existing behavior.
-//            if currentPlaybackStage == 1 {
-//                if let lang2 = selectedLanguage2Code,
-//                   let sentenceText = getCurrentSentenceText(languageCode: lang2),
-//                   let sentenceId = getCurrentSentenceId() {
-//                    currentSentence = sentenceText
-//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang2)
-//                    currentPlaybackStage = 2
-//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-//                    audioManager.setRate(Float(selectedSpeed2))
-//                    print("DEBUG: Sentence mode - Switching to secondary language at globalSentenceIndex = \(globalSentenceIndex)")
-//                    audioManager.play()
-//                    return
-//                }
-//                if let lang3 = selectedLanguage3Code,
-//                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
-//                   let sentenceId = getCurrentSentenceId() {
-//                    currentSentence = sentenceText
-//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
-//                    currentPlaybackStage = 3
-//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-//                    audioManager.setRate(Float(selectedSpeed3))
-//                    print("DEBUG: Sentence mode - Switching to tertiary language at globalSentenceIndex = \(globalSentenceIndex)")
-//                    audioManager.play()
-//                    return
-//                }
-//                advanceSentenceWithReset()
-//            } else if currentPlaybackStage == 2 {
-//                if let lang3 = selectedLanguage3Code,
-//                   let sentenceText = getCurrentSentenceText(languageCode: lang3),
-//                   let sentenceId = getCurrentSentenceId() {
-//                    currentSentence = sentenceText
-//                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: lang3)
-//                    currentPlaybackStage = 3
-//                    audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
-//                    audioManager.setRate(Float(selectedSpeed3))
-//                    print("DEBUG: Sentence mode - Switching from secondary to tertiary at globalSentenceIndex = \(globalSentenceIndex)")
-//                    audioManager.play()
-//                    return
-//                }
-//                advanceSentenceWithReset()
-//            } else if currentPlaybackStage == 3 {
-//                advanceSentenceWithReset()
-//            }
-//        }
-//    }
     // MARK: - Audio Completion Handler
     private func audioDidFinishPlaying() {
         guard isPlaying else { return }
@@ -958,17 +822,6 @@ struct BookDetailView: View {
     }
     
     // MARK: - Update Current Sentence on Selection Change
-//    private func updateCurrentSentenceForSelection() {
-//        loadChapterContent()
-//        globalSentenceIndex = 0
-//        sliderNormalized = 0.0
-//        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
-//            currentSentence = sentenceText
-//        } else {
-//            currentSentence = "No sentence available."
-//        }
-//    }
-  
     private func updateCurrentSentenceForSelection() {
         loadChapterContent()
         globalSentenceIndex = 0
@@ -988,6 +841,7 @@ struct BookDetailView: View {
             // Don't auto-play - let the user decide when to play
         }
     }
+    
     // MARK: - Persistence Helper Functions
     private func loadBookState() {
         let targetBookID = book.id

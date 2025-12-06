@@ -1,8 +1,7 @@
 //
 //  AppState.swift
 //  EchoBooks3
-//
-//  Created by Chris Brookhart on 2/8/25.
+// 
 //
 import Foundation
 import SwiftData

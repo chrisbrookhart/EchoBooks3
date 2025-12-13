@@ -3,6 +3,7 @@
 
 import SwiftUI
 import SwiftData
+import AVFoundation
 
 @main
 struct EchoBooks3App: App {
@@ -23,6 +24,17 @@ struct EchoBooks3App: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init() {
+        // Configure audio session for playback
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default)
+            try audioSession.setActive(true)
+        } catch {
+            print("Failed to configure audio session: \(error)")
+        }
+    }
     
     var body: some Scene {
         WindowGroup {

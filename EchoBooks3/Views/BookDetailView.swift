@@ -37,6 +37,10 @@ struct BookDetailView: View {
 
     /// Flag to track if playback was paused.
     @State private var didPause: Bool = false
+    
+    /// Flag to track if we're currently restoring state from persistence.
+    /// This prevents onChange handlers from resetting sentence index during restoration.
+    @State private var isRestoringState: Bool = false
 
     // MARK: - Global Playback Settings (via @AppStorage)
     @AppStorage("selectedLanguage1") private var selectedLanguage1: String = "en-US"
@@ -95,6 +99,17 @@ struct BookDetailView: View {
     
     // MARK: - Persistence State (Book-specific)
     @State private var bookState: BookState?
+    
+    // MARK: - Book Original Primary Language
+    /// The book's original primary language (the language used in sentences.simplified.json)
+    /// This is the first language in the book's languages array
+    private var bookOriginalPrimaryLanguage: String {
+        // Use the first language in the book's languages array as the original primary language
+        if let firstLanguage = book.languages.first {
+            return firstLanguage.rawValue
+        }
+        return "en-US" // Fallback default
+    }
     
     // MARK: - Chapter Content State (New Format)
     @State private var chapterSentences: [SentenceData] = []
@@ -291,10 +306,12 @@ struct BookDetailView: View {
                                 sliderNormalized = newValue
                                 let computedIndex = Int(round(newValue * Double(totalSentences - 1)))
                                 globalSentenceIndex = computedIndex
-                                if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+                                // Use the language for the current playback stage
+                                let languageCode = getLanguageCodeForCurrentStage()
+                                if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
                                     currentSentence = sentenceText
                                     if let sentenceId = getCurrentSentenceId() {
-                                        audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+                                        audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
                                         if isPlaying {
                                             if currentPlaybackStage == 1 {
                                                 audioManager.setRate(Float(selectedSpeed1))
@@ -366,6 +383,9 @@ struct BookDetailView: View {
                 }
             }
             .onAppear {
+                // Set flag to prevent onChange handlers from resetting sentence index
+                isRestoringState = true
+                
                 loadBookState()
                 updateGlobalAppStateForBookDetail()
                 initializeContentLoader()
@@ -373,15 +393,37 @@ struct BookDetailView: View {
                 if selectedChapterIndex >= selectedSubBook.chapters.count {
                     selectedChapterIndex = 0
                 }
+                // Restore the sentence index from saved state AFTER chapter content is loaded
                 globalSentenceIndex = bookState?.lastGlobalSentenceIndex ?? 0
-                sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
-                    currentSentence = sentenceText
+                // Ensure the index is within bounds
+                if globalSentenceIndex >= totalSentences {
+                    globalSentenceIndex = max(0, totalSentences - 1)
                 }
-                audioManager.setRate(Float(selectedSpeed1))
-                print("DEBUG onAppear: totalSentences = \(totalSentences), globalSentenceIndex = \(globalSentenceIndex), sliderNormalized = \(sliderNormalized)")
-                DispatchQueue.main.async {
-                    hasRestoredState = true
+                sliderNormalized = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+                
+                // Always reset to language 1 (primary language) when returning to the book
+                currentPlaybackStage = 1
+                
+                // Get and display the sentence text in language 1
+                let languageCode = getLanguageCodeForCurrentStage() // This will be language 1
+                if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
+                    currentSentence = sentenceText
+                } else {
+                    currentSentence = "No sentence available."
+                }
+                
+                // Load the audio for the restored sentence in language 1
+                if let sentenceId = getCurrentSentenceId() {
+                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                    audioManager.setRate(Float(selectedSpeed1))
+                    // Don't auto-play - let the user decide when to play
+                }
+                
+                print("DEBUG onAppear: totalSentences = \(totalSentences), globalSentenceIndex = \(globalSentenceIndex), sliderNormalized = \(sliderNormalized), currentPlaybackStage = \(currentPlaybackStage)")
+                
+                // Clear the restoration flag after a brief delay to allow all state to settle
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.isRestoringState = false
                 }
             }
             .onDisappear {
@@ -406,6 +448,9 @@ struct BookDetailView: View {
             SettingsView(availableLanguages: book.languages)
         }
         .onChange(of: selectedSubBookIndex) { _, newValue in
+            // Don't reset sentence index if we're restoring state
+            if isRestoringState { return }
+            
             // Always update immediately when subbook changes (unless it's internal navigation)
             if !internalNavigation {
                 isPlaying = false
@@ -422,6 +467,9 @@ struct BookDetailView: View {
             }
         }
         .onChange(of: selectedChapterIndex) { _, newValue in
+            // Don't reset sentence index if we're restoring state
+            if isRestoringState { return }
+            
             // Always update immediately when chapter changes (unless it's internal navigation)
             if !internalNavigation {
                 isPlaying = false
@@ -436,20 +484,62 @@ struct BookDetailView: View {
             }
         }
         .onChange(of: selectedLanguage1) {
+            // Always reset to stage 1 when language 1 changes
+            currentPlaybackStage = 1
             loadChapterContent()
-            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+            
+            // Get text and audio for the current sentence in language 1
+            let languageCode = getLanguageCodeForCurrentStage() // Will be language 1
+            if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
                 currentSentence = sentenceText
             } else {
                 currentSentence = "No sentence available."
+            }
+            
+            // Reload audio for the current sentence with language 1
+            if let sentenceId = getCurrentSentenceId() {
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                audioManager.setRate(Float(selectedSpeed1))
+                if isPlaying {
+                    audioManager.play()
+                }
             }
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
         .onChange(of: selectedLanguage2) {
+            // Always reset to stage 1 when language 2 changes
+            currentPlaybackStage = 1
+            
+            // Get text and audio for the current sentence in language 1
+            let languageCode = getLanguageCodeForCurrentStage() // Will be language 1
+            if let sentenceText = getCurrentSentenceText(languageCode: languageCode),
+               let sentenceId = getCurrentSentenceId() {
+                currentSentence = sentenceText
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                audioManager.setRate(Float(selectedSpeed1))
+                if isPlaying {
+                    audioManager.play()
+                }
+            }
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
         .onChange(of: selectedLanguage3) {
+            // Always reset to stage 1 when language 3 changes
+            currentPlaybackStage = 1
+            
+            // Get text and audio for the current sentence in language 1
+            let languageCode = getLanguageCodeForCurrentStage() // Will be language 1
+            if let sentenceText = getCurrentSentenceText(languageCode: languageCode),
+               let sentenceId = getCurrentSentenceId() {
+                currentSentence = sentenceText
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                audioManager.setRate(Float(selectedSpeed1))
+                if isPlaying {
+                    audioManager.play()
+                }
+            }
             saveBookState()
             updateGlobalAppStateForBookDetail()
         }
@@ -537,15 +627,16 @@ struct BookDetailView: View {
         guard globalSentenceIndex < chapterSentences.count else { return nil }
         let sentenceData = chapterSentences[globalSentenceIndex]
         
-        // Check if this is the primary language (simplified format uses primary language text)
-        let normalizedLang = normalizeLanguageCode(languageCode)
-        let primaryLang = normalizeLanguageCode(selectedLanguage1Code)
+        // Check if the requested language matches the book's original primary language
+        // (the language used in sentences.simplified.json)
+        let normalizedRequestedLang = normalizeLanguageCode(languageCode)
+        let normalizedOriginalLang = normalizeLanguageCode(bookOriginalPrimaryLanguage)
         
-        if normalizedLang == primaryLang {
-            // Use the text from SentenceData (primary language)
+        if normalizedRequestedLang == normalizedOriginalLang {
+            // Use the text from SentenceData (book's original primary language)
             return sentenceData.text
         } else {
-            // Get translation from ContentLoader
+            // Get translation from ContentLoader for any other language
             guard let loader = contentLoader else { return sentenceData.text }
             do {
                 if let translation = try loader.translation(for: sentenceData.sentenceId, languageCode: languageCode) {
@@ -554,6 +645,7 @@ struct BookDetailView: View {
             } catch {
                 print("ERROR: Failed to get translation: \(error)")
             }
+            // Fallback to original text if translation fails
             return sentenceData.text
         }
     }
@@ -771,12 +863,20 @@ struct BookDetailView: View {
         if globalSentenceIndex < total - 1 {
             globalSentenceIndex += 1
             sliderNormalized = total > 0 ? Double(globalSentenceIndex) / Double(total - 1) : 0.0
-            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+            // Use the language for the current playback stage
+            let languageCode = getLanguageCodeForCurrentStage()
+            if let sentenceText = getCurrentSentenceText(languageCode: languageCode),
                let sentenceId = getCurrentSentenceId() {
                 currentSentence = sentenceText
-                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
                 if isPlaying {
-                    audioManager.setRate(Float(selectedSpeed1))
+                    if currentPlaybackStage == 1 {
+                        audioManager.setRate(Float(selectedSpeed1))
+                    } else if currentPlaybackStage == 2 {
+                        audioManager.setRate(Float(selectedSpeed2))
+                    } else if currentPlaybackStage == 3 {
+                        audioManager.setRate(Float(selectedSpeed3))
+                    }
                     audioManager.play()
                     audioManager.onPlaybackFinished = { self.audioDidFinishPlaying() }
                 }
@@ -802,10 +902,12 @@ struct BookDetailView: View {
             sliderNormalized = 0.0
             loadChapterContent()
             currentPlaybackStage = 1
-            if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code),
+            // Use the language for the current playback stage (will be language 1)
+            let languageCode = getLanguageCodeForCurrentStage()
+            if let sentenceText = getCurrentSentenceText(languageCode: languageCode),
                let sentenceId = getCurrentSentenceId() {
                 currentSentence = sentenceText
-                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
+                audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
                 if isPlaying {
                     audioManager.setRate(Float(selectedSpeed1))
                     audioManager.play()
@@ -828,7 +930,9 @@ struct BookDetailView: View {
         sliderNormalized = 0.0
         currentPlaybackStage = 1  // Reset to primary language
         
-        if let sentenceText = getCurrentSentenceText(languageCode: selectedLanguage1Code) {
+        // Always use the language for the current playback stage
+        let languageCode = getLanguageCodeForCurrentStage()
+        if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
             currentSentence = sentenceText
         } else {
             currentSentence = "No sentence available."
@@ -836,8 +940,14 @@ struct BookDetailView: View {
         
         // Load the audio for the first sentence of the new chapter
         if let sentenceId = getCurrentSentenceId() {
-            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: selectedLanguage1Code)
-            audioManager.setRate(Float(selectedSpeed1))
+            audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+            if currentPlaybackStage == 1 {
+                audioManager.setRate(Float(selectedSpeed1))
+            } else if currentPlaybackStage == 2 {
+                audioManager.setRate(Float(selectedSpeed2))
+            } else if currentPlaybackStage == 3 {
+                audioManager.setRate(Float(selectedSpeed3))
+            }
             // Don't auto-play - let the user decide when to play
         }
     }

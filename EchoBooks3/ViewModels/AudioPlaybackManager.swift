@@ -33,6 +33,10 @@ class AudioPlaybackManager: NSObject, ObservableObject {
     /// the player can be reconfigured to use this rate.
     var currentRate: Float = 1.0
     
+    /// Cached audio output latency to compensate for Bluetooth delays
+    /// Only used when latency is significant (>50ms, indicating Bluetooth)
+    private var audioOutputLatency: TimeInterval = 0.0
+    
     // MARK: - Audio Loading (New Format)
     
     /// Loads audio for a specific sentence using the new chunk-based format.
@@ -309,6 +313,28 @@ class AudioPlaybackManager: NSObject, ObservableObject {
         return String(components[0]).lowercased()
     }
     
+    /// Updates the cached audio output latency from the current audio session
+    /// Only stores latency if it's significant (likely Bluetooth)
+    private func updateAudioOutputLatency() {
+        let audioSession = AVAudioSession.sharedInstance()
+        let ioBufferDuration = audioSession.ioBufferDuration
+        let outputLatency = audioSession.outputLatency
+        let totalLatency = ioBufferDuration + outputLatency
+        
+        // Only compensate for significant latency (likely Bluetooth)
+        // Device speakers typically have <10ms latency
+        if totalLatency > 0.05 { // 50ms threshold
+            // Add a safety margin (20% of latency, minimum 30ms)
+            let safetyMargin = max(totalLatency * 0.2, 0.03)
+            audioOutputLatency = totalLatency + safetyMargin
+            print("🔊 Bluetooth detected - applying latency compensation: \(audioOutputLatency * 1000)ms")
+        } else {
+            // Device speakers - no compensation needed
+            audioOutputLatency = 0.0
+            print("🔊 Device speakers - no latency compensation needed (latency: \(totalLatency * 1000)ms)")
+        }
+    }
+    
     // MARK: - Playback Control
     
     /// Manages the idle timer to prevent screen from sleeping during playback
@@ -320,6 +346,9 @@ class AudioPlaybackManager: NSObject, ObservableObject {
     /// Starts audio playback.
     func play() {
         guard let player = audioPlayer else { return }
+        
+        // Update latency before starting playback
+        updateAudioOutputLatency()
         
         // Check if we've reached the end of the current segment
         if player.currentTime >= segmentEndTime {
@@ -409,15 +438,47 @@ class AudioPlaybackManager: NSObject, ObservableObject {
             return
         }
         
+        // Update latency periodically (in case output changes during playback)
+        updateAudioOutputLatency()
+        
         let currentTime = player.currentTime
         let segmentStart = TimeInterval(segment.startMs) / 1000.0
         let segmentEnd = segmentStart + (TimeInterval(segment.durationMs) / 1000.0)
         
-        // Check if we've reached or passed the segment end
+        // Check if we've reached the actual segment end (file position)
         if currentTime >= segmentEnd {
-            // Stop monitoring and notify completion
+            // Stop monitoring since we've detected completion
             stopPlaybackMonitoring()
-            audioPlayerDidFinishPlaying(player, successfully: true)
+            
+            // Fade out smoothly to prevent abrupt stop and clicks
+            // Use a quick fade (50ms) to smoothly end the audio
+            player.setVolume(0.0, fadeDuration: 0.05)
+            
+            // Calculate total wait time: fade duration + full latency + small gap
+            // The fade happens during the latency period, ensuring smooth transition
+            // We wait for the full latency to ensure audio finishes playing before stopping
+            let fadeDuration: TimeInterval = 0.05
+            let totalWaitTime: TimeInterval
+            if audioOutputLatency > 0.05 {
+                // For Bluetooth: wait for fade + full latency + small gap
+                // This ensures the audio finishes playing (no cut-off) and prevents drift
+                // The fade happens during the latency, so audio fades out smoothly
+                totalWaitTime = fadeDuration + audioOutputLatency + 0.02 // fade + full latency + 20ms gap
+            } else {
+                // For device speakers: just fade + small gap
+                totalWaitTime = fadeDuration + 0.01
+            }
+            
+            // Wait for fade-out and latency to complete, then stop the player and trigger completion
+            // This ensures audio finishes playing before we advance to the next segment
+            DispatchQueue.main.asyncAfter(deadline: .now() + totalWaitTime) { [weak self] in
+                guard let self = self, let player = self.audioPlayer else { return }
+                // Stop the player after fade-out and latency complete
+                player.stop()
+                // Reset volume for next playback
+                player.volume = 1.0
+                self.audioPlayerDidFinishPlaying(player, successfully: true)
+            }
         }
     }
     

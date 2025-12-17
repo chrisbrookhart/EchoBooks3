@@ -19,6 +19,10 @@ struct BookMetadata: Codable {
     let bookDescription: String?
     let coverImageName: String
     let defaultPlaybackOrder: [String]?
+    let bookLevel: Int?
+    let learningTheme: String?
+    let whatYouWillPractice: [String]?
+    let estimatedLength: String?
     
     enum CodingKeys: String, CodingKey {
         case bookID = "bookID"
@@ -29,6 +33,10 @@ struct BookMetadata: Codable {
         case bookDescription = "bookDescription"
         case coverImageName = "coverImageName"
         case defaultPlaybackOrder = "defaultPlaybackOrder"
+        case bookLevel = "bookLevel"
+        case learningTheme = "learningTheme"
+        case whatYouWillPractice = "whatYouWillPractice"
+        case estimatedLength = "estimatedLength"
     }
 }
 

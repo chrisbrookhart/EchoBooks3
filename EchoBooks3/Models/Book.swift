@@ -37,6 +37,18 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
     /// A short code for the book (e.g., "BOOKM").
     var bookCode: String
     
+    /// The level of the book (optional).
+    var bookLevel: Int?
+    
+    /// The learning theme of the book (optional).
+    var learningTheme: String?
+    
+    /// What the user will practice with this book (optional).
+    var whatYouWillPractice: [String]?
+    
+    /// Estimated length of the book (optional).
+    var estimatedLength: String?
+    
     // MARK: - Relationships
     
     /// The subbooks in this book. Optional - for new format books, a default subbook is created.
@@ -53,6 +65,10 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         case bookDescription
         case coverImageName
         case bookCode
+        case bookLevel
+        case learningTheme
+        case whatYouWillPractice
+        case estimatedLength
         case subBooks
     }
     
@@ -68,6 +84,10 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
         self.coverImageName = try container.decode(String.self, forKey: .coverImageName)
         self.bookCode = try container.decode(String.self, forKey: .bookCode)
+        self.bookLevel = try container.decodeIfPresent(Int.self, forKey: .bookLevel)
+        self.learningTheme = try container.decodeIfPresent(String.self, forKey: .learningTheme)
+        self.whatYouWillPractice = try container.decodeIfPresent([String].self, forKey: .whatYouWillPractice)
+        self.estimatedLength = try container.decodeIfPresent(String.self, forKey: .estimatedLength)
         // subBooks is optional - decode if present, otherwise nil
         self.subBooks = try container.decodeIfPresent([SubBook].self, forKey: .subBooks)
     }
@@ -82,6 +102,10 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         bookDescription: String? = nil,
         coverImageName: String,
         bookCode: String,
+        bookLevel: Int? = nil,
+        learningTheme: String? = nil,
+        whatYouWillPractice: [String]? = nil,
+        estimatedLength: String? = nil,
         subBooks: [SubBook]? = nil
     ) {
         self.id = id
@@ -91,6 +115,10 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.bookDescription = bookDescription
         self.coverImageName = coverImageName
         self.bookCode = bookCode
+        self.bookLevel = bookLevel
+        self.learningTheme = learningTheme
+        self.whatYouWillPractice = whatYouWillPractice
+        self.estimatedLength = estimatedLength
         self.subBooks = subBooks
     }
     

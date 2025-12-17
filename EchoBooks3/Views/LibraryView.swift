@@ -55,7 +55,7 @@ struct LibraryView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: DesignSystem.Spacing.md) {
                                         ForEach(filteredBooks, id: \.id) { book in
-                                            NavigationLink(destination: BookDetailView(book: book)) {
+                                            NavigationLink(destination: BookInfoView(book: book)) {
                                                 VStack(spacing: DesignSystem.Spacing.xs) {
                                                     coverImage(for: book)
                                                         .resizable()

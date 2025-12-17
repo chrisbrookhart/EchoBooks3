@@ -276,6 +276,10 @@ struct BookImporter {
                 : nil,
             coverImageName: bookMetadata.coverImageName,
             bookCode: bookMetadata.bookCode,
+            bookLevel: bookMetadata.bookLevel,
+            learningTheme: bookMetadata.learningTheme,
+            whatYouWillPractice: bookMetadata.whatYouWillPractice,
+            estimatedLength: bookMetadata.estimatedLength,
             subBooks: [defaultSubBook]
         )
         

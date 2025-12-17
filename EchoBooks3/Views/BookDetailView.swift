@@ -989,12 +989,28 @@ struct BookDetailView: View {
         let fetchRequest = FetchDescriptor<AppState>(predicate: #Predicate<AppState> { state in
             return state.id == globalStateID
         })
+        
+        // Determine if book is unfinished
+        // A book is unfinished if:
+        // 1. We're not at the last sentence of the last chapter of the last subbook, OR
+        // 2. The slider is not at 1.0 (not at the end)
+        let isUnfinished: Bool = {
+            let isLastSubBook = selectedSubBookIndex == book.effectiveSubBooks.count - 1
+            let isLastChapter = selectedChapterIndex == selectedSubBook.chapters.count - 1
+            let isLastSentence = globalSentenceIndex >= chapterSentences.count - 1
+            let isAtEnd = sliderNormalized >= 0.99 // Use 0.99 to account for floating point precision
+            
+            // Book is unfinished if we're not at the very end
+            return !(isLastSubBook && isLastChapter && isLastSentence && isAtEnd)
+        }()
+        
         if let appState = try? modelContext.fetch(fetchRequest).first {
             appState.lastOpenedView = .bookDetail
             appState.lastOpenedBookID = book.id
+            appState.lastBookUnfinished = isUnfinished
             try? modelContext.save()
         } else {
-            let newAppState = AppState(lastOpenedView: .bookDetail, lastOpenedBookID: book.id)
+            let newAppState = AppState(lastOpenedView: .bookDetail, lastOpenedBookID: book.id, lastBookUnfinished: isUnfinished)
             newAppState.id = globalStateID
             modelContext.insert(newAppState)
             try? modelContext.save()

@@ -258,8 +258,7 @@ struct BookDetailView: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(.horizontal, DesignSystem.Spacing.md)
-                .padding(.bottom, DesignSystem.Spacing.sm)
+                .padding(DesignSystem.Spacing.md)
                 .background(DesignSystem.Colors.cardBackground)
                 .cornerRadius(DesignSystem.CornerRadius.card)
                 .shadow(DesignSystem.Shadow.small)
@@ -384,8 +383,7 @@ struct BookDetailView: View {
                 .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                 .padding(.bottom, DesignSystem.Spacing.sm) // Add bottom padding instead of Spacer
             }
-            .padding(.top, -DesignSystem.Spacing.md)
-            .padding(.bottom, DesignSystem.Spacing.md)
+            .padding(.vertical, DesignSystem.Spacing.md)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 // Set flag to prevent onChange handlers from resetting sentence index

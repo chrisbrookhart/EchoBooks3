@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import SwiftUI
+import UIKit
 
 class AudioPlaybackManager: NSObject, ObservableObject {
     @Published var isPlaying: Bool = false
@@ -310,6 +311,11 @@ class AudioPlaybackManager: NSObject, ObservableObject {
     
     // MARK: - Playback Control
     
+    /// Manages the idle timer to prevent screen from sleeping during playback
+    private func updateIdleTimer() {
+        UIApplication.shared.isIdleTimerDisabled = isPlaying
+    }
+    
     /// Starts audio playback.
     /// Starts audio playback.
     func play() {
@@ -348,6 +354,7 @@ class AudioPlaybackManager: NSObject, ObservableObject {
         }
         
         isPlaying = true
+        updateIdleTimer() // Prevent screen from sleeping
         startPlaybackMonitoring()
     }
     
@@ -355,6 +362,7 @@ class AudioPlaybackManager: NSObject, ObservableObject {
     func pause() {
         audioPlayer?.pause()
         isPlaying = false
+        updateIdleTimer() // Allow screen to sleep again
         stopPlaybackMonitoring()
     }
     
@@ -362,6 +370,7 @@ class AudioPlaybackManager: NSObject, ObservableObject {
     func stop() {
         audioPlayer?.stop()
         isPlaying = false
+        updateIdleTimer() // Allow screen to sleep again
         stopPlaybackMonitoring()
         currentSegment = nil
         currentChunkId = nil
@@ -431,6 +440,7 @@ class AudioPlaybackManager: NSObject, ObservableObject {
 extension AudioPlaybackManager: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         isPlaying = false
+        updateIdleTimer() // Allow screen to sleep again
         stopPlaybackMonitoring()
         onPlaybackFinished?()
     }
@@ -438,6 +448,7 @@ extension AudioPlaybackManager: AVAudioPlayerDelegate {
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         print("ERROR: Audio decode error: \(error?.localizedDescription ?? "Unknown error")")
         isPlaying = false
+        updateIdleTimer() // Allow screen to sleep again
         stopPlaybackMonitoring()
     }
 }

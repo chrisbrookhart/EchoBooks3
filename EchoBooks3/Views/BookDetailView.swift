@@ -16,7 +16,6 @@ struct BookDetailView: View {
     // MARK: - Navigation & Content State
     @State private var selectedSubBookIndex: Int = 0
     @State private var selectedChapterIndex: Int = 0
-    @State private var showingNavigationSheet: Bool = false
     @State private var showSettings: Bool = false
 
     // MARK: - Content Display & Playback State
@@ -194,34 +193,80 @@ struct BookDetailView: View {
     
     var body: some View {
         GeometryReader { geo in
-            ScrollView {
-                VStack(spacing: DesignSystem.Spacing.lg) {
-                    // "Select Chapter" Button.
-                    Button(action: { showingNavigationSheet = true }) {
-                        HStack {
-                            if selectedSubBook.subBookTitle.lowercased() == "default" {
-                                Text(selectedChapter.chapterTitle)
+            VStack(spacing: DesignSystem.Spacing.md) {
+                // Chapter Selector - Direct Menu Picker
+                HStack {
+                    if selectedSubBook.subBookTitle.lowercased() == "default" {
+                        Menu {
+                            ForEach(0..<selectedSubBook.chapters.count, id: \.self) { index in
+                                Button(action: {
+                                    selectedChapterIndex = index
+                                }) {
+                                    Text(selectedSubBook.chapters[index].chapterTitle)
+                                        .frame(minWidth: geo.size.width * 0.9, alignment: .leading)
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text("Chapter \(selectedChapter.chapterNumber)")
                                     .font(DesignSystem.Typography.h3)
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
-                            } else {
-                                Text("\(selectedSubBook.subBookTitle) \(selectedChapter.chapterTitle)")
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                                    .font(DesignSystem.Typography.label)
+                                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                    } else {
+                        // If there are multiple subbooks, show subbook picker first, then chapter
+                        if book.effectiveSubBooks.count > 1 {
+                            Menu {
+                                ForEach(0..<book.effectiveSubBooks.count, id: \.self) { index in
+                                    Button(action: {
+                                        selectedSubBookIndex = index
+                                    }) {
+                                        Text(book.effectiveSubBooks[index].subBookTitle)
+                                    }
+                                }
+                            } label: {
+                                Text(selectedSubBook.subBookTitle)
                                     .font(DesignSystem.Typography.h3)
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(DesignSystem.Typography.label)
-                                .foregroundColor(DesignSystem.Colors.textSecondary)
                         }
-                        .padding(DesignSystem.Spacing.md)
-                        .background(DesignSystem.Colors.cardBackground)
-                        .cornerRadius(DesignSystem.CornerRadius.card)
-                        .shadow(DesignSystem.Shadow.small)
+                        Menu {
+                            ForEach(0..<selectedSubBook.chapters.count, id: \.self) { index in
+                                Button(action: {
+                                    selectedChapterIndex = index
+                                }) {
+                                    Text(selectedSubBook.chapters[index].chapterTitle)
+                                        .frame(minWidth: geo.size.width * 0.9, alignment: .leading)
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text("Chapter \(selectedChapter.chapterNumber)")
+                                    .font(DesignSystem.Typography.h3)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                                    .font(DesignSystem.Typography.label)
+                                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    
-                    // Enlarged Sentence Display Area.
-                    ZStack {
+                }
+                .padding(.horizontal, DesignSystem.Spacing.md)
+                .padding(.bottom, DesignSystem.Spacing.sm)
+                .background(DesignSystem.Colors.cardBackground)
+                .cornerRadius(DesignSystem.CornerRadius.card)
+                .shadow(DesignSystem.Shadow.small)
+                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                
+                // Enlarged Sentence Display Area - flexible height
+                ZStack {
                         LinearGradient(
                             gradient: Gradient(colors: [
                                 DesignSystem.Colors.gradientStart,
@@ -230,29 +275,29 @@ struct BookDetailView: View {
                             startPoint: .top,
                             endPoint: .bottom
                         )
-                        Text(currentSentence)
-                            .font(DesignSystem.Typography.sentenceDisplay)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(DesignSystem.Spacing.sm)
-                            .padding(DesignSystem.Spacing.lg)
+                    Text(currentSentence)
+                        .font(DesignSystem.Typography.sentenceDisplay)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(DesignSystem.Spacing.sm)
+                        .padding(DesignSystem.Spacing.lg)
+                }
+                .frame(maxHeight: geo.size.height * 0.5) // Use maxHeight instead of fixed height
+                .cornerRadius(DesignSystem.CornerRadius.lg)
+                .shadow(DesignSystem.Shadow.medium)
+                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                
+                // Playback Controls.
+                HStack {
+                    Spacer()
+                    Button(action: { skipBackwardAction() }) {
+                        Image(systemName: "arrow.trianglehead.counterclockwise")
+                            .font(.system(size: DesignSystem.Layout.playbackControlSize))
                     }
-                    .frame(height: geo.size.height * 0.65)
-                    .cornerRadius(DesignSystem.CornerRadius.lg)
-                    .shadow(DesignSystem.Shadow.medium)
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    
-                    // Playback Controls.
-                    HStack {
-                        Spacer()
-                        Button(action: { skipBackwardAction() }) {
-                            Image(systemName: "arrow.trianglehead.counterclockwise")
-                                .font(.system(size: DesignSystem.Layout.playbackControlSize))
-                        }
-                        .disabled(globalSentenceIndex == 0)
-                        .foregroundColor(globalSentenceIndex == 0 ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
-                        Spacer()
-                        Button(action: {
+                    .disabled(globalSentenceIndex == 0)
+                    .foregroundColor(globalSentenceIndex == 0 ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
+                    Spacer()
+                    Button(action: {
                             if isPlaying {
                                 isPlaying = false
                                 audioManager.pause()
@@ -281,107 +326,67 @@ struct BookDetailView: View {
                                 }
                                 didPause = false
                             }
-                        }) {
-                            Image(systemName: isAtEnd || !isPlaying ? "play.circle.fill" : "pause.circle.fill")
-                                .font(.system(size: DesignSystem.Layout.playbackButtonSize))
-                        }
-                        .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
-                        .disabled(isAtEnd)
-                        Spacer()
-                        Button(action: { skipForwardAction() }) {
-                            Image(systemName: "arrow.trianglehead.clockwise")
-                                .font(.system(size: DesignSystem.Layout.playbackControlSize))
-                        }
-                        .disabled(isAtEnd)
-                        .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
-                        Spacer()
+                    }) {
+                        Image(systemName: isAtEnd || !isPlaying ? "play.circle.fill" : "pause.circle.fill")
+                            .font(.system(size: DesignSystem.Layout.playbackButtonSize))
                     }
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    
-                    // Normalized Slider for Chapter Navigation.
-                    Slider(
-                        value: Binding(
-                            get: { sliderNormalized },
-                            set: { newValue in
-                                sliderNormalized = newValue
-                                let computedIndex = Int(round(newValue * Double(totalSentences - 1)))
-                                globalSentenceIndex = computedIndex
-                                // Use the language for the current playback stage
-                                let languageCode = getLanguageCodeForCurrentStage()
-                                if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
-                                    currentSentence = sentenceText
-                                    if let sentenceId = getCurrentSentenceId() {
-                                        audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
-                                        if isPlaying {
-                                            if currentPlaybackStage == 1 {
-                                                audioManager.setRate(Float(selectedSpeed1))
-                                            } else if currentPlaybackStage == 2 {
-                                                audioManager.setRate(Float(selectedSpeed2))
-                                            } else if currentPlaybackStage == 3 {
-                                                audioManager.setRate(Float(selectedSpeed3))
-                                            }
-                                            audioManager.play()
+                    .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
+                    .disabled(isAtEnd)
+                    Spacer()
+                    Button(action: { skipForwardAction() }) {
+                        Image(systemName: "arrow.trianglehead.clockwise")
+                            .font(.system(size: DesignSystem.Layout.playbackControlSize))
+                    }
+                    .disabled(isAtEnd)
+                    .foregroundColor(isAtEnd ? DesignSystem.Colors.interactiveDisabled : DesignSystem.Colors.primary)
+                    Spacer()
+                }
+                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                
+                // Normalized Slider for Chapter Navigation.
+                Slider(
+                    value: Binding(
+                        get: { sliderNormalized },
+                        set: { newValue in
+                            sliderNormalized = newValue
+                            let computedIndex = Int(round(newValue * Double(totalSentences - 1)))
+                            globalSentenceIndex = computedIndex
+                            // Use the language for the current playback stage
+                            let languageCode = getLanguageCodeForCurrentStage()
+                            if let sentenceText = getCurrentSentenceText(languageCode: languageCode) {
+                                currentSentence = sentenceText
+                                if let sentenceId = getCurrentSentenceId() {
+                                    audioManager.loadAudio(sentenceId: sentenceId, bookCode: book.bookCode, languageCode: languageCode)
+                                    if isPlaying {
+                                        if currentPlaybackStage == 1 {
+                                            audioManager.setRate(Float(selectedSpeed1))
+                                        } else if currentPlaybackStage == 2 {
+                                            audioManager.setRate(Float(selectedSpeed2))
+                                        } else if currentPlaybackStage == 3 {
+                                            audioManager.setRate(Float(selectedSpeed3))
                                         }
+                                        audioManager.play()
                                     }
                                 }
-                                let computedSlider = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
-                                print("DEBUG: [Slider Update] totalSentences = \(totalSentences), globalSentenceIndex = \(globalSentenceIndex), computed normalized slider = \(computedSlider)")
-                                saveBookState()
-                                updateGlobalAppStateForBookDetail()
                             }
-                        ),
-                        in: 0...maxSliderNormalized,
-                        onEditingChanged: { _ in
+                            let computedSlider = totalSentences > 0 ? Double(globalSentenceIndex) / Double(totalSentences - 1) : 0.0
+                            print("DEBUG: [Slider Update] totalSentences = \(totalSentences), globalSentenceIndex = \(globalSentenceIndex), computed normalized slider = \(computedSlider)")
                             saveBookState()
                             updateGlobalAppStateForBookDetail()
                         }
-                    )
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    
-                    Spacer()
-                }
-                .padding(.vertical, DesignSystem.Spacing.lg)
-            }
-            // Modal Sheet for Subbook/Chapter Selection.
-            .sheet(isPresented: $showingNavigationSheet) {
-                NavigationStack {
-                    Form {
-                        if book.effectiveSubBooks.count > 1 && book.effectiveSubBooks.first?.subBookTitle.lowercased() != "default" {
-                            HStack {
-                                Spacer()
-                                Picker("", selection: $selectedSubBookIndex) {
-                                    ForEach(0..<book.effectiveSubBooks.count, id: \.self) { index in
-                                        Text(book.effectiveSubBooks[index].subBookTitle).tag(index)
-                                    }
-                                }
-                                .pickerStyle(MenuPickerStyle())
-                                Spacer()
-                            }
-                        }
-                        HStack {
-                            Spacer()
-                            Picker("", selection: $selectedChapterIndex) {
-                                ForEach(0..<selectedSubBook.chapters.count, id: \.self) { index in
-                                    Text(selectedSubBook.chapters[index].chapterTitle).tag(index)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            Spacer()
-                        }
+                    ),
+                    in: 0...maxSliderNormalized,
+                    onEditingChanged: { _ in
+                        saveBookState()
+                        updateGlobalAppStateForBookDetail()
                     }
-                    .padding(DesignSystem.Spacing.md)
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") {
-                                showingNavigationSheet = false
-                                updateCurrentSentenceForSelection()
-                            }
-                            .font(DesignSystem.Typography.button)
-                            .foregroundColor(DesignSystem.Colors.primary)
-                        }
-                    }
-                }
+                )
+                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                .padding(.bottom, DesignSystem.Spacing.sm) // Add bottom padding instead of Spacer
             }
+            .padding(.top, -DesignSystem.Spacing.md)
+            .padding(.bottom, DesignSystem.Spacing.md)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 // Set flag to prevent onChange handlers from resetting sentence index
                 isRestoringState = true

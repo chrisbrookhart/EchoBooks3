@@ -10,23 +10,77 @@ import Foundation
 
 struct BookImporter {
     
-    /// Scans the bundle for books in the new format and imports them.
+    /// Scans both bundle and Application Support Directory for books in the new format and imports them.
+    /// Downloaded books in Application Support take precedence over bundle books.
     /// - Returns: An array of decoded Book objects.
     static func importBooks() -> [Book] {
         var books: [Book] = []
         
         print("🔍 BookImporter: Starting book discovery...")
         
-        // Use FileManager to search for book_title.json files since Bundle.main.urls isn't finding them
-        guard let resourcePath = Bundle.main.resourcePath else {
-            print("❌ BookImporter: Could not get bundle resource path")
-            return books
+        // Get all book directories (bundle + Application Support)
+        let bookDirectories = getBooksDirectories()
+        
+        // Track which books we've already imported (by bookCode) to avoid duplicates
+        // Downloaded books take precedence
+        var importedBookCodes: Set<String> = []
+        
+        // First, import from Application Support (downloaded books)
+        if let appSupportDir = bookDirectories.first(where: { $0.path.contains("Application Support") }) {
+            print("📦 BookImporter: Checking Application Support: \(appSupportDir.path)")
+            let appSupportBooks = importBooks(from: appSupportDir)
+            for book in appSupportBooks {
+                books.append(book)
+                importedBookCodes.insert(book.bookCode)
+            }
         }
         
-        print("📦 BookImporter: Bundle resource path: \(resourcePath)")
+        // Then, import from bundle (only if not already imported from Application Support)
+        if let bundleDir = bookDirectories.first(where: { $0.path.contains("Bundle") || !$0.path.contains("Application Support") }) {
+            print("📦 BookImporter: Checking Bundle: \(bundleDir.path)")
+            let bundleBooks = importBooks(from: bundleDir)
+            for book in bundleBooks {
+                if !importedBookCodes.contains(book.bookCode) {
+                    books.append(book)
+                    importedBookCodes.insert(book.bookCode)
+                }
+            }
+        }
+        
+        print("📚 BookImporter: Imported \(books.count) books total")
+        return books
+    }
+    
+    /// Gets all directories where books can be found (bundle + Application Support)
+    private static func getBooksDirectories() -> [URL] {
+        var directories: [URL] = []
+        let fileManager = FileManager.default
+        
+        // 1. Bundle directory
+        if let resourcePath = Bundle.main.resourcePath {
+            let booksPath = (resourcePath as NSString).appendingPathComponent("Books")
+            if fileManager.fileExists(atPath: booksPath) {
+                directories.append(URL(fileURLWithPath: booksPath))
+            }
+        }
+        
+        // 2. Application Support directory
+        if let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            let booksPath = appSupport.appendingPathComponent("Books", isDirectory: true)
+            if fileManager.fileExists(atPath: booksPath.path) {
+                directories.append(booksPath)
+            }
+        }
+        
+        return directories
+    }
+    
+    /// Imports books from a specific directory
+    private static func importBooks(from directory: URL) -> [Book] {
+        var books: [Book] = []
         
         let fileManager = FileManager.default
-        let booksPath = (resourcePath as NSString).appendingPathComponent("Books")
+        let booksPath = directory.path
         
         guard fileManager.fileExists(atPath: booksPath) else {
             print("❌ BookImporter: Books folder NOT found at: \(booksPath)")
@@ -52,7 +106,6 @@ struct BookImporter {
             }
             
             var fileCount = 0
-            var dirCount = 0
             var jsonFiles: [String] = []
             
             for case let item as String in enumerator {
@@ -88,7 +141,7 @@ struct BookImporter {
                 }
             }
             
-            print("📊 BookImporter: Found \(fileCount) files, \(dirCount) directories")
+            print("📊 BookImporter: Found \(fileCount) files")
             print("📄 BookImporter: Found \(jsonFiles.count) JSON files: \(jsonFiles)")
             
             // Also try listing CLOCK_book directly
@@ -162,62 +215,41 @@ struct BookImporter {
     }
     
     /// Checks if a book folder contains the new format structure.
+    /// Checks both bundle and Application Support directories.
     /// - Parameter bookCode: The book code (e.g., "CLOCK")
     /// - Returns: true if new format files are found, false otherwise
     private static func isNewFormatBook(bookCode: String) -> Bool {
         let bookRootPath = "\(bookCode)_book"
+        let fileManager = FileManager.default
         
-        // Try Bundle.main.url first
-        var hasContentIndex = Bundle.main.url(
-            forResource: "content_index",
-            withExtension: "json",
-            subdirectory: "Books/\(bookRootPath)/app"
-        ) != nil || Bundle.main.url(
-            forResource: "content_index",
-            withExtension: "json",
-            subdirectory: "\(bookRootPath)/app"
-        ) != nil
+        // Check both bundle and Application Support
+        let directories = getBooksDirectories()
         
-        var hasBookTitle = Bundle.main.url(
-            forResource: "book_title",
-            withExtension: "json",
-            subdirectory: "Books/\(bookRootPath)/universal"
-        ) != nil || Bundle.main.url(
-            forResource: "book_title",
-            withExtension: "json",
-            subdirectory: "\(bookRootPath)/universal"
-        ) != nil
-        
-        // Fallback to FileManager if Bundle.main.url fails
-        if !hasContentIndex || !hasBookTitle {
-            guard let resourcePath = Bundle.main.resourcePath else {
-                return hasContentIndex || hasBookTitle
-            }
+        for directory in directories {
+            let bookPath = directory.appendingPathComponent(bookRootPath, isDirectory: true)
             
-            let fileManager = FileManager.default
-            let booksPath = (resourcePath as NSString).appendingPathComponent("Books")
-            let bookPath = (booksPath as NSString).appendingPathComponent(bookRootPath)
+            let contentIndexPath = bookPath.appendingPathComponent("app/content_index.json")
+            let bookTitlePath = bookPath.appendingPathComponent("universal/book_title.json")
             
-            if !hasContentIndex {
-                let contentIndexPath = (bookPath as NSString).appendingPathComponent("app/content_index.json")
-                hasContentIndex = fileManager.fileExists(atPath: contentIndexPath)
-            }
+            let hasContentIndex = fileManager.fileExists(atPath: contentIndexPath.path)
+            let hasBookTitle = fileManager.fileExists(atPath: bookTitlePath.path)
             
-            if !hasBookTitle {
-                let bookTitlePath = (bookPath as NSString).appendingPathComponent("universal/book_title.json")
-                hasBookTitle = fileManager.fileExists(atPath: bookTitlePath)
+            if hasContentIndex || hasBookTitle {
+                print("🔍 BookImporter: Checking \(bookCode) in \(directory.path) - hasContentIndex: \(hasContentIndex), hasBookTitle: \(hasBookTitle)")
+                return true
             }
         }
         
-        print("🔍 BookImporter: Checking \(bookCode) - hasContentIndex: \(hasContentIndex), hasBookTitle: \(hasBookTitle)")
-        
-        return hasContentIndex || hasBookTitle
+        return false
     }
     
     /// Imports a book from the new format structure.
+    /// Checks both bundle and Application Support directories.
     /// - Parameter bookCode: The book code (e.g., "CLOCK")
     /// - Returns: A Book object if successfully loaded, nil otherwise
     private static func importNewFormatBook(bookCode: String) throws -> Book {
+        // ContentLoader will check both bundle and Application Support
+        // (we'll update ContentLoader to do this)
         let contentLoader = ContentLoader(bookCode: bookCode)
         
         // Load book metadata
@@ -280,6 +312,8 @@ struct BookImporter {
             learningTheme: bookMetadata.learningTheme,
             whatYouWillPractice: bookMetadata.whatYouWillPractice,
             estimatedLength: bookMetadata.estimatedLength,
+            isFree: bookMetadata.isFree ?? false, // Default to false if not present
+            productIdentifier: bookMetadata.productIdentifier,
             subBooks: [defaultSubBook]
         )
         

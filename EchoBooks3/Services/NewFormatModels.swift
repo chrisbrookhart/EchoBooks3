@@ -23,6 +23,8 @@ struct BookMetadata: Codable {
     let learningTheme: String?
     let whatYouWillPractice: [String]?
     let estimatedLength: String?
+    let isFree: Bool?
+    let productIdentifier: String?
     
     enum CodingKeys: String, CodingKey {
         case bookID = "bookID"
@@ -37,6 +39,8 @@ struct BookMetadata: Codable {
         case learningTheme = "learningTheme"
         case whatYouWillPractice = "whatYouWillPractice"
         case estimatedLength = "estimatedLength"
+        case isFree = "isFree"
+        case productIdentifier = "productIdentifier"
     }
 }
 

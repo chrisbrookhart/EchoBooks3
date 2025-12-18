@@ -36,9 +36,25 @@ class AudioMappingLoader {
     
     // MARK: - File Resource Helper
     
-    /// Attempts to find a resource using FileManager as fallback
+    /// Attempts to find a resource, checking Application Support first, then bundle.
+    /// Downloaded books in Application Support take precedence over bundle books.
     private func findResourceWithFileManager(name: String, extension ext: String, subdirectory: String) -> URL? {
-        // First try Bundle.main.url with Books prefix (works if files are properly registered)
+        let fileManager = FileManager.default
+        let fileName = "\(name).\(ext)"
+        
+        // 1. First check Application Support Directory (downloaded books)
+        if let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            let booksPath = appSupport.appendingPathComponent("Books", isDirectory: true)
+            let bookPath = booksPath.appendingPathComponent(bookRootPath, isDirectory: true)
+            let filePath = bookPath.appendingPathComponent(subdirectory).appendingPathComponent(fileName)
+            
+            if fileManager.fileExists(atPath: filePath.path) {
+                return filePath
+            }
+        }
+        
+        // 2. Then check Bundle (bundle books)
+        // Try Bundle.main.url with Books prefix
         if let url = Bundle.main.url(
             forResource: name,
             withExtension: ext,
@@ -56,15 +72,14 @@ class AudioMappingLoader {
             return url
         }
         
-        // Fallback: Use FileManager to search in Books folder
+        // Fallback: Use FileManager to search in Bundle Books folder
         guard let resourcePath = Bundle.main.resourcePath else {
             return nil
         }
         
-        let fileManager = FileManager.default
         let booksPath = (resourcePath as NSString).appendingPathComponent("Books")
         let searchPath = (booksPath as NSString).appendingPathComponent("\(bookRootPath)/\(subdirectory)")
-        let filePath = (searchPath as NSString).appendingPathComponent("\(name).\(ext)")
+        let filePath = (searchPath as NSString).appendingPathComponent(fileName)
         
         if fileManager.fileExists(atPath: filePath) {
             return URL(fileURLWithPath: filePath)

@@ -49,6 +49,12 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
     /// Estimated length of the book (optional).
     var estimatedLength: String?
     
+    /// Whether the book is free (true) or requires a subscription (false).
+    var isFree: Bool
+    
+    /// StoreKit product identifier for this book (optional, only for downloadable books).
+    var productIdentifier: String?
+    
     // MARK: - Relationships
     
     /// The subbooks in this book. Optional - for new format books, a default subbook is created.
@@ -69,6 +75,8 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         case learningTheme
         case whatYouWillPractice
         case estimatedLength
+        case isFree
+        case productIdentifier
         case subBooks
     }
     
@@ -88,6 +96,8 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.learningTheme = try container.decodeIfPresent(String.self, forKey: .learningTheme)
         self.whatYouWillPractice = try container.decodeIfPresent([String].self, forKey: .whatYouWillPractice)
         self.estimatedLength = try container.decodeIfPresent(String.self, forKey: .estimatedLength)
+        self.isFree = try container.decodeIfPresent(Bool.self, forKey: .isFree) ?? false // Default to false if not present
+        self.productIdentifier = try container.decodeIfPresent(String.self, forKey: .productIdentifier)
         // subBooks is optional - decode if present, otherwise nil
         self.subBooks = try container.decodeIfPresent([SubBook].self, forKey: .subBooks)
     }
@@ -106,6 +116,8 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         learningTheme: String? = nil,
         whatYouWillPractice: [String]? = nil,
         estimatedLength: String? = nil,
+        isFree: Bool = false,
+        productIdentifier: String? = nil,
         subBooks: [SubBook]? = nil
     ) {
         self.id = id
@@ -119,6 +131,8 @@ final class Book: Identifiable, Hashable, Decodable, Validatable {
         self.learningTheme = learningTheme
         self.whatYouWillPractice = whatYouWillPractice
         self.estimatedLength = estimatedLength
+        self.isFree = isFree
+        self.productIdentifier = productIdentifier
         self.subBooks = subBooks
     }
     

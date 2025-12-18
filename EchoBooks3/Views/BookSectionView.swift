@@ -10,6 +10,9 @@ struct BookSectionView: View {
     let books: [Book]
     let itemWidth: CGFloat
     let itemHeight: CGFloat
+    let isSubscribed: Bool
+    let isBookDownloaded: (Book) -> Bool
+    let onDelete: ((Book) -> Void)?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -31,9 +34,16 @@ struct BookSectionView: View {
                     HStack(spacing: 16) {
                         ForEach(books, id: \.id) { book in
                             NavigationLink(destination: BookDetailView(book: book)) {
-                                BookItemView(book: book, width: itemWidth, height: itemHeight)
-                                    .transition(.opacity)
-                                    .animation(.easeInOut, value: books.count)
+                                BookItemView(
+                                    book: book,
+                                    width: itemWidth,
+                                    height: itemHeight,
+                                    isSubscribed: isSubscribed,
+                                    isDownloaded: isBookDownloaded(book),
+                                    onDelete: onDelete != nil ? { onDelete?(book) } : nil
+                                )
+                                .transition(.opacity)
+                                .animation(.easeInOut, value: books.count)
                             }
                         }
                     }

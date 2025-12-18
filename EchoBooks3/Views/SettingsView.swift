@@ -52,20 +52,20 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("Language Selection")) {
-                    Picker("Primary", selection: selectedLanguage1) {
+                    Picker("Slot 1", selection: selectedLanguage1) {
                         ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
                         }
                     }
                     
-                    Picker("Secondary", selection: selectedLanguage2) {
+                    Picker("Slot 2", selection: selectedLanguage2) {
                         Text("None").tag("None")
                         ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
                         }
                     }
                     
-                    Picker("Tertiary", selection: selectedLanguage3) {
+                    Picker("Slot 3", selection: selectedLanguage3) {
                         Text("None").tag("None")
                         ForEach(availableLanguages, id: \.rawValue) { lang in
                             Text(lang.name).tag(lang.rawValue)
@@ -74,19 +74,19 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("Playback Speed")) {
-                    Picker("Primary Speed", selection: $selectedSpeed1) {
+                    Picker("Slot 1", selection: $selectedSpeed1) {
                         ForEach(speedOptions, id: \.self) { speed in
                             Text(String(format: "%.2f", speed)).tag(speed)
                         }
                     }
                     
-                    Picker("Secondary Speed", selection: $selectedSpeed2) {
+                    Picker("Slot 2", selection: $selectedSpeed2) {
                         ForEach(speedOptions, id: \.self) { speed in
                             Text(String(format: "%.2f", speed)).tag(speed)
                         }
                     }
                     
-                    Picker("Tertiary Speed", selection: $selectedSpeed3) {
+                    Picker("Slot 3", selection: $selectedSpeed3) {
                         ForEach(speedOptions, id: \.self) { speed in
                             Text(String(format: "%.2f", speed)).tag(speed)
                         }

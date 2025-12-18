@@ -25,16 +25,23 @@ struct EchoBooks3App: App {
         }
     }()
     
-    init() {
-        // Configure audio session for playback
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback, mode: .default)
-            try audioSession.setActive(true)
-        } catch {
-            print("Failed to configure audio session: \(error)")
+        init() {
+            // Configure audio session for playback
+            do {
+                let audioSession = AVAudioSession.sharedInstance()
+                try audioSession.setCategory(.playback, mode: .default)
+                try audioSession.setActive(true)
+            } catch {
+                print("Failed to configure audio session: \(error)")
+            }
+            
+            // Initialize subscription manager and check status
+            // SubscriptionManager initializes itself and starts observing transactions
+            Task { @MainActor in
+                let manager = SubscriptionManager()
+                await manager.checkSubscriptionStatus()
+            }
         }
-    }
     
     var body: some Scene {
         WindowGroup {

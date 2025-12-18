@@ -13,18 +13,59 @@ struct LibraryView: View {
     @Environment(\.modelContext) private var modelContext
     
     // MARK: - State Variables
-    @State private var books: [Book] = []          // Downloaded books imported from the bundle.
-    @State private var searchText: String = ""       // Search text.
+    @StateObject private var subscriptionManager = SubscriptionManager()
+    @StateObject private var bookStoreService = BookStoreService()
+    @StateObject private var downloadManager = BookDownloadManager()
+    
+    @State private var books: [Book] = []          // Downloaded books imported from bundle + Application Support
+    @State private var availableBooks: [Book] = [] // All available books (from BookStoreService)
+    @State private var searchText: String = ""       // Search text
     @State private var showMiniPlayer: Bool = false  // Whether to show the mini-player
     
     // MARK: - Computed Properties
-    /// Filters the downloaded books by title.
-    private var filteredBooks: [Book] {
-        if searchText.isEmpty {
-            return books
-        } else {
-            return books.filter { $0.bookTitle.localizedCaseInsensitiveContains(searchText) }
+    
+    /// Books that are downloaded (on device - bundle or Application Support)
+    /// For testing: bundle books show here so they can be used immediately
+    private var downloadedBooks: [Book] {
+        books.filter { downloadManager.isBookDownloaded(bookCode: $0.bookCode) }
+    }
+    
+    /// Books that are available for download (not on device)
+    private var booksForDownload: [Book] {
+        availableBooks.filter { book in
+            !downloadManager.isBookDownloaded(bookCode: book.bookCode)
         }
+    }
+    
+    /// Filters downloaded books by search text
+    private var filteredDownloadedBooks: [Book] {
+        let filtered = downloadedBooks
+        if searchText.isEmpty {
+            return filtered
+        } else {
+            return filtered.filter { $0.bookTitle.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
+    
+    /// Filters available books by search text
+    private var filteredAvailableBooks: [Book] {
+        let filtered = booksForDownload
+        if searchText.isEmpty {
+            return filtered
+        } else {
+            return filtered.filter { $0.bookTitle.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
+    
+    /// Checks if a book is downloaded (in Application Support only)
+    /// Used for deletion - only Application Support books can be deleted
+    private func isBookDownloaded(_ book: Book) -> Bool {
+        downloadManager.isBookDownloadedOnly(bookCode: book.bookCode)
+    }
+    
+    /// Checks if a book is in the bundle (cannot be deleted)
+    private func isBookInBundle(_ book: Book) -> Bool {
+        downloadManager.isBookInBundle(bookCode: book.bookCode)
     }
     
     var body: some View {
@@ -45,7 +86,7 @@ struct LibraryView: View {
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
                                     .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                                 
-                                if filteredBooks.isEmpty {
+                                if filteredDownloadedBooks.isEmpty {
                                     // Empty state view for downloaded books.
                                     VStack(spacing: DesignSystem.Spacing.sm) {
                                         Text("No downloaded books found.")
@@ -60,25 +101,20 @@ struct LibraryView: View {
                                 } else {
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack(spacing: DesignSystem.Spacing.md) {
-                                            ForEach(filteredBooks, id: \.id) { book in
+                                            ForEach(filteredDownloadedBooks, id: \.id) { book in
                                                 NavigationLink(destination: BookInfoView(book: book)) {
-                                                    VStack(spacing: DesignSystem.Spacing.xs) {
-                                                        coverImage(for: book)
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fill)
-                                                            .frame(width: itemWidth, height: itemHeight)
-                                                            .clipped()
-                                                            .cornerRadius(DesignSystem.CornerRadius.bookCover)
-                                                            .shadow(DesignSystem.Shadow.card)
-                                                        Text(book.bookTitle)
-                                                            .font(DesignSystem.Typography.caption)
-                                                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                                                            .lineLimit(4)
-                                                            .multilineTextAlignment(.center)
-                                                            .frame(width: itemWidth, height: 60) // Reserve space for up to 4 lines
-                                                    }
+                                                    BookItemView(
+                                                        book: book,
+                                                        width: itemWidth,
+                                                        height: itemHeight,
+                                                        isSubscribed: subscriptionManager.isSubscribed,
+                                                        isDownloaded: isBookDownloaded(book), // Only true for Application Support books
+                                                        onDelete: isBookDownloaded(book) ? { // Only allow delete for downloaded books
+                                                            deleteBook(book)
+                                                        } : nil
+                                                    )
                                                     .transition(.opacity)
-                                                    .animation(DesignSystem.Animation.springQuick, value: filteredBooks.count)
+                                                    .animation(DesignSystem.Animation.springQuick, value: filteredDownloadedBooks.count)
                                                 }
                                             }
                                         }
@@ -87,36 +123,48 @@ struct LibraryView: View {
                                 }
                             }
                             
-                            // Available for Download Section (Placeholder)
+                            // Available for Download Section
                             VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                                 Text("Available for Download")
                                     .font(DesignSystem.Typography.h2)
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
                                     .padding(.horizontal, DesignSystem.Spacing.screenPadding)
                                 
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: DesignSystem.Spacing.md) {
-                                        ForEach(0..<7, id: \.self) { index in
-                                            VStack(spacing: DesignSystem.Spacing.xs) {
-                                                Image("DefaultCover")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(width: itemWidth, height: itemHeight)
-                                                    .clipped()
-                                                    .cornerRadius(DesignSystem.CornerRadius.bookCover)
-                                                    .shadow(DesignSystem.Shadow.card)
-                                                Text("Placeholder \(index + 1)")
-                                                    .font(DesignSystem.Typography.caption)
-                                                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                                                    .lineLimit(3)
-                                                    .multilineTextAlignment(.center)
-                                                    .frame(width: itemWidth)  // Constrain width for wrapping.
-                                            }
-                                            .transition(.opacity)
-                                            .animation(DesignSystem.Animation.springQuick, value: index)
-                                        }
+                                if bookStoreService.isLoading {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                        Spacer()
                                     }
-                                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                                    .padding(DesignSystem.Spacing.lg)
+                                } else if filteredAvailableBooks.isEmpty {
+                                    VStack(spacing: DesignSystem.Spacing.sm) {
+                                        Text("No books available for download.")
+                                            .font(DesignSystem.Typography.body)
+                                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(DesignSystem.Spacing.lg)
+                                } else {
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: DesignSystem.Spacing.md) {
+                                            ForEach(filteredAvailableBooks, id: \.id) { book in
+                                                NavigationLink(destination: BookInfoView(book: book)) {
+                                                    BookItemView(
+                                                        book: book,
+                                                        width: itemWidth,
+                                                        height: itemHeight,
+                                                        isSubscribed: subscriptionManager.isSubscribed,
+                                                        isDownloaded: false, // Not downloaded yet
+                                                        onDelete: nil // Can't delete what's not downloaded
+                                                    )
+                                                    .transition(.opacity)
+                                                    .animation(DesignSystem.Animation.springQuick, value: filteredAvailableBooks.count)
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                                    }
                                 }
                             }
                             
@@ -147,28 +195,51 @@ struct LibraryView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Search Books")
-        .onAppear {
-            self.books = BookImporter.importBooks()
+        .task {
+            // Load books and available books on appear
+            await loadBooks()
+        }
+        .refreshable {
+            // Refresh on pull-to-refresh
+            await loadBooks()
             checkForUnfinishedBook()
         }
         .onChange(of: books.count) { _, _ in
             // Re-check when books are loaded
             checkForUnfinishedBook()
         }
-        .refreshable {
-            // Allow pull-to-refresh to update mini-player
-            checkForUnfinishedBook()
-        }
     }
     
-    // MARK: - Helper: Cover Image Lookup
-    /// Returns an Image for the book's cover by stripping any file extension from the coverImageName.
-    private func coverImage(for book: Book) -> Image {
-        let assetName = (book.coverImageName as NSString).deletingPathExtension
-        if UIImage(named: assetName) != nil {
-            return Image(assetName)
-        } else {
-            return Image("DefaultCover")
+    // MARK: - Helper: Load Books
+    
+    /// Loads books from both bundle/Application Support and available books from StoreKit
+    private func loadBooks() async {
+        // Load downloaded books (bundle + Application Support)
+        self.books = BookImporter.importBooks()
+        
+        // Load available books from StoreKit
+        do {
+            try await bookStoreService.fetchAvailableBooks()
+            self.availableBooks = bookStoreService.availableBooks
+        } catch {
+            print("❌ LibraryView: Failed to load available books: \(error.localizedDescription)")
+        }
+        
+        // Check subscription status
+        await subscriptionManager.checkSubscriptionStatus()
+    }
+    
+    // MARK: - Helper: Delete Book
+    
+    /// Deletes a downloaded book
+    private func deleteBook(_ book: Book) {
+        do {
+            try downloadManager.deleteBook(bookCode: book.bookCode)
+            // Refresh books list
+            self.books = BookImporter.importBooks()
+        } catch {
+            print("❌ LibraryView: Failed to delete book: \(error.localizedDescription)")
+            // TODO: Show error alert to user
         }
     }
     

@@ -74,14 +74,9 @@ struct MiniPlayerView: View {
     
     // MARK: - Helper: Cover Image Lookup
     
-    /// Returns an Image for the book's cover by stripping any file extension from the coverImageName.
+    /// Returns an Image for the book's cover, checking downloaded book folder first, then bundle.
     private func coverImage(for book: Book) -> Image {
-        let assetName = (book.coverImageName as NSString).deletingPathExtension
-        if UIImage(named: assetName) != nil {
-            return Image(assetName)
-        } else {
-            return Image("DefaultCover")
-        }
+        CoverImageLoader.loadCoverImage(for: book)
     }
     
     // MARK: - Load Last Book

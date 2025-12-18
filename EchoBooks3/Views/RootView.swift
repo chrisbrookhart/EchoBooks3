@@ -22,7 +22,9 @@ struct RootView: View {
                 LibraryView()
             }
         }
-        .onAppear {
+        .task {
+            // Perform first launch setup (copies example books if needed)
+            await FirstLaunchSetup.performFirstLaunchSetup(modelContext: modelContext)
             loadGlobalAppState()
         }
     }

@@ -15,54 +15,157 @@ struct BookInfoView: View {
     
     let book: Book
     
+    // MARK: - State Objects
+    
+    @StateObject private var subscriptionManager = SubscriptionManager()
+    @StateObject private var downloadManager = BookDownloadManager()
+    
     // MARK: - State
     
     @State private var isOnDevice: Bool = false
     @State private var availableLanguages: [LanguageCode] = []
     @State private var showLevelInfo: Bool = false
+    @State private var showLanguageSelection: Bool = false
+    @State private var selectedLanguages: [LanguageCode] = []
+    @State private var isDownloading: Bool = false
+    @State private var downloadProgress: Double = 0.0
+    @State private var downloadError: String?
     
     // MARK: - Computed Properties
     
-    /// Determines if the book is on device by checking if it exists in imported books
+    /// Determines if the book is on device by checking both bundle and Application Support
+    /// For UI purposes, we consider it "on device" if it's in either location
     private func checkIfOnDevice() {
-        let onDeviceBooks = BookImporter.importBooks()
-        isOnDevice = onDeviceBooks.contains { $0.id == book.id }
+        // Check if book is downloaded (in Application Support) or in bundle
+        isOnDevice = downloadManager.isBookDownloaded(bookCode: book.bookCode)
     }
     
-    /// Determines available languages by checking the audio folder structure
+    /// Determines available languages from book metadata or file structure
     private func loadAvailableLanguages() {
+        // First, try to use languages from book metadata
+        if !book.languages.isEmpty {
+            availableLanguages = book.languages.sorted { $0.name < $1.name }
+            return
+        }
+        
+        // Fallback: Check file structure (bundle or Application Support)
+        let fileManager = FileManager.default
+        let bookRootPath = "\(book.bookCode)_book"
+        
+        // Check Application Support first
+        if let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            let booksPath = appSupport.appendingPathComponent("Books", isDirectory: true)
+            let audioFolderPath = booksPath.appendingPathComponent(bookRootPath).appendingPathComponent("audio", isDirectory: true)
+            
+            if fileManager.fileExists(atPath: audioFolderPath.path),
+               let audioContents = try? fileManager.contentsOfDirectory(atPath: audioFolderPath.path) {
+                var languages: [LanguageCode] = []
+                for langFolder in audioContents {
+                    let langFolderPath = audioFolderPath.appendingPathComponent(langFolder)
+                    var isDirectory: ObjCBool = false
+                    if fileManager.fileExists(atPath: langFolderPath.path, isDirectory: &isDirectory),
+                       isDirectory.boolValue,
+                       let languageCode = LanguageCode.fromCode(langFolder) {
+                        languages.append(languageCode)
+                    }
+                }
+                if !languages.isEmpty {
+                    availableLanguages = languages.sorted { $0.name < $1.name }
+                    return
+                }
+            }
+        }
+        
+        // Check bundle
         guard let resourcePath = Bundle.main.resourcePath else {
             return
         }
         
-        let fileManager = FileManager.default
-        let bookRootPath = "\(book.bookCode)_book"
         let booksPath = (resourcePath as NSString).appendingPathComponent("Books")
         let audioFolderPath = (booksPath as NSString).appendingPathComponent("\(bookRootPath)/audio")
         
-        guard fileManager.fileExists(atPath: audioFolderPath) else {
-            return
-        }
-        
-        guard let audioContents = try? fileManager.contentsOfDirectory(atPath: audioFolderPath) else {
+        guard fileManager.fileExists(atPath: audioFolderPath),
+              let audioContents = try? fileManager.contentsOfDirectory(atPath: audioFolderPath) else {
             return
         }
         
         var languages: [LanguageCode] = []
         for langFolder in audioContents {
-            // Check if it's a directory
             let langFolderPath = (audioFolderPath as NSString).appendingPathComponent(langFolder)
             var isDirectory: ObjCBool = false
-            if fileManager.fileExists(atPath: langFolderPath, isDirectory: &isDirectory), isDirectory.boolValue {
-                // Try to map the folder name to a LanguageCode
-                if let languageCode = LanguageCode.fromCode(langFolder) {
-                    languages.append(languageCode)
-                }
+            if fileManager.fileExists(atPath: langFolderPath, isDirectory: &isDirectory),
+               isDirectory.boolValue,
+               let languageCode = LanguageCode.fromCode(langFolder) {
+                languages.append(languageCode)
             }
         }
         
-        // Sort languages for consistent display
         availableLanguages = languages.sorted { $0.name < $1.name }
+    }
+    
+    // MARK: - Download Actions
+    
+    /// Handles download button tap - shows language selection or subscription prompt
+    private func handleDownloadTap() {
+        // Check subscription if book is not free
+        if !book.isFree && !subscriptionManager.isSubscribed {
+            // Show subscription prompt (could navigate to ManageSubscriptionView)
+            // For now, just show language selection - subscription check happens in download
+            showLanguageSelection = true
+        } else {
+            // Show language selection
+            selectedLanguages = [] // Reset selection
+            showLanguageSelection = true
+        }
+    }
+    
+    /// Starts the download process with selected languages
+    private func startDownload() async {
+        guard !selectedLanguages.isEmpty else {
+            downloadError = "Please select at least one language"
+            return
+        }
+        
+        // For bundle books, no subscription check needed
+        // For StoreKit books, check subscription
+        let productIdentifier = book.productIdentifier
+        if let productID = productIdentifier, !book.isFree && !subscriptionManager.isSubscribed {
+            downloadError = "Subscription required to download this book"
+            return
+        }
+        
+        isDownloading = true
+        downloadProgress = 0.0
+        downloadError = nil
+        
+        do {
+            try await downloadManager.downloadBook(
+                productIdentifier: productIdentifier, // Can be nil for bundle books
+                bookCode: book.bookCode,
+                selectedLanguages: selectedLanguages
+            )
+            
+            // Update download progress
+            downloadProgress = 1.0
+            
+            // Refresh book status
+            checkIfOnDevice()
+            
+            // Dismiss language selection
+            showLanguageSelection = false
+            
+        } catch let error as DownloadError {
+            // Handle specific download errors
+            if case .notImplemented = error {
+                downloadError = "Download feature is not yet fully implemented. Please check back later."
+            } else {
+                downloadError = error.localizedDescription
+            }
+        } catch {
+            downloadError = "Download failed: \(error.localizedDescription)"
+        }
+        
+        isDownloading = false
     }
     
     // MARK: - Body
@@ -87,6 +190,62 @@ struct BookInfoView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                
+                // Action Button
+                if isOnDevice {
+                    NavigationLink(destination: BookDetailView(book: book)) {
+                        Text("Start Reading")
+                            .font(DesignSystem.Typography.button)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, DesignSystem.Spacing.buttonPadding)
+                            .background(DesignSystem.Colors.primary)
+                            .cornerRadius(DesignSystem.CornerRadius.button)
+                            .shadow(DesignSystem.Shadow.small)
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                    .padding(.top, DesignSystem.Spacing.md)
+                } else {
+                    VStack(spacing: DesignSystem.Spacing.sm) {
+                        Button(action: {
+                            handleDownloadTap()
+                        }) {
+                            HStack {
+                                if isDownloading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                }
+                                Text(isDownloading ? "Downloading..." : "Download")
+                                    .font(DesignSystem.Typography.button)
+                                    .foregroundColor(.white)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, DesignSystem.Spacing.buttonPadding)
+                            .background(isDownloading ? DesignSystem.Colors.primary.opacity(0.7) : DesignSystem.Colors.primary)
+                            .cornerRadius(DesignSystem.CornerRadius.button)
+                            .shadow(DesignSystem.Shadow.small)
+                        }
+                        .disabled(isDownloading || book.productIdentifier == nil)
+                        
+                        // Download Progress
+                        if isDownloading {
+                            ProgressView(value: downloadProgress)
+                                .progressViewStyle(LinearProgressViewStyle())
+                                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                        }
+                        
+                        // Error Message
+                        if let error = downloadError {
+                            Text(error)
+                                .font(DesignSystem.Typography.bodySmall)
+                                .foregroundColor(.red)
+                                .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                        }
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
+                    .padding(.top, DesignSystem.Spacing.md)
+                }
                 
                 // Book Level
                 if let bookLevel = book.bookLevel {
@@ -192,38 +351,6 @@ struct BookInfoView: View {
                             .foregroundColor(DesignSystem.Colors.textSecondary)
                     }
                     .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                }
-                
-                // Action Button
-                if isOnDevice {
-                    NavigationLink(destination: BookDetailView(book: book)) {
-                        Text("Start Reading")
-                            .font(DesignSystem.Typography.button)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, DesignSystem.Spacing.buttonPadding)
-                            .background(DesignSystem.Colors.primary)
-                            .cornerRadius(DesignSystem.CornerRadius.button)
-                            .shadow(DesignSystem.Shadow.small)
-                    }
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    .padding(.top, DesignSystem.Spacing.md)
-                    .padding(.bottom, DesignSystem.Spacing.lg)
-                } else {
-                    Button(action: {
-                        // Download functionality to be implemented later
-                    }) {
-                        Text("Download")
-                            .font(DesignSystem.Typography.button)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, DesignSystem.Spacing.buttonPadding)
-                            .background(DesignSystem.Colors.primary)
-                            .cornerRadius(DesignSystem.CornerRadius.button)
-                            .shadow(DesignSystem.Shadow.small)
-                    }
-                    .padding(.horizontal, DesignSystem.Spacing.screenPadding)
-                    .padding(.top, DesignSystem.Spacing.md)
                     .padding(.bottom, DesignSystem.Spacing.lg)
                 }
             }
@@ -233,22 +360,43 @@ struct BookInfoView: View {
         .sheet(isPresented: $showLevelInfo) {
             LevelInfoView()
         }
+        .sheet(isPresented: $showLanguageSelection) {
+            LanguageSelectionView(
+                availableLanguages: availableLanguages.isEmpty ? book.languages : availableLanguages,
+                selectedLanguages: $selectedLanguages,
+                onDownload: {
+                    // Start download when user taps Download in language selection
+                    Task {
+                        await startDownload()
+                    }
+                }
+            )
+        }
+        .task {
+            // Check subscription status
+            await subscriptionManager.checkSubscriptionStatus()
+        }
         .onAppear {
             checkIfOnDevice()
             loadAvailableLanguages()
+            // Initialize selected languages with all available languages
+            if selectedLanguages.isEmpty {
+                selectedLanguages = availableLanguages.isEmpty ? book.languages : availableLanguages
+            }
+        }
+        .onChange(of: downloadManager.downloadProgress) { _, newValue in
+            // Update progress from download manager
+            if let progress = newValue[book.productIdentifier ?? ""] {
+                downloadProgress = progress
+            }
         }
     }
     
     // MARK: - Helper: Cover Image Lookup
     
-    /// Returns an Image for the book's cover by stripping any file extension from the coverImageName.
+    /// Returns an Image for the book's cover, checking downloaded book folder first, then bundle.
     private func coverImage(for book: Book) -> Image {
-        let assetName = (book.coverImageName as NSString).deletingPathExtension
-        if UIImage(named: assetName) != nil {
-            return Image(assetName)
-        } else {
-            return Image("DefaultCover")
-        }
+        CoverImageLoader.loadCoverImage(for: book)
     }
 }
 
